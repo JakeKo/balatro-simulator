@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Scoreboard from "./Scoreboard.jsx";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
@@ -6,9 +7,24 @@ import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [chips, setChips] = useState(0);
+  const [mult, setMult] = useState(1);
+  const [handMap, setHandMap] = useState({
+    "Straight Flush": [100, 8],
+    "Four of a Kind": [60, 7],
+    "Full House": [40, 4],
+    Flush: [35, 4],
+    Straight: [30, 4],
+    "Three of a Kind": [30, 3],
+    "Two Pair": [20, 2],
+    Pair: [10, 2],
+    "High Card": [5, 1],
+  });
 
   return (
     <>
+      <Scoreboard chips={chips} mult={mult} />
+
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
