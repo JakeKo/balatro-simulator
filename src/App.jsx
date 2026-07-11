@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Scoreboard from "./Scoreboard.jsx";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import "./App.css";
+import CardPicker from "./CardPicker.jsx";
+import { identifyHandPlayed } from "./handResolver.js";
 
 function App() {
   const [count, setCount] = useState(0);
   const [chips, setChips] = useState(0);
   const [mult, setMult] = useState(1);
   const [handMap, setHandMap] = useState({
+    "Flush Five": [160, 16],
+    "Flush House": [140, 14],
+    "Five of a Kind": [120, 12],
+    "Royal Flush": [100, 8],
     "Straight Flush": [100, 8],
     "Four of a Kind": [60, 7],
     "Full House": [40, 4],
@@ -20,117 +26,38 @@ function App() {
     Pair: [10, 2],
     "High Card": [5, 1],
   });
+  const [playedCards, setPlayedCards] = useState([
+    { rank: 14, suit: "Hearts" },
+    { rank: 14, suit: "Hearts" },
+    { rank: 14, suit: "Hearts" },
+    { rank: 14, suit: "Hearts" },
+    { rank: 14, suit: "Hearts" },
+  ]);
+  const [handPlayed, setHandPlayed] = useState(identifyHandPlayed(playedCards));
+
+  useEffect(() => {
+    const handPlayed = identifyHandPlayed(playedCards);
+    const [chip, mult] = handMap[handPlayed];
+    setChips(chip);
+    setMult(mult);
+    setHandPlayed(handPlayed);
+  }, [playedCards]);
 
   return (
     <>
       <Scoreboard chips={chips} mult={mult} />
-
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started now!</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      {handPlayed}
+      {Array.from({ length: 5 }).map((_, index) => (
+        <CardPicker
+          key={index}
+          card={playedCards[index]}
+          onChange={(card) => {
+            const newPlayedCards = JSON.parse(JSON.stringify(playedCards));
+            newPlayedCards[index] = card;
+            setPlayedCards(newPlayedCards);
+          }}
+        />
+      ))}
     </>
   );
 }

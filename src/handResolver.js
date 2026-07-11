@@ -1,3 +1,7 @@
+function sortCardsByRank(playedCards) {
+  return [...playedCards].sort((a, b) => (a.rank < b.rank ? -1 : 1));
+}
+
 function countRanks(playedCards) {
   return playedCards.reduce((counter, card) => {
     counter[card.rank] = (counter[card.rank] || 0) + 1;
@@ -13,12 +17,12 @@ function countSuits(playedCards) {
 }
 
 function handIsRoyalFlush(playedCards) {
-  const sortedCards = playedCards.sort((a, b) => (a.rank < b.rank ? -1 : 1));
+  const sortedCards = sortCardsByRank(playedCards);
   return sortedCards[0].rank === 10 && handIsStraightFlush(playedCards);
 }
 
 function handIsStraightFlush(playedCards) {
-  const sortedCards = playedCards.sort((a, b) => (a.rank < b.rank ? -1 : 1));
+  const sortedCards = sortCardsByRank(playedCards);
 
   for (let i = 1; i < sortedCards.length; i++) {
     const prev = sortedCards[i - 1];
@@ -49,7 +53,7 @@ function handIsFlush(playedCards) {
 }
 
 function handIsStraight(playedCards) {
-  const sortedCards = playedCards.sort((a, b) => (a.rank < b.rank ? -1 : 1));
+  const sortedCards = sortCardsByRank(playedCards);
 
   for (let i = 1; i < sortedCards.length; i++) {
     const prev = sortedCards[i - 1];
