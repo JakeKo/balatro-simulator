@@ -5,6 +5,7 @@ import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import "./App.css";
 import CardPicker from "./CardPicker.jsx";
+import HandTable from "./HandTable.jsx";
 import { identifyHandPlayed } from "./handResolver.js";
 
 function App() {
@@ -43,10 +44,16 @@ function App() {
     setHandPlayed(handPlayed);
   }, [playedCards]);
 
+  useEffect(() => {
+    const [chip, mult] = handMap[handPlayed];
+    setChips(chip);
+    setMult(mult);
+  }, [handMap]);
+
   return (
     <>
       <Scoreboard chips={chips} mult={mult} />
-      {handPlayed}
+      <HandTable handMap={handMap} onChange={setHandMap} />
       {Array.from({ length: 5 }).map((_, index) => (
         <CardPicker
           key={index}
