@@ -25,10 +25,6 @@ function stringifyCard(card) {
   return `${rankString}${suitString}`;
 }
 
-function isFaceCard(card) {
-  return card.rank >= 11 && card.rank <= 13;
-}
-
 function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
   const playedJokers = allJokers.filter((joker) => joker !== "None");
@@ -56,6 +52,13 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
     chips += addedChips;
     mult += addedMult;
     log.push(header + readout);
+  }
+
+  function isFaceCard(card) {
+    return (
+      playedJokers.includes("Pareidolia") ||
+      (card.rank >= 11 && card.rank <= 13)
+    );
   }
 
   delete gameMetadata.hangingChadRepeats;

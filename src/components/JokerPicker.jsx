@@ -19,6 +19,7 @@ const JOKERS = [
   "Jolly Joker",
   "Mad Joker",
   "Odd Todd",
+  "Pareidolia",
   "Photograph",
   "Scary Face",
   "Scholar",
