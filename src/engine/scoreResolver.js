@@ -35,7 +35,6 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   }
 
   function addEvent(entry) {
-    console.log("Event", entry);
     eventLog.push(entry);
     resolvedJokers.forEach((resolvedJoker) => {
       if (resolvedJoker.when(entry)) {
@@ -47,55 +46,7 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   // BODY OF ROUND - CYCLE THROUGH PLAYED CARDS
   for (let i = 0; i < scoredCards.length; i++) {
     const card = scoredCards[i];
-    const { rank } = card;
-    addEvent({ type: "CARD_SCORED", card, index: i, addChips: rank });
-
-    for (const joker of playedJokers) {
-      if (joker === "Even Steven") {
-        if (rank % 2 === 0) {
-          eventLog.push({ type: "JOKER_SCORED", joker, addMult: 4 });
-        }
-      } else if (joker === "Odd Todd") {
-        if (isOddRank(card)) {
-          eventLog.push({ type: "JOKER_SCORED", joker, addChips: 31 });
-        }
-      } else if (joker === "Photograph") {
-        if (isFaceCard(card)) {
-          const isFirstFaceCard = scoredCards
-            .slice(0, i)
-            .every((card) => !isFaceCard(card));
-          if (isFirstFaceCard) {
-            eventLog.push({ type: "JOKER_SCORED", joker, addMult: 2 });
-          }
-        }
-      } else if (joker === "Scary Face") {
-        if (isFaceCard(card)) {
-          eventLog.push({ type: "JOKER_SCORED", joker, addChips: 30 });
-        }
-      } else if (joker === "Scholar") {
-        if (rank === 14) {
-          eventLog.push({
-            type: "JOKER_SCORED",
-            joker,
-            addChips: 20,
-            addMult: 4,
-          });
-        }
-      } else if (joker === "Smiley Face") {
-        if (isFaceCard(card)) {
-          eventLog.push({ type: "JOKER_SCORED", joker, addMult: 5 });
-        }
-      } else if (joker === "Walkie Talkie") {
-        if (rank === 4 || rank === 10) {
-          eventLog.push({
-            type: "JOKER_SCORED",
-            joker,
-            addChips: 10,
-            addMult: 4,
-          });
-        }
-      }
-    }
+    addEvent({ type: "CARD_SCORED", card, index: i, addChips: card.rank });
   }
 
   // END OF ROUND - CYCLE THROUGH JOKERS
