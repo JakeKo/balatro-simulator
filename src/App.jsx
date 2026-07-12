@@ -35,7 +35,7 @@ function App() {
     { rank: 0, suit: "Hearts" },
     { rank: 0, suit: "Hearts" },
   ]);
-  const [jokers, setJokers] = useState([
+  const [allJokers, setAllJokers] = useState([
     "None",
     "None",
     "None",
@@ -44,24 +44,25 @@ function App() {
   ]);
 
   useEffect(() => {
-    const [newChips, newMult, log] = resolveScore(allCards, handMap);
+    const [newChips, newMult, log] = resolveScore(allCards, handMap, allJokers);
     setChips(newChips);
     setMult(newMult);
     setLog(log);
-  }, [allCards, handMap]);
+  }, [allCards, handMap, allJokers]);
 
   return (
     <div className="app">
       <Scoreboard chips={chips} mult={mult} />
       <HandTable handMap={handMap} onChange={setHandMap} />
       <div className="joker-pickers">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {allJokers.map((joker, index) => (
           <JokerPicker
-            joker={jokers[index]}
+            key={index}
+            joker={joker}
             onChange={(joker) => {
-              const newJokers = JSON.parse(JSON.stringify(jokers));
+              const newJokers = JSON.parse(JSON.stringify(allJokers));
               newJokers[index] = joker;
-              setJokers(newJokers);
+              setAllJokers(newJokers);
             }}
           />
         ))}
