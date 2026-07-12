@@ -62,6 +62,21 @@ function resolveScore(allCards, handMap, allJokers) {
         chips += 80;
         log.push(`${joker} | +80 chips`);
       }
+    } else if (joker === "Crazy Joker") {
+      if (allHandsPlayed.includes("Straight")) {
+        mult += 12;
+        log.push(`${joker} | +12 mult`);
+      }
+    } else if (joker === "Devious Joker") {
+      if (allHandsPlayed.includes("Straight")) {
+        chips += 100;
+        log.push(`${joker} | +100 chips`);
+      }
+    } else if (joker === "Droll Joker") {
+      if (allHandsPlayed.includes("Flush")) {
+        mult += 10;
+        log.push(`${joker} | +10 mult`);
+      }
     } else if (joker === "Joker") {
       mult += 2;
       log.push(`${joker} | +2 mult`);

@@ -12,9 +12,15 @@ function JokerPicker({ joker, onChange }) {
         <option>Chaos the Clown</option>
         {/* 1 free reroll */}
         <option>Clever Joker</option>
-        {/* +80 chips if contains two pair */}
+        {/* +80 chips if two pair */}
         <option>Crafty Joker</option>
         {/* +80 chips if Flush */}
+        <option>Crazy Joker</option>
+        {/* +12 mult if straight */}
+        <option>Devious Joker</option>
+        {/* +100 chips if straight */}
+        <option>Droll Joker</option>
+        {/* +10 mult if flush */}
         <option>Joker</option>
         {/* +2 mult */}
         <option>Wrathful Joker</option>
