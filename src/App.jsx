@@ -7,9 +7,11 @@ import "./App.css";
 import CardPicker from "./CardPicker.jsx";
 import HandTable from "./HandTable.jsx";
 import { identifyHandPlayed } from "./handResolver.js";
+import { resolveScore } from "./scoreResolver.js";
+import ScoreLogger from "./ScoreLogger.jsx";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [log, setLog] = useState([]);
   const [chips, setChips] = useState(0);
   const [mult, setMult] = useState(1);
   const [handMap, setHandMap] = useState({
@@ -34,21 +36,13 @@ function App() {
     { rank: 14, suit: "Hearts" },
     { rank: 14, suit: "Hearts" },
   ]);
-  const [handPlayed, setHandPlayed] = useState(identifyHandPlayed(playedCards));
 
   useEffect(() => {
-    const handPlayed = identifyHandPlayed(playedCards);
-    const [chip, mult] = handMap[handPlayed];
-    setChips(chip);
-    setMult(mult);
-    setHandPlayed(handPlayed);
-  }, [playedCards]);
-
-  useEffect(() => {
-    const [chip, mult] = handMap[handPlayed];
-    setChips(chip);
-    setMult(mult);
-  }, [handMap]);
+    const [newChips, newMult, log] = resolveScore(playedCards, handMap);
+    setChips(newChips);
+    setMult(newMult);
+    setLog(log);
+  }, [playedCards, handMap]);
 
   return (
     <>
@@ -65,6 +59,7 @@ function App() {
           }}
         />
       ))}
+      <ScoreLogger log={log} />
     </>
   );
 }
