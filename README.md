@@ -1,16 +1,156 @@
-# React + Vite
+# Balatro Simulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This application allows a user to simulate a hand in Balatro given a custom configuration of cards, jokers, and game state.
 
-Currently, two official plugins are available:
+# Joker Tally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- [ ] 8 Ball
+- [x] Abstract Joker
+- [ ] Acrobat
+- [ ] Ancient Joker
+- [ ] Arrowhead
+- [ ] Astronomer
+- [x] Banner
+- [ ] Baron
+- [ ] Baseball Card
+- [ ] Blackboard
+- [ ] Bloodstone
+- [ ] Blue Joker
+- [ ] Blueprint
+- [ ] Bootstraps
+- [ ] Brainstorm
+- [ ] Bull
+- [ ] Burglar
+- [ ] Burnt Joker
+- [ ] Business Card
+- [ ] Campfire
+- [ ] Canio
+- [ ] Card Sharp
+- [ ] Cartomancer
+- [ ] Castle
+- [x] Cavendish
+- [ ] Ceremonial Dagger
+- [ ] Certificate
+- [x] Chaos the Clown
+- [ ] Chicot
+- [x] Clever Joker
+- [ ] Cloud 9
+- [ ] Constellation
+- [x] Crafty Joker
+- [x] Crazy Joker
+- [ ] Credit Card
+- [ ] DNA
+- [ ] Delayed Gratification
+- [x] Devious Joker
+- [ ] Diet Cola
+- [ ] Driver's License
+- [x] Droll Joker
+- [ ] Drunkard
+- [ ] Dusk
+- [ ] Egg
+- [ ] Erosion
+- [x] Even Steven
+- [ ] Faceless Joker
+- [ ] Fibonacci
+- [ ] Flash Card
+- [ ] Flower Pot
+- [ ] Fortune Teller
+- [ ] Four Fingers
+- [ ] Gift Card
+- [ ] Glass Joker
+- [ ] Gluttonous Joker
+- [ ] Golden Joker
+- [ ] Golden Ticket
+- [ ] Greedy Joker
+- [ ] Green Joker
+- [x] Gros Michel
+- [ ] Hack
+- [x] Half Joker
+- [ ] Hallucination
+- [ ] Hanging Chad
+- [ ] Hiker
+- [ ] Hit the Road
+- [ ] Hologram
+- [ ] Ice Cream
+- [ ] Invisible Joker
+- [x] Joker
+- [ ] Joker Stencil
+- [x] Jolly Joker
+- [ ] Juggler
+- [ ] Loyalty Card
+- [ ] Luchador
+- [ ] Lucky Cat
+- [ ] Lusty Joker
+- [x] Mad Joker
+- [ ] Madness
+- [ ] Mail-In Rebate
+- [ ] Marble Joker
+- [ ] Matador
+- [ ] Merry Andy
+- [ ] Midas Mask
+- [ ] Mime
+- [ ] Misprint
+- [ ] Mr. Bones
+- [ ] Mystic Summit
+- [ ] Obelisk
+- [x] Odd Todd
+- [ ] Onyx Agate
+- [ ] Oops! All 6s
+- [ ] Pareidolia
+- [ ] Perkeo
+- [x] Photograph
+- [ ] Popcorn
+- [ ] Raised Fist
+- [ ] Ramen
+- [ ] Red Card
+- [ ] Reserved Parking
+- [ ] Ride the Bus
+- [ ] Riff-raff
+- [ ] Rocket
+- [ ] Rough Gem
+- [ ] Runner
+- [ ] Satellite
+- [x] Scary Face
+- [x] Scholar
+- [ ] Seance
+- [ ] Seeing Double
+- [ ] Seltzer
+- [ ] Shoot the Moon
+- [ ] Shortcut
+- [ ] Showman
+- [ ] Sixth Sense
+- [x] Sly Joker
+- [ ] Smeared Joker
+- [x] Smiley Face
+- [ ] Sock and Buskin
+- [ ] Space Joker
+- [ ] Spare Trousers
+- [ ] Splash
+- [ ] Square Joker
+- [ ] Steel Joker
+- [ ] Stone Joker
+- [ ] Stuntman
+- [ ] Supernova
+- [ ] Superposition
+- [ ] Swashbuckler
+- [ ] The Duo
+- [ ] The Family
+- [ ] The Idol
+- [ ] The Order
+- [ ] The Tribe
+- [ ] The Trio
+- [ ] Throwback
+- [ ] To Do List
+- [ ] To the Moon
+- [ ] Trading Card
+- [ ] Triboulet
+- [ ] Troubadour
+- [ ] Turtle Bean
+- [ ] Vagabond
+- [ ] Vampire
+- [x] Walkie Talkie
+- [ ] Wee Joker
+- [x] Wily Joker
+- [ ] Wrathful Joker
+- [ ] Yorick
+- [x] Zany Joker
