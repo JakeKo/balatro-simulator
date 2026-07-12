@@ -16,10 +16,19 @@ function countSuits(playedCards) {
   }, {});
 }
 
+function findRankWithCount(rankCounts, count) {
+  const [rankString] = Object.entries(rankCounts).find(([_, c]) => c === count);
+  return Number.parseInt(rankString, 10);
+}
+
 function handIsRoyalFlush(playedCards) {
   if (playedCards.length < 5) return false;
   const sortedCards = sortCardsByRank(playedCards);
   return sortedCards[0].rank === 10 && handIsStraightFlush(playedCards);
+}
+
+function findRoyalFlush(playedCards) {
+  return playedCards;
 }
 
 function handIsStraightFlush(playedCards) {
@@ -38,10 +47,20 @@ function handIsStraightFlush(playedCards) {
   return true;
 }
 
+function findStraightFlush(playedCards) {
+  return playedCards;
+}
+
 function handIsFourOfAKind(playedCards) {
   if (playedCards.length < 4) return false;
   const rankCounts = countRanks(playedCards);
   return Object.values(rankCounts).includes(4);
+}
+
+function findFourOfAKind(playedCards) {
+  const rankCounts = countRanks(playedCards);
+  const rankToFind = findRankWithCount(rankCounts, 4);
+  return playedCards.filter((card) => card.rank === rankToFind);
 }
 
 function handIsFullHouse(playedCards) {
@@ -51,10 +70,24 @@ function handIsFullHouse(playedCards) {
   return counts.includes(3) && counts.includes(2);
 }
 
+function findFullHouse(playedCards) {
+  const rankCounts = countRanks(playedCards);
+  const ranksToFind = [
+    findRankWithCount(rankCounts, 2),
+    findRankWithCount(rankCounts, 3),
+  ];
+
+  return playedCards.filter((card) => ranksToFind.includes(card.rank));
+}
+
 function handIsFlush(playedCards) {
   if (playedCards.length < 5) return false;
   const suitCounts = countSuits(playedCards);
   return Object.values(suitCounts).includes(5);
+}
+
+function findFlush(playedCards) {
+  return playedCards;
 }
 
 function handIsStraight(playedCards) {
@@ -73,10 +106,20 @@ function handIsStraight(playedCards) {
   return true;
 }
 
+function findStraight(playedCards) {
+  return playedCards;
+}
+
 function handIsThreeOfAKind(playedCards) {
   if (playedCards.length < 3) return false;
   const rankCounts = countRanks(playedCards);
   return Object.values(rankCounts).includes(3);
+}
+
+function findThreeOfAKind(playedCards) {
+  const rankCounts = countRanks(playedCards);
+  const rankToFind = findRankWithCount(rankCounts, 3);
+  return playedCards.filter((card) => card.rank === rankToFind);
 }
 
 function handIsTwoPair(playedCards) {
@@ -86,24 +129,61 @@ function handIsTwoPair(playedCards) {
   return counts.filter((count) => count === 2).length === 2;
 }
 
+function findTwoPair(playedCards) {
+  const rankCounts = countRanks(playedCards);
+  const ranksToFind = [];
+  Object.entries(rankCounts).forEach(([rank, count]) => {
+    if (count === 2) ranksToFind.push(rank);
+  });
+
+  return playedCards.filter((card) => ranksToFind.includes(card.rank));
+}
+
 function handIsPair(playedCards) {
   if (playedCards.length < 2) return false;
   const rankCounts = countRanks(playedCards);
   return Object.values(rankCounts).includes(2);
 }
 
+function findPair(playedCards) {
+  const rankCounts = countRanks(playedCards);
+  const rankToFind = findRankWithCount(rankCounts, 2);
+  return playedCards.filter((card) => card.rank === rankToFind);
+}
+
+function handIsHighCard(playedCards) {
+  return playedCards.length > 0;
+}
+
+function findHighCard(playedCards) {
+  const highRank = Math.max(...playedCards.map((card) => card.rank));
+  return [playedCards.find((card) => card.rank === highRank)];
+}
+
 function identifyHandPlayed(playedCards) {
-  if (handIsRoyalFlush(playedCards)) return "Royal Flush";
-  if (handIsStraightFlush(playedCards)) return "Straight Flush";
-  if (handIsFourOfAKind(playedCards)) return "Four of a Kind";
-  if (handIsFullHouse(playedCards)) return "Full House";
-  if (handIsFlush(playedCards)) return "Flush";
-  if (handIsStraight(playedCards)) return "Straight";
-  if (handIsThreeOfAKind(playedCards)) return "Three of a Kind";
-  if (handIsTwoPair(playedCards)) return "Two Pair";
-  if (handIsPair(playedCards)) return "Pair";
-  if (playedCards.length > 0) return "High Card";
-  return "No Hand";
+  if (handIsRoyalFlush(playedCards)) {
+    return ["Royal Flush", findRoyalFlush(playedCards)];
+  } else if (handIsStraightFlush(playedCards)) {
+    return ["Straight Flush", findStraightFlush(playedCards)];
+  } else if (handIsFourOfAKind(playedCards)) {
+    return ["Four of a Kind", findFourOfAKind(playedCards)];
+  } else if (handIsFullHouse(playedCards)) {
+    return ["FullHouse", findFullHouse(playedCards)];
+  } else if (handIsFlush(playedCards)) {
+    return ["Flush", findFlush(playedCards)];
+  } else if (handIsStraight(playedCards)) {
+    return ["Straight", findStraight(playedCards)];
+  } else if (handIsThreeOfAKind(playedCards)) {
+    return ["Three of a Kind", findThreeOfAKind(playedCards)];
+  } else if (handIsTwoPair(playedCards)) {
+    return ["Two Pair", findTwoPair(playedCards)];
+  } else if (handIsPair(playedCards)) {
+    return ["Pair", findPair(playedCards)];
+  } else if (handIsHighCard(playedCards)) {
+    return ["High Card", findHighCard(playedCards)];
+  }
+
+  return ["No Hand", []];
 }
 
 function identifyAllHandsPlayed(playedCards) {

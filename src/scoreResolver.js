@@ -33,12 +33,15 @@ function resolveScore(allCards, handMap, allJokers) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
   const playedJokers = allJokers.filter((joker) => joker !== "None");
 
-  const handPlayed = identifyHandPlayed(playedCards);
+  const [handPlayed, scoredCards] = identifyHandPlayed(playedCards);
   const allHandsPlayed = identifyAllHandsPlayed(playedCards);
   if (handPlayed === "No Hand") return [0, 0, ["No Hand"]];
 
   let [chips, mult] = handMap[handPlayed];
-  const log = [`${handPlayed} | ${chips} × ${mult}`];
+  const log = [
+    `${handPlayed} | ${chips} × ${mult}`,
+    `Scored: ${scoredCards.map(stringifyCard)}`,
+  ];
 
   function addChipsOrMultAndLog(header, addedChips, addedMult) {
     let readout = " | ";
@@ -56,8 +59,8 @@ function resolveScore(allCards, handMap, allJokers) {
   }
 
   // BODY OF ROUND - CYCLE THROUGH PLAYED CARDS
-  for (let i = 0; i < playedCards.length; i++) {
-    const card = playedCards[i];
+  for (let i = 0; i < scoredCards.length; i++) {
+    const card = scoredCards[i];
     const { rank } = card;
     addChipsOrMultAndLog(stringifyCard(card), rank, 0);
 
@@ -72,7 +75,7 @@ function resolveScore(allCards, handMap, allJokers) {
         }
       } else if (joker === "Photograph") {
         if (isFaceCard(card)) {
-          const isFirstFaceCard = playedCards
+          const isFirstFaceCard = scoredCards
             .slice(0, i)
             .every((card) => !isFaceCard(card));
           if (isFirstFaceCard) {
@@ -129,7 +132,7 @@ function resolveScore(allCards, handMap, allJokers) {
     } else if (joker === "Gros Michel") {
       addChipsOrMultAndLog(joker, 0, 15);
     } else if (joker === "Half Joker") {
-      if (playedCards.length <= 3) {
+      if (scoredCards.length <= 3) {
         addChipsOrMultAndLog(joker, 0, 20);
       }
     } else if (joker === "Joker") {
