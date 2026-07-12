@@ -21,6 +21,8 @@ function JokerPicker({ joker, onChange }) {
         {/* +100 chips if straight */}
         <option>Droll Joker</option>
         {/* +10 mult if flush */}
+        <option>Even Steven</option>
+        {/* +4 mult per card with even rank */}
         <option>Joker</option>
         {/* +2 mult */}
         <option>Wrathful Joker</option>

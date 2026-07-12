@@ -41,6 +41,15 @@ function resolveScore(allCards, handMap, allJokers) {
     const { rank } = card;
     chips += rank;
     log.push(`${stringifyCard(card)} | +${rank} chips`);
+
+    for (const joker of playedJokers) {
+      if (joker === "Even Steven") {
+        if (rank % 2 === 0) {
+          mult += 4;
+          log.push(`${joker} | +4 mult`);
+        }
+      }
+    }
   }
 
   // END OF ROUND - CYCLE THROUGH JOKERS
