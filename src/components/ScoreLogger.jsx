@@ -44,6 +44,10 @@ function stringifyJokerScored(entry) {
   return `${joker} | ${operations.join(", ")}`;
 }
 
+function stringifyHandEnded(entry) {
+  return "Hand Ended |";
+}
+
 function ScoreLogger({ log }) {
   return (
     <div className="score-logger">
@@ -56,6 +60,8 @@ function ScoreLogger({ log }) {
             return <code>{stringifyCardScored(entry)}</code>;
           case "JOKER_SCORED":
             return <code>{stringifyJokerScored(entry)}</code>;
+          case "HAND_ENDED":
+            return <code>{stringifyHandEnded(entry)}</code>;
         }
       })}
     </div>

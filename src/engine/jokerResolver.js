@@ -1,3 +1,5 @@
+import { identifyAllHandsPlayed } from "./handResolver";
+
 function isOddRank(card) {
   // Rank 14 is an Ace, which is treated instead as rank 1 in this context
   return [14, 9, 7, 5, 3].includes(card.rank);
@@ -12,11 +14,96 @@ function isFaceCard(card, gameMetadata) {
 }
 
 const resolvedJokers = {
+  "Abstract Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const addMult = 3 * gameMetadata.jokerCount;
+      addEvent({ type: "JOKER_SCORED", joker: "Abstract Joker", addMult });
+    },
+  },
+  Banner: {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      if (gameMetadata.remainingDiscards > 0) {
+        const addChips = 30 * gameMetadata.remainingDiscards;
+        addEvent({ type: "JOKER_SCORED", joker: "Banner", addChips });
+      }
+    },
+  },
+  Cavendish: {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      addEvent({ type: "JOKER_SCORED", joker: "Cavendish", addMult: 3 });
+    },
+  },
+  "Clever Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Two Pair")) {
+        addEvent({ type: "JOKER_SCORED", joker: "Clever Joker", addChips: 80 });
+      }
+    },
+  },
+  "Crafty Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Flush")) {
+        addEvent({ type: "JOKER_SCORED", joker: "Crafty Joker", addChips: 80 });
+      }
+    },
+  },
+  "Crazy Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Straight")) {
+        addEvent({ type: "JOKER_SCORED", joker: "Crazy Joker", addMult: 12 });
+      }
+    },
+  },
+  "Devious Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Straight")) {
+        addEvent({
+          type: "JOKER_SCORED",
+          joker: "Devious Joker",
+          addChips: 100,
+        });
+      }
+    },
+  },
+  "Droll Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Flush")) {
+        addEvent({ type: "JOKER_SCORED", joker: "Droll Joker", addMult: 10 });
+      }
+    },
+  },
   "Even Steven": {
     when: (entry) => entry.type === "CARD_SCORED",
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (isEvenRank(entry.card)) {
         addEvent({ type: "JOKER_SCORED", joker: "Even Steven", addMult: 4 });
+      }
+    },
+  },
+  "Gros Michel": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      addEvent({ type: "JOKER_SCORED", joker: "Gros Michel", addMult: 15 });
+    },
+  },
+  "Half Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      if (scoredCards.length <= 3) {
+        addEvent({ type: "JOKER_SCORED", joker: "Half Joker", addMult: 20 });
       }
     },
   },
@@ -27,6 +114,30 @@ const resolvedJokers = {
         addEvent({ type: "JOKER_SCORED", joker: "Hanging Chad" });
         addEvent({ ...entry, hangingChadApplied: true });
         addEvent({ ...entry, hangingChadApplied: true });
+      }
+    },
+  },
+  Joker: {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      addEvent({ type: "JOKER_SCORED", joker: "Joker", addMult: 2 });
+    },
+  },
+  "Jolly Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Pair")) {
+        addEvent({ type: "JOKER_SCORED", joker: "Jolly Joker", addMult: 8 });
+      }
+    },
+  },
+  "Mad Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Two Pair")) {
+        addEvent({ type: "JOKER_SCORED", joker: "Mad Joker", addMult: 10 });
       }
     },
   },
@@ -72,6 +183,15 @@ const resolvedJokers = {
       }
     },
   },
+  "Sly Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Pair")) {
+        addEvent({ type: "JOKER_SCORED", joker: "Sly Joker", addChips: 50 });
+      }
+    },
+  },
   "Smiley Face": {
     when: (entry) => entry.type === "CARD_SCORED",
     score: (entry, scoredCards, gameMetadata, addEvent) => {
@@ -90,6 +210,24 @@ const resolvedJokers = {
           addChips: 10,
           addMult: 4,
         });
+      }
+    },
+  },
+  "Wily Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Three of a Kind")) {
+        addEvent({ type: "JOKER_SCORED", joker: "Wily Joker", addChips: 100 });
+      }
+    },
+  },
+  "Zany Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
+      if (allHandsPlayed.includes("Three of a Kind")) {
+        addEvent({ type: "JOKER_SCORED", joker: "Zany Joker", addMult: 12 });
       }
     },
   },
