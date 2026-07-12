@@ -50,16 +50,10 @@ h2 {
   background: grey;
 }
 
-.hand-table {
-  display: grid;
-  grid-template-columns: 1fr 50px 50px min-content;
-  width: max-content;
-}
-
 .app {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
-  grid-template-rows: min-content min-content;
+  grid-template-rows: repeat(3, min-content);
 }
 
 .scoreboard {
@@ -73,6 +67,22 @@ h2 {
   background-color: #f0f0f0;
 }
 
+.hand-table {
+  grid-column: 1 / 2;
+  grid-row: 2 / -1;
+  display: grid;
+  grid-template-columns: 1fr 50px 50px min-content;
+  width: max-content;
+}
+
+.joker-pickers {
+  grid-column: 2 / 3;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  padding: 24px;
+}
+
 .card-pickers {
   grid-column: 2 / 3;
   display: grid;
@@ -83,6 +93,7 @@ h2 {
 
 .score-logger {
   grid-column: 3 / 4;
+  grid-row: 2 / -1;
   display: flex;
   flex-direction: column;
   padding: 12px;

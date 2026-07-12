@@ -8,6 +8,7 @@ import HandTable from "./HandTable.jsx";
 import { identifyHandPlayed } from "./handResolver.js";
 import { resolveScore } from "./scoreResolver.js";
 import ScoreLogger from "./ScoreLogger.jsx";
+import JokerPicker from "./JokerPicker.jsx";
 
 function App() {
   const [log, setLog] = useState([]);
@@ -35,6 +36,13 @@ function App() {
     { rank: 14, suit: "Hearts" },
     { rank: 14, suit: "Hearts" },
   ]);
+  const [jokers, setJokers] = useState([
+    "None",
+    "None",
+    "None",
+    "None",
+    "None",
+  ]);
 
   useEffect(() => {
     const [newChips, newMult, log] = resolveScore(playedCards, handMap);
@@ -47,6 +55,18 @@ function App() {
     <div className="app">
       <Scoreboard chips={chips} mult={mult} />
       <HandTable handMap={handMap} onChange={setHandMap} />
+      <div className="joker-pickers">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <JokerPicker
+            joker={jokers[index]}
+            onChange={(joker) => {
+              const newJokers = JSON.parse(JSON.stringify(jokers));
+              newJokers[index] = joker;
+              setJokers(newJokers);
+            }}
+          />
+        ))}
+      </div>
       <div className="card-pickers">
         {Array.from({ length: 5 }).map((_, index) => (
           <CardPicker
