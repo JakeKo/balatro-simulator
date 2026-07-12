@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import Scoreboard from "./Scoreboard.jsx";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
-import CardPicker from "./CardPicker.jsx";
-import HandTable from "./HandTable.jsx";
-import { resolveScore } from "./scoreResolver.js";
-import ScoreLogger from "./ScoreLogger.jsx";
-import JokerPicker from "./JokerPicker.jsx";
+import {
+  CardPicker,
+  HandTable,
+  JokerPicker,
+  Scoreboard,
+  ScoreLogger,
+} from "./components";
+import { resolveScore } from "./engine/scoreResolver.js";
 
 function App() {
   const [log, setLog] = useState([]);
