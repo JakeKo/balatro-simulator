@@ -44,18 +44,27 @@ function getJokerMetadata(joker) {
   return [];
 }
 
-function JokerPicker({ joker, gameMetadata, onChange }) {
+function JokerPicker({ joker, gameMetadata, onJokerChange, onMetadataChange }) {
   const metadataEntries = getJokerMetadata(joker);
 
   return (
     <div className="joker-picker">
-      <select value={joker} onChange={(event) => onChange(event.target.value)}>
+      <select value={joker} onChange={(e) => onJokerChange(e.target.value)}>
         {JOKERS.map((joker) => (
-          <option>{joker}</option>
+          <option key={joker}>{joker}</option>
         ))}
       </select>
       {metadataEntries.map(({ key, label }) => (
-        <input value={gameMetadata[key]} placeholder={label} type="number" />
+        <input
+          value={gameMetadata[key]}
+          placeholder={label}
+          type="number"
+          onChange={(event) => {
+            onMetadataChange({
+              [key]: Number.parseInt(event.target.value, 10),
+            });
+          }}
+        />
       ))}
     </div>
   );

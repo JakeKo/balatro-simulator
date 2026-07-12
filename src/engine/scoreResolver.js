@@ -29,7 +29,7 @@ function isFaceCard(card) {
   return card.rank >= 11 && card.rank <= 13;
 }
 
-function resolveScore(allCards, handMap, allJokers) {
+function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
   const playedJokers = allJokers.filter((joker) => joker !== "None");
 
@@ -107,6 +107,11 @@ function resolveScore(allCards, handMap, allJokers) {
     if (joker === "Abstract Joker") {
       const addedMult = 3 * playedJokers.length;
       addChipsOrMultAndLog(joker, 0, addedMult);
+    } else if (joker === "Banner") {
+      if (gameMetadata.remainingDiscards > 0) {
+        const addedChips = 30 * gameMetadata.remainingDiscards;
+        addChipsOrMultAndLog(joker, addedChips, 0);
+      }
     } else if (joker === "Cavendish") {
       addChipsOrMultAndLog(joker, 0, 3);
     } else if (joker === "Clever Joker") {

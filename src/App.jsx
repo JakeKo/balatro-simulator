@@ -41,13 +41,19 @@ function App() {
     "None",
     "None",
   ]);
+  const [gameMetadata, setGameMetadata] = useState({});
 
   useEffect(() => {
-    const [newChips, newMult, log] = resolveScore(allCards, handMap, allJokers);
+    const [newChips, newMult, log] = resolveScore(
+      allCards,
+      handMap,
+      allJokers,
+      gameMetadata,
+    );
     setChips(newChips);
     setMult(newMult);
     setLog(log);
-  }, [allCards, handMap, allJokers]);
+  }, [allCards, handMap, allJokers, gameMetadata]);
 
   return (
     <div className="app">
@@ -58,11 +64,15 @@ function App() {
           <JokerPicker
             key={index}
             joker={joker}
-            gameMetadata={{}}
-            onChange={(joker) => {
+            gameMetadata={gameMetadata}
+            onJokerChange={(joker) => {
               const newJokers = JSON.parse(JSON.stringify(allJokers));
               newJokers[index] = joker;
               setAllJokers(newJokers);
+            }}
+            onMetadataChange={(newMetadata) => {
+              const newGameMetadata = { ...gameMetadata, ...newMetadata };
+              setGameMetadata(newGameMetadata);
             }}
           />
         ))}
