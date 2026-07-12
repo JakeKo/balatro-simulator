@@ -58,6 +58,8 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
     log.push(header + readout);
   }
 
+  delete gameMetadata.hangingChadRepeats;
+
   // BODY OF ROUND - CYCLE THROUGH PLAYED CARDS
   for (let i = 0; i < scoredCards.length; i++) {
     const card = scoredCards[i];
@@ -68,6 +70,10 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
       if (joker === "Even Steven") {
         if (rank % 2 === 0) {
           addChipsOrMultAndLog(joker, 0, 4);
+        }
+      } else if (joker === "Hanging Chad") {
+        if (i === 0 && gameMetadata.hangingChadRepeats === undefined) {
+          gameMetadata.hangingChadRepeats = 2;
         }
       } else if (joker === "Odd Todd") {
         if (rank < 11 && rank % 2 === 1) {
@@ -99,6 +105,11 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
           addChipsOrMultAndLog(joker, 10, 4);
         }
       }
+    }
+
+    if (gameMetadata.hangingChadRepeats > 0) {
+      i--;
+      gameMetadata.hangingChadRepeats--;
     }
   }
 

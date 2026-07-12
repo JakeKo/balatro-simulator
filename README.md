@@ -67,7 +67,7 @@ This application allows a user to simulate a hand in Balatro given a custom conf
 - [ ] Hack
 - [x] Half Joker
 - [ ] Hallucination
-- [ ] Hanging Chad
+- [x] Hanging Chad
 - [ ] Hiker
 - [ ] Hit the Road
 - [ ] Hologram

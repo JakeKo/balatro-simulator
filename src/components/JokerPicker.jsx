@@ -14,6 +14,7 @@ const JOKERS = [
   "Even Steven",
   "Gros Michel",
   "Half Joker",
+  "Hanging Chad",
   "Joker",
   "Jolly Joker",
   "Mad Joker",
