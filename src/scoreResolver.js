@@ -47,6 +47,9 @@ function resolveScore(allCards, handMap, allJokers) {
     if (joker === "Joker") {
       mult += 2;
       log.push(`${joker} | +2 mult`);
+    } else if (joker === "Crafty Joker" && handPlayed === "Flush") {
+      chips += 80;
+      log.push(`${joker} | +80 chips`);
     }
   }
 
