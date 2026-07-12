@@ -123,6 +123,6 @@ code {
 
 .hand-table {
   display: grid;
-  grid-template-columns: 1fr 100px 100px min-content;
+  grid-template-columns: 1fr 50px 50px min-content;
   width: max-content;
 }

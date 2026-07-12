@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 function HandTable({ handMap, onChange }) {
   function onChipChange(hand, newChip) {
     const newHandMap = { ...handMap };
@@ -15,10 +17,10 @@ function HandTable({ handMap, onChange }) {
     <div className="hand-table">
       <div>Hand</div>
       <div>Chips</div>
-      <div>Multiplier</div>
+      <div>Mult</div>
       <div>Total</div>
       {Object.entries(handMap).map(([hand, [chip, mult]]) => (
-        <>
+        <Fragment key={hand}>
           <div className="hand-table-row-hand">{hand}</div>
           <input
             className="hand-table-row-chip"
@@ -31,7 +33,7 @@ function HandTable({ handMap, onChange }) {
             onChange={(e) => onMultChange(hand, e.target.value)}
           />
           <div className="hand-table-row-total">{chip * mult}</div>
-        </>
+        </Fragment>
       ))}
     </div>
   );
