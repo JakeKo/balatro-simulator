@@ -25,6 +25,10 @@ function stringifyCard(card) {
   return `${rankString}${suitString}`;
 }
 
+function isFaceCard(card) {
+  return card.rank >= 11 && card.rank <= 13;
+}
+
 function resolveScore(allCards, handMap, allJokers) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
   const playedJokers = allJokers.filter((joker) => joker !== "None");
@@ -36,44 +40,60 @@ function resolveScore(allCards, handMap, allJokers) {
   let [chips, mult] = handMap[handPlayed];
   const log = [`${handPlayed} | ${chips} × ${mult}`];
 
+  function addChipsOrMultAndLog(header, addedChips, addedMult) {
+    let readout = " | ";
+    if (addedChips > 0 && addedMult > 0) {
+      readout += `+${addedChips}c, +${addedMult}m`;
+    } else if (addedChips > 0) {
+      readout += `+${addedChips}c`;
+    } else if (addedMult > 0) {
+      readout += `+${addedMult}m`;
+    }
+
+    chips += addedChips;
+    mult += addedMult;
+    log.push(header + readout);
+  }
+
   // BODY OF ROUND - CYCLE THROUGH PLAYED CARDS
-  for (const card of playedCards) {
+  for (let i = 0; i < playedCards.length; i++) {
+    const card = playedCards[i];
     const { rank } = card;
-    chips += rank;
-    log.push(`${stringifyCard(card)} | +${rank} chips`);
+    addChipsOrMultAndLog(stringifyCard(card), rank, 0);
 
     for (const joker of playedJokers) {
       if (joker === "Even Steven") {
         if (rank % 2 === 0) {
-          mult += 4;
-          log.push(`${joker} | +4 mult`);
+          addChipsOrMultAndLog(joker, 0, 4);
         }
       } else if (joker === "Odd Todd") {
         if (rank < 11 && rank % 2 === 1) {
-          mult += 31;
-          log.push(`${joker} | +31 mult`);
+          addChipsOrMultAndLog(joker, 0, 31);
+        }
+      } else if (joker === "Photograph") {
+        if (isFaceCard(card)) {
+          const isFirstFaceCard = playedCards
+            .slice(0, i)
+            .every((card) => !isFaceCard(card));
+          if (isFirstFaceCard) {
+            addChipsOrMultAndLog(joker, 0, 2);
+          }
         }
       } else if (joker === "Scary Face") {
-        if (rank >= 11 && rank <= 13) {
-          chips += 30;
-          log.push(`${joker} | +30 chips`);
+        if (isFaceCard(card)) {
+          addChipsOrMultAndLog(joker, 30, 0);
         }
       } else if (joker === "Scholar") {
         if (rank === 14) {
-          chips += 30;
-          mult += 4;
-          log.push(`${joker} | +30 chips, +4 mult`);
+          addChipsOrMultAndLog(joker, 30, 4);
         }
       } else if (joker === "Smiley Face") {
-        if (rank >= 11 && rank <= 13) {
-          mult += 5;
-          log.push(`${joker} | +5 mult`);
+        if (isFaceCard(card)) {
+          addChipsOrMultAndLog(joker, 0, 5);
         }
       } else if (joker === "Walkie Talkie") {
         if (rank === 4 || rank === 10) {
-          chips += 10;
-          mult += 4;
-          log.push(`${joker} | +10 chips, +4 mult`);
+          addChipsOrMultAndLog(joker, 10, 4);
         }
       }
     }
@@ -83,71 +103,56 @@ function resolveScore(allCards, handMap, allJokers) {
   for (const joker of playedJokers) {
     if (joker === "Abstract Joker") {
       const addedMult = 3 * playedJokers.length;
-      mult += addedMult;
-      log.push(`${joker} | +${addedMult} mult`);
+      addChipsOrMultAndLog(joker, 0, addedMult);
     } else if (joker === "Cavendish") {
-      mult += 3;
-      log.push(`${joker} | +3 mult`);
+      addChipsOrMultAndLog(joker, 0, 3);
     } else if (joker === "Clever Joker") {
       if (allHandsPlayed.includes("Two Pair")) {
-        chips += 80;
-        log.push(`${joker} | +80 chips`);
+        addChipsOrMultAndLog(joker, 80, 0);
       }
     } else if (joker === "Crafty Joker") {
       if (allHandsPlayed.includes("Flush")) {
-        chips += 80;
-        log.push(`${joker} | +80 chips`);
+        addChipsOrMultAndLog(joker, 80, 0);
       }
     } else if (joker === "Crazy Joker") {
       if (allHandsPlayed.includes("Straight")) {
-        mult += 12;
-        log.push(`${joker} | +12 mult`);
+        addChipsOrMultAndLog(joker, 0, 12);
       }
     } else if (joker === "Devious Joker") {
       if (allHandsPlayed.includes("Straight")) {
-        chips += 100;
-        log.push(`${joker} | +100 chips`);
+        addChipsOrMultAndLog(joker, 100, 0);
       }
     } else if (joker === "Droll Joker") {
       if (allHandsPlayed.includes("Flush")) {
-        mult += 10;
-        log.push(`${joker} | +10 mult`);
+        addChipsOrMultAndLog(joker, 0, 10);
       }
     } else if (joker === "Gros Michel") {
-      mult += 15;
-      log.push(`${joker} | +15 mult`);
+      addChipsOrMultAndLog(joker, 0, 15);
     } else if (joker === "Half Joker") {
       if (playedCards.length <= 3) {
-        mult += 20;
-        log.push(`${joker} | +20 mult`);
+        addChipsOrMultAndLog(joker, 0, 20);
       }
     } else if (joker === "Joker") {
-      mult += 2;
-      log.push(`${joker} | +2 mult`);
+      addChipsOrMultAndLog(joker, 0, 2);
     } else if (joker === "Jolly Joker") {
       if (allHandsPlayed.includes("Pair")) {
-        mult += 8;
-        log.push(`${joker} | +8 mult`);
+        addChipsOrMultAndLog(joker, 0, 8);
       }
     } else if (joker === "Mad Joker") {
       if (allHandsPlayed.includes("Two Pair")) {
-        mult += 10;
-        log.push(`${joker} | +10 mult`);
+        addChipsOrMultAndLog(joker, 0, 10);
       }
     } else if (joker === "Sly Joker") {
       if (allHandsPlayed.includes("Pair")) {
-        chips += 50;
-        log.push(`${joker} | +50 chips`);
+        addChipsOrMultAndLog(joker, 50, 0);
       }
     } else if (joker === "Wily Joker") {
       if (allHandsPlayed.includes("Three of a Kind")) {
-        chips += 100;
-        log.push(`${joker} | +100 chips`);
+        addChipsOrMultAndLog(joker, 100, 0);
       }
     } else if (joker === "Zany Joker") {
       if (allHandsPlayed.includes("Three of a Kind")) {
-        mult += 12;
-        log.push(`${joker} | +12 mult`);
+        addChipsOrMultAndLog(joker, 0, 12);
       }
     }
   }

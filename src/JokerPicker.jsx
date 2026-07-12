@@ -35,6 +35,8 @@ function JokerPicker({ joker, onChange }) {
         {/* +10 mult if two pair */}
         <option>Odd Todd</option>
         {/* +31 mult per card with odd rank */}
+        <option>Photograph</option>
+        {/* +2 mult for first face card */}
         <option>Scary Face</option>
         {/* +30 chips per card with face rank */}
         <option>Scholar</option>
