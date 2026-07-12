@@ -48,6 +48,33 @@ function resolveScore(allCards, handMap, allJokers) {
           mult += 4;
           log.push(`${joker} | +4 mult`);
         }
+      } else if (joker === "Odd Todd") {
+        if (rank < 11 && rank % 2 === 1) {
+          mult += 31;
+          log.push(`${joker} | +31 mult`);
+        }
+      } else if (joker === "Scary Face") {
+        if (rank >= 11 && rank <= 13) {
+          chips += 30;
+          log.push(`${joker} | +30 chips`);
+        }
+      } else if (joker === "Scholar") {
+        if (rank === 14) {
+          chips += 30;
+          mult += 4;
+          log.push(`${joker} | +30 chips, +4 mult`);
+        }
+      } else if (joker === "Smiley Face") {
+        if (rank >= 11 && rank <= 13) {
+          mult += 5;
+          log.push(`${joker} | +5 mult`);
+        }
+      } else if (joker === "Walkie Talkie") {
+        if (rank === 4 || rank === 10) {
+          chips += 10;
+          mult += 4;
+          log.push(`${joker} | +10 chips, +4 mult`);
+        }
       }
     }
   }
@@ -86,9 +113,42 @@ function resolveScore(allCards, handMap, allJokers) {
         mult += 10;
         log.push(`${joker} | +10 mult`);
       }
+    } else if (joker === "Gros Michel") {
+      mult += 15;
+      log.push(`${joker} | +15 mult`);
+    } else if (joker === "Half Joker") {
+      if (playedCards.length <= 3) {
+        mult += 20;
+        log.push(`${joker} | +20 mult`);
+      }
     } else if (joker === "Joker") {
       mult += 2;
       log.push(`${joker} | +2 mult`);
+    } else if (joker === "Jolly Joker") {
+      if (allHandsPlayed.includes("Pair")) {
+        mult += 8;
+        log.push(`${joker} | +8 mult`);
+      }
+    } else if (joker === "Mad Joker") {
+      if (allHandsPlayed.includes("Two Pair")) {
+        mult += 10;
+        log.push(`${joker} | +10 mult`);
+      }
+    } else if (joker === "Sly Joker") {
+      if (allHandsPlayed.includes("Pair")) {
+        chips += 50;
+        log.push(`${joker} | +50 chips`);
+      }
+    } else if (joker === "Wily Joker") {
+      if (allHandsPlayed.includes("Three of a Kind")) {
+        chips += 100;
+        log.push(`${joker} | +100 chips`);
+      }
+    } else if (joker === "Zany Joker") {
+      if (allHandsPlayed.includes("Three of a Kind")) {
+        mult += 12;
+        log.push(`${joker} | +12 mult`);
+      }
     }
   }
 
