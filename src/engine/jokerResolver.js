@@ -21,6 +21,14 @@ const resolvedJokers = {
       addEvent({ type: "JOKER_SCORED", joker: "Abstract Joker", addMult });
     },
   },
+  Acrobat: {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      if (gameMetadata.finalHand) {
+        addEvent({ type: "JOKER_SCORED", joker: "Acrobat", multMult: 3 });
+      }
+    },
+  },
   Banner: {
     when: (entry) => entry.type === "HAND_ENDED",
     score: (entry, scoredCards, gameMetadata, addEvent) => {

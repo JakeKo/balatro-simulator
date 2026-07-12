@@ -4,7 +4,7 @@ const JOKERS = [
   "None",
   // "8 Ball",
   "Abstract Joker",
-  // "Acrobat",
+  "Acrobat",
   // "Ancient Joker",
   // "Arrowhead",
   // "Astronomer",
@@ -158,7 +158,15 @@ const JOKERS = [
 // E.g., Banner needs to know how many discards are remaining
 // Rather than implement entire game state tracking, prompt the user to provide the hard-coded values
 // The map connects a selected Joker to the metadata that needs to be gathered
-const JOKER_METADATA_MAP = {
+const METADATA_TEMPLATES_MAP = {
+  Acrobat: [
+    {
+      key: "finalHand",
+      label: "Final Hand",
+      type: "boolean",
+      default: false,
+    },
+  ],
   Banner: [
     {
       key: "remainingDiscards",
@@ -169,20 +177,20 @@ const JOKER_METADATA_MAP = {
   ],
 };
 
-function getJokerMetadata(joker) {
-  if (joker in JOKER_METADATA_MAP) {
-    return JOKER_METADATA_MAP[joker];
+function getMetadataTemplate(joker) {
+  if (joker in METADATA_TEMPLATES_MAP) {
+    return METADATA_TEMPLATES_MAP[joker];
   }
 
   return [];
 }
 
 function JokerPicker({ joker, metadata, onChange }) {
-  const metadataEntries = getJokerMetadata(joker);
+  const metadataTemplate = getMetadataTemplate(joker);
 
   function onJokerChange(newJoker) {
-    const metadataEntries = getJokerMetadata(newJoker);
-    const newMetadata = metadataEntries.reduce(
+    const newMetadataTemplate = getMetadataTemplate(newJoker);
+    const newMetadata = newMetadataTemplate.reduce(
       (metadata, entry) => ({ ...metadata, [entry.key]: entry.default }),
       {},
     );
@@ -207,16 +215,34 @@ function JokerPicker({ joker, metadata, onChange }) {
           <option key={joker}>{joker}</option>
         ))}
       </select>
-      {metadataEntries.map(({ key, label, type }) => (
-        <input
-          value={metadata[key]}
-          placeholder={label}
-          type={type}
-          onChange={(e) =>
-            onMetadataChange({ [key]: Number.parseInt(e.target.value, 10) })
-          }
-        />
-      ))}
+      {metadataTemplate.map(({ key, label, type }) => {
+        switch (type) {
+          case "number":
+            return (
+              <input
+                value={metadata[key]}
+                placeholder={label}
+                type="number"
+                onChange={(e) =>
+                  onMetadataChange({ [key]: parseInt(e.target.value, 10) })
+                }
+              />
+            );
+          case "boolean":
+            return (
+              <div>
+                <label>{label}</label>
+                <input
+                  checked={metadata[key]}
+                  type="checkbox"
+                  onChange={(e) =>
+                    onMetadataChange({ [key]: e.target.checked })
+                  }
+                />
+              </div>
+            );
+        }
+      })}
     </div>
   );
 }
