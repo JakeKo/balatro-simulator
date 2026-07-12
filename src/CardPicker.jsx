@@ -12,7 +12,7 @@ function CardPicker({ card, onChange }) {
   }
 
   return (
-    <div className="card-container">
+    <div className="card-picker">
       <select value={card.rank} onChange={onRankChange}>
         <option value="2">Two</option>
         <option value="3">Three</option>

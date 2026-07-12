@@ -3,7 +3,6 @@ import Scoreboard from "./Scoreboard.jsx";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
-import "./App.css";
 import CardPicker from "./CardPicker.jsx";
 import HandTable from "./HandTable.jsx";
 import { identifyHandPlayed } from "./handResolver.js";
@@ -45,22 +44,24 @@ function App() {
   }, [playedCards, handMap]);
 
   return (
-    <>
+    <div className="app">
       <Scoreboard chips={chips} mult={mult} />
       <HandTable handMap={handMap} onChange={setHandMap} />
-      {Array.from({ length: 5 }).map((_, index) => (
-        <CardPicker
-          key={index}
-          card={playedCards[index]}
-          onChange={(card) => {
-            const newPlayedCards = JSON.parse(JSON.stringify(playedCards));
-            newPlayedCards[index] = card;
-            setPlayedCards(newPlayedCards);
-          }}
-        />
-      ))}
+      <div className="card-pickers">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <CardPicker
+            key={index}
+            card={playedCards[index]}
+            onChange={(card) => {
+              const newPlayedCards = JSON.parse(JSON.stringify(playedCards));
+              newPlayedCards[index] = card;
+              setPlayedCards(newPlayedCards);
+            }}
+          />
+        ))}
+      </div>
       <ScoreLogger log={log} />
-    </>
+    </div>
   );
 }
 

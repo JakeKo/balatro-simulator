@@ -2,7 +2,7 @@ function ScoreLogger({ log }) {
   return (
     <div className="score-logger">
       {log.map((entry, index) => (
-        <div key={index}>{entry}</div>
+        <code key={index}>{entry}</code>
       ))}
     </div>
   );
