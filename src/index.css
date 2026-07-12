@@ -40,16 +40,6 @@ h2 {
   margin: 0 0 8px;
 }
 
-.card-picker {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  aspect-ratio: 5/7;
-  background: grey;
-}
-
 .app {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
@@ -89,6 +79,22 @@ h2 {
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
   padding: 24px;
+}
+
+.joker-picker,
+.card-picker {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  aspect-ratio: 5/7;
+  background: grey;
+}
+
+.joker-picker input {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .score-logger {

@@ -58,6 +58,7 @@ function App() {
           <JokerPicker
             key={index}
             joker={joker}
+            gameMetadata={{}}
             onChange={(joker) => {
               const newJokers = JSON.parse(JSON.stringify(allJokers));
               newJokers[index] = joker;

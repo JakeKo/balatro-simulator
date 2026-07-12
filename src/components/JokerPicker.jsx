@@ -1,12 +1,32 @@
 import { useState } from "react";
 
-function JokerPicker({ joker, onChange }) {
+// Some jokers require additional information to calculate
+// E.g., Banner needs to know how many discards are remaining
+// Rather than implement entire game state tracking, prompt the user to provide the hard-coded values
+// The map connects a selected Joker to the metadata that needs to be gathered
+const JOKER_METADATA_MAP = {
+  Banner: [{ key: "remainingDiscards", label: "Remaining Discards" }],
+};
+
+function getJokerMetadata(joker) {
+  if (joker in JOKER_METADATA_MAP) {
+    return JOKER_METADATA_MAP[joker];
+  }
+
+  return [];
+}
+
+function JokerPicker({ joker, gameMetadata, onChange }) {
+  const metadataEntries = getJokerMetadata(joker);
+
   return (
     <div className="joker-picker">
       <select value={joker} onChange={(event) => onChange(event.target.value)}>
         <option>None</option>
         <option>Abstract Joker</option>
         {/* +3 mult per joker */}
+        <option>Banner</option>
+        {/* +30 chips per remaining discard */}
         <option>Cavendish</option>
         {/* +3 mult, 1 / 1000 chance to destroy */}
         <option>Chaos the Clown</option>
@@ -52,6 +72,9 @@ function JokerPicker({ joker, onChange }) {
         <option>Zany Joker</option>
         {/* +12 mult if three of a kind */}
       </select>
+      {metadataEntries.map(({ key, label }) => (
+        <input value={gameMetadata[key]} placeholder={label} type="number" />
+      ))}
     </div>
   );
 }
