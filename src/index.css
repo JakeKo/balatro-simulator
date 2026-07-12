@@ -63,6 +63,34 @@ h2 {
   display: grid;
   grid-template-columns: 1fr 50px 50px min-content;
   width: max-content;
+  gap: 4px;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  font-family: monospace;
+  background: black;
+  color: white;
+}
+
+.hand-table * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hand-table-chip,
+.hand-table-mult {
+  border: none;
+  background: lightgrey;
+  text-align: center;
+  font-family: monospace;
+}
+
+.hand-table-chip {
+  color: blue;
+}
+
+.hand-table-mult {
+  color: red;
 }
 
 .joker-pickers {

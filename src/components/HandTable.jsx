@@ -15,24 +15,30 @@ function HandTable({ handMap, onChange }) {
 
   return (
     <div className="hand-table">
-      <div>Hand</div>
-      <div>Chips</div>
-      <div>Mult</div>
-      <div>Total</div>
+      <strong>Hand</strong>
+      <strong>Chips</strong>
+      <strong>Mult</strong>
+      <strong>Total</strong>
       {Object.entries(handMap).map(([hand, [chip, mult]]) => (
         <Fragment key={hand}>
-          <div className="hand-table-row-hand">{hand}</div>
+          <div className="hand-table-hand">{hand}</div>
           <input
-            className="hand-table-row-chip"
+            className="hand-table-chip"
             value={chip}
-            onChange={(e) => onChipChange(hand, e.target.value)}
+            type="number"
+            onChange={(event) =>
+              onChipChange(hand, Number.parseInt(event.target.value, 10))
+            }
           />
           <input
-            className="hand-table-row-mult"
+            className="hand-table-mult"
             value={mult}
-            onChange={(e) => onMultChange(hand, e.target.value)}
+            type="number"
+            onChange={(event) =>
+              onMultChange(hand, Number.parseInt(event.target.value, 10))
+            }
           />
-          <div className="hand-table-row-total">{chip * mult}</div>
+          <strong className="hand-table-total">{chip * mult}</strong>
         </Fragment>
       ))}
     </div>
