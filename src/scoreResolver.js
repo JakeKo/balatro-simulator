@@ -1,4 +1,4 @@
-import { identifyHandPlayed } from "./handResolver.js";
+import { identifyHandPlayed, identifyAllHandsPlayed } from "./handResolver.js";
 
 function stringifyCard(card) {
   const { rank, suit } = card;
@@ -30,6 +30,7 @@ function resolveScore(allCards, handMap, allJokers) {
   const playedJokers = allJokers.filter((joker) => joker !== "None");
 
   const handPlayed = identifyHandPlayed(playedCards);
+  const allHandsPlayed = identifyAllHandsPlayed(playedCards);
   if (handPlayed === "No Hand") return [0, 0, ["No Hand"]];
 
   let [chips, mult] = handMap[handPlayed];
@@ -44,12 +45,26 @@ function resolveScore(allCards, handMap, allJokers) {
 
   // END OF ROUND - CYCLE THROUGH JOKERS
   for (const joker of playedJokers) {
-    if (joker === "Joker") {
+    if (joker === "Abstract Joker") {
+      const addedMult = 3 * playedJokers.length;
+      mult += addedMult;
+      log.push(`${joker} | +${addedMult} mult`);
+    } else if (joker === "Cavendish") {
+      mult += 3;
+      log.push(`${joker} | +3 mult`);
+    } else if (joker === "Clever Joker") {
+      if (allHandsPlayed.includes("Two Pair")) {
+        chips += 80;
+        log.push(`${joker} | +80 chips`);
+      }
+    } else if (joker === "Crafty Joker") {
+      if (allHandsPlayed.includes("Flush")) {
+        chips += 80;
+        log.push(`${joker} | +80 chips`);
+      }
+    } else if (joker === "Joker") {
       mult += 2;
       log.push(`${joker} | +2 mult`);
-    } else if (joker === "Crafty Joker" && handPlayed === "Flush") {
-      chips += 80;
-      log.push(`${joker} | +80 chips`);
     }
   }
 

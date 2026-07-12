@@ -106,4 +106,19 @@ function identifyHandPlayed(playedCards) {
   return "No Hand";
 }
 
-export { identifyHandPlayed };
+function identifyAllHandsPlayed(playedCards) {
+  const hands = [];
+  if (handIsRoyalFlush(playedCards)) hands.push("Royal Flush");
+  if (handIsStraightFlush(playedCards)) hands.push("Straight Flush");
+  if (handIsFourOfAKind(playedCards)) hands.push("Four of a Kind");
+  if (handIsFullHouse(playedCards)) hands.push("Full House");
+  if (handIsFlush(playedCards)) hands.push("Flush");
+  if (handIsStraight(playedCards)) hands.push("Straight");
+  if (handIsThreeOfAKind(playedCards)) hands.push("Three of a Kind");
+  if (handIsTwoPair(playedCards)) hands.push("Two Pair");
+  if (handIsPair(playedCards)) hands.push("Pair");
+  if (playedCards.length > 0) hands.push("High Card");
+  return hands;
+}
+
+export { identifyHandPlayed, identifyAllHandsPlayed };
