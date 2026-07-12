@@ -17,11 +17,13 @@ function countSuits(playedCards) {
 }
 
 function handIsRoyalFlush(playedCards) {
+  if (playedCards.length < 5) return false;
   const sortedCards = sortCardsByRank(playedCards);
   return sortedCards[0].rank === 10 && handIsStraightFlush(playedCards);
 }
 
 function handIsStraightFlush(playedCards) {
+  if (playedCards.length < 5) return false;
   const sortedCards = sortCardsByRank(playedCards);
 
   for (let i = 1; i < sortedCards.length; i++) {
@@ -37,22 +39,26 @@ function handIsStraightFlush(playedCards) {
 }
 
 function handIsFourOfAKind(playedCards) {
+  if (playedCards.length < 4) return false;
   const rankCounts = countRanks(playedCards);
   return Object.values(rankCounts).includes(4);
 }
 
 function handIsFullHouse(playedCards) {
+  if (playedCards.length < 5) return false;
   const rankCounts = countRanks(playedCards);
   const counts = Object.values(rankCounts);
   return counts.includes(3) && counts.includes(2);
 }
 
 function handIsFlush(playedCards) {
+  if (playedCards.length < 5) return false;
   const suitCounts = countSuits(playedCards);
   return Object.values(suitCounts).includes(5);
 }
 
 function handIsStraight(playedCards) {
+  if (playedCards.length < 5) return false;
   const sortedCards = sortCardsByRank(playedCards);
 
   for (let i = 1; i < sortedCards.length; i++) {
@@ -68,17 +74,20 @@ function handIsStraight(playedCards) {
 }
 
 function handIsThreeOfAKind(playedCards) {
+  if (playedCards.length < 3) return false;
   const rankCounts = countRanks(playedCards);
   return Object.values(rankCounts).includes(3);
 }
 
 function handIsTwoPair(playedCards) {
+  if (playedCards.length < 4) return false;
   const rankCounts = countRanks(playedCards);
   const counts = Object.values(rankCounts);
   return counts.filter((count) => count === 2).length === 2;
 }
 
 function handIsPair(playedCards) {
+  if (playedCards.length < 2) return false;
   const rankCounts = countRanks(playedCards);
   return Object.values(rankCounts).includes(2);
 }
@@ -93,7 +102,8 @@ function identifyHandPlayed(playedCards) {
   if (handIsThreeOfAKind(playedCards)) return "Three of a Kind";
   if (handIsTwoPair(playedCards)) return "Two Pair";
   if (handIsPair(playedCards)) return "Pair";
-  return "High Card";
+  if (playedCards.length > 0) return "High Card";
+  return "No Hand";
 }
 
 export { identifyHandPlayed };

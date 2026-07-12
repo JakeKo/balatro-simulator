@@ -14,6 +14,7 @@ function CardPicker({ card, onChange }) {
   return (
     <div className="card-picker">
       <select value={card.rank} onChange={onRankChange}>
+        <option value="0">None</option>
         <option value="2">Two</option>
         <option value="3">Three</option>
         <option value="4">Four</option>

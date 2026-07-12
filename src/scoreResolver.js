@@ -25,8 +25,13 @@ function stringifyCard(card) {
   return `${rankString}${suitString}`;
 }
 
-function resolveScore(playedCards, handMap) {
+function resolveScore(allCards, handMap) {
+  const playedCards = allCards.filter((card) => card.rank !== 0);
   const handPlayed = identifyHandPlayed(playedCards);
+  if (handPlayed === "No Hand") {
+    return [0, 0, ["No Hand"]];
+  }
+
   let [chips, mult] = handMap[handPlayed];
   const log = [`${handPlayed} | ${chips} × ${mult}`];
 

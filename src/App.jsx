@@ -5,7 +5,6 @@ import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import CardPicker from "./CardPicker.jsx";
 import HandTable from "./HandTable.jsx";
-import { identifyHandPlayed } from "./handResolver.js";
 import { resolveScore } from "./scoreResolver.js";
 import ScoreLogger from "./ScoreLogger.jsx";
 import JokerPicker from "./JokerPicker.jsx";
@@ -29,12 +28,12 @@ function App() {
     Pair: [10, 2],
     "High Card": [5, 1],
   });
-  const [playedCards, setPlayedCards] = useState([
-    { rank: 14, suit: "Hearts" },
-    { rank: 14, suit: "Hearts" },
-    { rank: 14, suit: "Hearts" },
-    { rank: 14, suit: "Hearts" },
-    { rank: 14, suit: "Hearts" },
+  const [allCards, setAllCards] = useState([
+    { rank: 0, suit: "Hearts" },
+    { rank: 0, suit: "Hearts" },
+    { rank: 0, suit: "Hearts" },
+    { rank: 0, suit: "Hearts" },
+    { rank: 0, suit: "Hearts" },
   ]);
   const [jokers, setJokers] = useState([
     "None",
@@ -45,11 +44,11 @@ function App() {
   ]);
 
   useEffect(() => {
-    const [newChips, newMult, log] = resolveScore(playedCards, handMap);
+    const [newChips, newMult, log] = resolveScore(allCards, handMap);
     setChips(newChips);
     setMult(newMult);
     setLog(log);
-  }, [playedCards, handMap]);
+  }, [allCards, handMap]);
 
   return (
     <div className="app">
@@ -68,14 +67,14 @@ function App() {
         ))}
       </div>
       <div className="card-pickers">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {allCards.map((card, index) => (
           <CardPicker
             key={index}
-            card={playedCards[index]}
+            card={card}
             onChange={(card) => {
-              const newPlayedCards = JSON.parse(JSON.stringify(playedCards));
+              const newPlayedCards = JSON.parse(JSON.stringify(allCards));
               newPlayedCards[index] = card;
-              setPlayedCards(newPlayedCards);
+              setAllCards(newPlayedCards);
             }}
           />
         ))}
