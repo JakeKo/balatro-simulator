@@ -38,6 +38,15 @@ const resolvedJokers = {
       }
     },
   },
+  "Blue Joker": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      if (gameMetadata.remainingCardsInDeck > 0) {
+        const addChips = 2 * gameMetadata.remainingCardsInDeck;
+        addEvent({ type: "JOKER_SCORED", joker: "Blue Joker", addChips });
+      }
+    },
+  },
   Cavendish: {
     when: (entry) => entry.type === "HAND_ENDED",
     score: (entry, scoredCards, gameMetadata, addEvent) => {
@@ -99,6 +108,13 @@ const resolvedJokers = {
       if (isEvenRank(entry.card)) {
         addEvent({ type: "JOKER_SCORED", joker: "Even Steven", addMult: 4 });
       }
+    },
+  },
+  "Fortune Teller": {
+    when: (entry) => entry.type === "HAND_ENDED",
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      const addMult = gameMetadata.cardsUsedThisRun + scoredCards.length;
+      addEvent({ type: "JOKER_SCORED", joker: "Fortune Teller", addMult });
     },
   },
   "Gros Michel": {

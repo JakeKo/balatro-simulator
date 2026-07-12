@@ -13,7 +13,7 @@ const JOKERS = [
   // "Baseball Card",
   // "Blackboard",
   // "Bloodstone",
-  // "Blue Joker",
+  "Blue Joker",
   // "Blueprint",
   // "Bootstraps",
   // "Brainstorm",
@@ -52,7 +52,7 @@ const JOKERS = [
   // "Fibonacci",
   // "Flash Card",
   // "Flower Pot",
-  // "Fortune Teller",
+  "Fortune Teller",
   // "Four Fingers",
   // "Gift Card",
   // "Glass Joker",
@@ -171,6 +171,22 @@ const METADATA_TEMPLATES_MAP = {
     {
       key: "remainingDiscards",
       label: "Remaining Discards",
+      type: "number",
+      default: 0,
+    },
+  ],
+  "Blue Joker": [
+    {
+      key: "remainingCardsInDeck",
+      label: "Remaining Cards in Deck",
+      type: "number",
+      default: 0,
+    },
+  ],
+  "Fortune Teller": [
+    {
+      key: "cardsUsedThisRun",
+      label: "Cards Used This Run",
       type: "number",
       default: 0,
     },
