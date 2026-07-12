@@ -41,9 +41,19 @@ function App() {
     "None",
     "None",
   ]);
-  const [gameMetadata, setGameMetadata] = useState({});
+  const [allJokerMetadata, setAllJokerMetadata] = useState([
+    {},
+    {},
+    {},
+    {},
+    {},
+  ]);
 
   useEffect(() => {
+    const gameMetadata = allJokerMetadata.reduce(
+      (metadata, jokerMetadata) => ({ ...metadata, ...jokerMetadata }),
+      {},
+    );
     const [newChips, newMult, log] = resolveScore(
       allCards,
       handMap,
@@ -53,7 +63,7 @@ function App() {
     setChips(newChips);
     setMult(newMult);
     setLog(log);
-  }, [allCards, handMap, allJokers, gameMetadata]);
+  }, [allCards, handMap, allJokers, allJokerMetadata]);
 
   return (
     <div className="app">
@@ -64,15 +74,16 @@ function App() {
           <JokerPicker
             key={index}
             joker={joker}
-            gameMetadata={gameMetadata}
-            onJokerChange={(joker) => {
+            metadata={allJokerMetadata[index]}
+            onChange={({ joker, metadata }) => {
               const newJokers = JSON.parse(JSON.stringify(allJokers));
+              const newMetadata = JSON.parse(JSON.stringify(allJokerMetadata));
+
               newJokers[index] = joker;
+              newMetadata[index] = metadata;
+
               setAllJokers(newJokers);
-            }}
-            onMetadataChange={(newMetadata) => {
-              const newGameMetadata = { ...gameMetadata, ...newMetadata };
-              setGameMetadata(newGameMetadata);
+              setAllJokerMetadata(newMetadata);
             }}
           />
         ))}

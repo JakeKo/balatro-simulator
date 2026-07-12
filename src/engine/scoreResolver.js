@@ -1,28 +1,16 @@
-import { identifyHandPlayed, identifyAllHandsPlayed } from "./handResolver.js";
+import { identifyHandPlayed } from "./handResolver.js";
 import { resolveJoker } from "./jokerResolver.js";
 
 function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
-  const playedJokers = allJokers.filter((joker) => joker !== "None");
-
   const [handPlayed, scoredCards] = identifyHandPlayed(playedCards);
-  const allHandsPlayed = identifyAllHandsPlayed(playedCards);
   if (handPlayed === "No Hand") return [0, 0, []];
 
-  const resolvedJokers = playedJokers.map(resolveJoker);
+  const playedJokers = allJokers.filter((joker) => joker !== "None");
+  const resolvedJokers = playedJokers.map(resolveJoker).filter((j) => !!j);
   gameMetadata.jokerCount = playedJokers.length;
 
-  const [baseChips, baseMult] = handMap[handPlayed];
-  const eventLog = [
-    {
-      type: "HAND_PLAYED",
-      hand: handPlayed,
-      baseChips,
-      baseMult,
-      scoredCards,
-    },
-  ];
-
+  const eventLog = [];
   function addEvent(entry) {
     eventLog.push(entry);
     resolvedJokers.forEach((resolvedJoker) => {
@@ -31,6 +19,15 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
       }
     });
   }
+
+  const [baseChips, baseMult] = handMap[handPlayed];
+  addEvent({
+    type: "HAND_PLAYED",
+    hand: handPlayed,
+    baseChips,
+    baseMult,
+    scoredCards,
+  });
 
   // BODY OF ROUND - CYCLE THROUGH PLAYED CARDS
   for (let i = 0; i < scoredCards.length; i++) {
