@@ -2,11 +2,11 @@
 
 This application allows a user to simulate a hand in Balatro given a custom configuration of cards, jokers, and game state.
 
-# Joker Tally
+# Joker Tally (30 / 150)
 
 - [ ] 8 Ball
 - [x] Abstract Joker
-- [ ] Acrobat
+- [x] Acrobat
 - [ ] Ancient Joker
 - [ ] Arrowhead
 - [ ] Astronomer
@@ -15,7 +15,7 @@ This application allows a user to simulate a hand in Balatro given a custom conf
 - [ ] Baseball Card
 - [ ] Blackboard
 - [ ] Bloodstone
-- [ ] Blue Joker
+- [x] Blue Joker
 - [ ] Blueprint
 - [ ] Bootstraps
 - [ ] Brainstorm
@@ -54,7 +54,7 @@ This application allows a user to simulate a hand in Balatro given a custom conf
 - [ ] Fibonacci
 - [ ] Flash Card
 - [ ] Flower Pot
-- [ ] Fortune Teller
+- [x] Fortune Teller
 - [ ] Four Fingers
 - [ ] Gift Card
 - [ ] Glass Joker
