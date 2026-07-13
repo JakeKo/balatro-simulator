@@ -17,8 +17,14 @@ function countSuits(playedCards) {
 }
 
 function findRankWithCount(rankCounts, count) {
-  const [rankString] = Object.entries(rankCounts).find(([_, c]) => c === count);
+  const [rankString] = Object.entries(rankCounts).find(([, c]) => c === count);
   return Number.parseInt(rankString, 10);
+}
+
+function findRanksWithCount(rankCounts, count) {
+  return Object.entries(rankCounts)
+    .filter(([, c]) => c === count)
+    .map(([rankString]) => Number.parseInt(rankString, 10));
 }
 
 function handIsRoyalFlush(playedCards) {
@@ -131,11 +137,7 @@ function handIsTwoPair(playedCards) {
 
 function findTwoPair(playedCards) {
   const rankCounts = countRanks(playedCards);
-  const ranksToFind = [];
-  Object.entries(rankCounts).forEach(([rank, count]) => {
-    if (count === 2) ranksToFind.push(rank);
-  });
-
+  const ranksToFind = findRanksWithCount(rankCounts, 2);
   return playedCards.filter((card) => ranksToFind.includes(card.rank));
 }
 
@@ -168,7 +170,7 @@ function identifyHandPlayed(playedCards) {
   } else if (handIsFourOfAKind(playedCards)) {
     return ["Four of a Kind", findFourOfAKind(playedCards)];
   } else if (handIsFullHouse(playedCards)) {
-    return ["FullHouse", findFullHouse(playedCards)];
+    return ["Full House", findFullHouse(playedCards)];
   } else if (handIsFlush(playedCards)) {
     return ["Flush", findFlush(playedCards)];
   } else if (handIsStraight(playedCards)) {
@@ -203,15 +205,25 @@ function identifyAllHandsPlayed(playedCards) {
 
 export {
   handIsRoyalFlush,
+  findRoyalFlush,
   handIsStraightFlush,
+  findStraightFlush,
   handIsFourOfAKind,
+  findFourOfAKind,
   handIsFullHouse,
+  findFullHouse,
   handIsFlush,
+  findFlush,
   handIsStraight,
+  findStraight,
   handIsThreeOfAKind,
+  findThreeOfAKind,
   handIsTwoPair,
+  findTwoPair,
   handIsPair,
+  findPair,
   handIsHighCard,
+  findHighCard,
   identifyHandPlayed,
   identifyAllHandsPlayed,
 };
