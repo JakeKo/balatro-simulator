@@ -1,4 +1,4 @@
-import { RANK_TO_NAME, SUIT_MAP } from "../constants";
+import { RANK_TO_NAME, SUITS } from "../constants";
 
 function CardPicker({ card, onChange }) {
   function onRankChange(event) {
@@ -21,7 +21,7 @@ function CardPicker({ card, onChange }) {
         ))}
       </select>
       <select value={card.suit} onChange={onSuitChange}>
-        {Object.values(SUIT_MAP).map((suit) => (
+        {Object.values(SUITS).map((suit) => (
           <option key={suit} value={suit}>
             {suit}
           </option>

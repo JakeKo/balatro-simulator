@@ -1,4 +1,4 @@
-const JOKERS_MAP = {
+const JOKERS = {
   NONE: "None",
   EIGHT_BALL: "8 Ball",
   ABSTRACT_JOKER: "Abstract Joker",
@@ -152,7 +152,46 @@ const JOKERS_MAP = {
   ZANY_JOKER: "Zany Joker",
 };
 
-const JOKERS_LIST = Object.values(JOKERS_MAP);
+const JOKERS_LIST = Object.values(JOKERS);
+
+// Some jokers require additional information to calculate
+// E.g., Banner needs to know how many discards are remaining
+// Rather than implement entire game state tracking, prompt the user to provide the hard-coded values
+// The map connects a selected Joker to the metadata that needs to be gathered
+const JOKER_METADATA_TEMPLATES = {
+  [JOKERS.ACROBAT]: [
+    {
+      key: "finalHand",
+      label: "Final Hand",
+      type: "boolean",
+      default: false,
+    },
+  ],
+  [JOKERS.BANNER]: [
+    {
+      key: "remainingDiscards",
+      label: "Remaining Discards",
+      type: "number",
+      default: 0,
+    },
+  ],
+  [JOKERS.BLUE_JOKER]: [
+    {
+      key: "remainingCardsInDeck",
+      label: "Remaining Cards in Deck",
+      type: "number",
+      default: 0,
+    },
+  ],
+  [JOKERS.FORTUNE_TELLER]: [
+    {
+      key: "cardsUsedThisRun",
+      label: "Cards Used This Run",
+      type: "number",
+      default: 0,
+    },
+  ],
+};
 
 const RANK_TO_NAME = {
   14: "Ace",
@@ -171,11 +210,63 @@ const RANK_TO_NAME = {
   0: "None",
 };
 
-const SUIT_MAP = {
+const SUITS = {
   HEARTS: "Hearts",
   DIAMONDS: "Diamonds",
   CLUBS: "Clubs",
   SPADES: "Spades",
 };
 
-export { JOKERS_MAP, JOKERS_LIST, RANK_TO_NAME, SUIT_MAP };
+const BASIC_HANDS = {
+  "Flush Five": [160, 16],
+  "Flush House": [140, 14],
+  "Five of a Kind": [120, 12],
+  "Royal Flush": [100, 8],
+  "Straight Flush": [100, 8],
+  "Four of a Kind": [60, 7],
+  "Full House": [40, 4],
+  Flush: [35, 4],
+  Straight: [30, 4],
+  "Three of a Kind": [30, 3],
+  "Two Pair": [20, 2],
+  Pair: [10, 2],
+  "High Card": [5, 1],
+};
+
+const HANDS = {
+  FLUSH_FIVE: "Flush Five",
+  FLUSH_HOUSE: "Flush House",
+  FIVE_OF_A_KIND: "Five of a Kind",
+  ROYAL_FLUSH: "Royal Flush",
+  STRAIGHT_FLUSH: "Straight Flush",
+  FOUR_OF_A_KIND: "Four of a Kind",
+  FULL_HOUSE: "Full House",
+  FLUSH: "Flush",
+  STRAIGHT: "Straight",
+  THREE_OF_A_KIND: "Three of a Kind",
+  TWO_PAIR: "Two Pair",
+  PAIR: "Pair",
+  HIGH_CARD: "High Card",
+  NONE: "No Hand",
+};
+
+const HANDS_LIST = Object.keys(BASIC_HANDS);
+
+const EVENT_TYPES = {
+  HAND_PLAYED: "Hand Played",
+  CARD_SCORED: "Card Scored",
+  HAND_ENDED: "Hand Ended",
+  JOKER_SCORED: "Joker Scored",
+};
+
+export {
+  JOKERS,
+  JOKERS_LIST,
+  JOKER_METADATA_TEMPLATES,
+  RANK_TO_NAME,
+  SUITS,
+  BASIC_HANDS,
+  HANDS,
+  HANDS_LIST,
+  EVENT_TYPES,
+};

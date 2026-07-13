@@ -1,12 +1,13 @@
 import { identifyHandPlayed } from "./handResolver.js";
 import { resolveJoker } from "./jokerResolver.js";
+import { JOKERS, HANDS, EVENT_TYPES } from "../constants.js";
 
 function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
   const [handPlayed, scoredCards] = identifyHandPlayed(playedCards);
-  if (handPlayed === "No Hand") return [0, 0, []];
+  if (handPlayed === HANDS.NONE) return [0, 0, []];
 
-  const playedJokers = allJokers.filter((joker) => joker !== "None");
+  const playedJokers = allJokers.filter((joker) => joker !== JOKERS.NONE);
   const resolvedJokers = playedJokers.map(resolveJoker).filter((j) => !!j);
   gameMetadata.jokerCount = playedJokers.length;
 
@@ -22,7 +23,7 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
 
   const [baseChips, baseMult] = handMap[handPlayed];
   addEvent({
-    type: "HAND_PLAYED",
+    type: EVENT_TYPES.HAND_PLAYED,
     hand: handPlayed,
     baseChips,
     baseMult,
@@ -32,11 +33,16 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   // BODY OF ROUND - CYCLE THROUGH PLAYED CARDS
   for (let i = 0; i < scoredCards.length; i++) {
     const card = scoredCards[i];
-    addEvent({ type: "CARD_SCORED", card, index: i, addChips: card.rank });
+    addEvent({
+      type: EVENT_TYPES.CARD_SCORED,
+      card,
+      index: i,
+      addChips: card.rank,
+    });
   }
 
   // END OF HAND - CYCLE THROUGH JOKERS
-  addEvent({ type: "HAND_ENDED" });
+  addEvent({ type: EVENT_TYPES.HAND_ENDED });
 
   const [chips, mult] = eventLog.reduce(
     ([chips, mult], entry) => {

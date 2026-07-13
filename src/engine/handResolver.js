@@ -1,3 +1,5 @@
+import { HANDS } from "../constants.js";
+
 function sortCardsByRank(playedCards) {
   return [...playedCards].sort((a, b) => (a.rank < b.rank ? -1 : 1));
 }
@@ -164,42 +166,42 @@ function findHighCard(playedCards) {
 
 function identifyHandPlayed(playedCards) {
   if (handIsRoyalFlush(playedCards)) {
-    return ["Royal Flush", findRoyalFlush(playedCards)];
+    return [HANDS.ROYAL_FLUSH, findRoyalFlush(playedCards)];
   } else if (handIsStraightFlush(playedCards)) {
-    return ["Straight Flush", findStraightFlush(playedCards)];
+    return [HANDS.STRAIGHT_FLUSH, findStraightFlush(playedCards)];
   } else if (handIsFourOfAKind(playedCards)) {
-    return ["Four of a Kind", findFourOfAKind(playedCards)];
+    return [HANDS.FOUR_OF_A_KIND, findFourOfAKind(playedCards)];
   } else if (handIsFullHouse(playedCards)) {
-    return ["Full House", findFullHouse(playedCards)];
+    return [HANDS.FULL_HOUSE, findFullHouse(playedCards)];
   } else if (handIsFlush(playedCards)) {
-    return ["Flush", findFlush(playedCards)];
+    return [HANDS.FLUSH, findFlush(playedCards)];
   } else if (handIsStraight(playedCards)) {
-    return ["Straight", findStraight(playedCards)];
+    return [HANDS.STRAIGHT, findStraight(playedCards)];
   } else if (handIsThreeOfAKind(playedCards)) {
-    return ["Three of a Kind", findThreeOfAKind(playedCards)];
+    return [HANDS.THREE_OF_A_KIND, findThreeOfAKind(playedCards)];
   } else if (handIsTwoPair(playedCards)) {
-    return ["Two Pair", findTwoPair(playedCards)];
+    return [HANDS.TWO_PAIR, findTwoPair(playedCards)];
   } else if (handIsPair(playedCards)) {
-    return ["Pair", findPair(playedCards)];
+    return [HANDS.PAIR, findPair(playedCards)];
   } else if (handIsHighCard(playedCards)) {
-    return ["High Card", findHighCard(playedCards)];
+    return [HANDS.HIGH_CARD, findHighCard(playedCards)];
   }
 
-  return ["No Hand", []];
+  return [HANDS.NONE, []];
 }
 
 function identifyAllHandsPlayed(playedCards) {
   const hands = [];
-  if (handIsRoyalFlush(playedCards)) hands.push("Royal Flush");
-  if (handIsStraightFlush(playedCards)) hands.push("Straight Flush");
-  if (handIsFourOfAKind(playedCards)) hands.push("Four of a Kind");
-  if (handIsFullHouse(playedCards)) hands.push("Full House");
-  if (handIsFlush(playedCards)) hands.push("Flush");
-  if (handIsStraight(playedCards)) hands.push("Straight");
-  if (handIsThreeOfAKind(playedCards)) hands.push("Three of a Kind");
-  if (handIsTwoPair(playedCards)) hands.push("Two Pair");
-  if (handIsPair(playedCards)) hands.push("Pair");
-  if (playedCards.length > 0) hands.push("High Card");
+  if (handIsRoyalFlush(playedCards)) hands.push(HANDS.ROYAL_FLUSH);
+  if (handIsStraightFlush(playedCards)) hands.push(HANDS.STRAIGHT_FLUSH);
+  if (handIsFourOfAKind(playedCards)) hands.push(HANDS.FOUR_OF_A_KIND);
+  if (handIsFullHouse(playedCards)) hands.push(HANDS.FULL_HOUSE);
+  if (handIsFlush(playedCards)) hands.push(HANDS.FLUSH);
+  if (handIsStraight(playedCards)) hands.push(HANDS.STRAIGHT);
+  if (handIsThreeOfAKind(playedCards)) hands.push(HANDS.THREE_OF_A_KIND);
+  if (handIsTwoPair(playedCards)) hands.push(HANDS.TWO_PAIR);
+  if (handIsPair(playedCards)) hands.push(HANDS.PAIR);
+  if (playedCards.length > 0) hands.push(HANDS.HIGH_CARD);
   return hands;
 }
 

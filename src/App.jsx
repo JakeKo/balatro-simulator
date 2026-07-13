@@ -7,36 +7,23 @@ import {
   ScoreLogger,
 } from "./components";
 import { resolveScore } from "./engine/scoreResolver.js";
+import { JOKERS, BASIC_HANDS, SUITS } from "./constants.js";
 
 function App() {
-  const [handMap, setHandMap] = useState({
-    "Flush Five": [160, 16],
-    "Flush House": [140, 14],
-    "Five of a Kind": [120, 12],
-    "Royal Flush": [100, 8],
-    "Straight Flush": [100, 8],
-    "Four of a Kind": [60, 7],
-    "Full House": [40, 4],
-    Flush: [35, 4],
-    Straight: [30, 4],
-    "Three of a Kind": [30, 3],
-    "Two Pair": [20, 2],
-    Pair: [10, 2],
-    "High Card": [5, 1],
-  });
+  const [handMap, setHandMap] = useState(BASIC_HANDS);
   const [allCards, setAllCards] = useState([
-    { rank: 0, suit: "Hearts" },
-    { rank: 0, suit: "Hearts" },
-    { rank: 0, suit: "Hearts" },
-    { rank: 0, suit: "Hearts" },
-    { rank: 0, suit: "Hearts" },
+    { rank: 0, suit: SUITS.HEARTS },
+    { rank: 0, suit: SUITS.HEARTS },
+    { rank: 0, suit: SUITS.HEARTS },
+    { rank: 0, suit: SUITS.HEARTS },
+    { rank: 0, suit: SUITS.HEARTS },
   ]);
   const [allJokers, setAllJokers] = useState([
-    "None",
-    "None",
-    "None",
-    "None",
-    "None",
+    JOKERS.NONE,
+    JOKERS.NONE,
+    JOKERS.NONE,
+    JOKERS.NONE,
+    JOKERS.NONE,
   ]);
   const [allJokerMetadata, setAllJokerMetadata] = useState([
     {},

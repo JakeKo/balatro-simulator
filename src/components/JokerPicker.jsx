@@ -1,50 +1,7 @@
-import { JOKERS_MAP, JOKERS_LIST } from "../constants";
-
-// Some jokers require additional information to calculate
-// E.g., Banner needs to know how many discards are remaining
-// Rather than implement entire game state tracking, prompt the user to provide the hard-coded values
-// The map connects a selected Joker to the metadata that needs to be gathered
-const METADATA_TEMPLATES_MAP = {
-  [JOKERS_MAP.ACROBAT]: [
-    {
-      key: "finalHand",
-      label: "Final Hand",
-      type: "boolean",
-      default: false,
-    },
-  ],
-  [JOKERS_MAP.BANNER]: [
-    {
-      key: "remainingDiscards",
-      label: "Remaining Discards",
-      type: "number",
-      default: 0,
-    },
-  ],
-  [JOKERS_MAP.BLUE_JOKER]: [
-    {
-      key: "remainingCardsInDeck",
-      label: "Remaining Cards in Deck",
-      type: "number",
-      default: 0,
-    },
-  ],
-  [JOKERS_MAP.FORTUNE_TELLER]: [
-    {
-      key: "cardsUsedThisRun",
-      label: "Cards Used This Run",
-      type: "number",
-      default: 0,
-    },
-  ],
-};
+import { JOKERS, JOKERS_LIST, JOKER_METADATA_TEMPLATES } from "../constants";
 
 function getMetadataTemplate(joker) {
-  if (joker in METADATA_TEMPLATES_MAP) {
-    return METADATA_TEMPLATES_MAP[joker];
-  }
-
-  return [];
+  return JOKER_METADATA_TEMPLATES[joker] || [];
 }
 
 function JokerPicker({ joker, metadata, onChange }) {

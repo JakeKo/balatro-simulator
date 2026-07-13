@@ -1,4 +1,4 @@
-import { SUIT_MAP } from "../constants";
+import { SUITS, EVENT_TYPES } from "../constants";
 
 function stringifyCard(card) {
   const { rank, suit } = card;
@@ -13,13 +13,13 @@ function stringifyCard(card) {
             ? "J"
             : rank.toString();
   const suitString =
-    suit === SUIT_MAP.HEARTS
+    suit === SUITS.HEARTS
       ? "H"
-      : suit === SUIT_MAP.DIAMONDS
+      : suit === SUITS.DIAMONDS
         ? "D"
-        : suit === SUIT_MAP.CLUBS
+        : suit === SUITS.CLUBS
           ? "C"
-          : suit === SUIT_MAP.SPADES
+          : suit === SUITS.SPADES
             ? "S"
             : "";
   return `${rankString}${suitString}`;
@@ -57,16 +57,16 @@ function ScoreLogger({ log }) {
       {log.map((entry, index) => {
         let logString = "";
         switch (entry.type) {
-          case "HAND_PLAYED":
+          case EVENT_TYPES.HAND_PLAYED:
             logString = stringifyHandPlayed(entry);
             break;
-          case "CARD_SCORED":
+          case EVENT_TYPES.CARD_SCORED:
             logString = stringifyCardScored(entry);
             break;
-          case "JOKER_SCORED":
+          case EVENT_TYPES.JOKER_SCORED:
             logString = stringifyJokerScored(entry);
             break;
-          case "HAND_ENDED":
+          case EVENT_TYPES.HAND_ENDED:
             logString = stringifyHandEnded();
             break;
         }
