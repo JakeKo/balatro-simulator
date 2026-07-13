@@ -201,4 +201,17 @@ function identifyAllHandsPlayed(playedCards) {
   return hands;
 }
 
-export { identifyHandPlayed, identifyAllHandsPlayed };
+export {
+  handIsRoyalFlush,
+  handIsStraightFlush,
+  handIsFourOfAKind,
+  handIsFullHouse,
+  handIsFlush,
+  handIsStraight,
+  handIsThreeOfAKind,
+  handIsTwoPair,
+  handIsPair,
+  handIsHighCard,
+  identifyHandPlayed,
+  identifyAllHandsPlayed,
+};
