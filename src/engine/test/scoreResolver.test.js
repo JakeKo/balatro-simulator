@@ -18,7 +18,24 @@ const BASIC_HAND_MAP = {
 };
 
 describe("scoreResolver", () => {
-  it("detects a royal flush and creates the correct eventLog", () => {
+  it("handles a custom hand map", () => {
+    const hand = parseCards(["AH", "KH", "QH", "JH", "10H"]);
+    const customHandMap = { ...BASIC_HAND_MAP, "Royal Flush": [200, 10] };
+    const [chips, mult, eventLog] = resolveScore(hand, customHandMap, [], {});
+
+    expect(chips).toBe(260);
+    expect(mult).toBe(10);
+    expect(eventLog).toContainEqual(
+      expect.objectContaining({
+        type: "HAND_PLAYED",
+        hand: "Royal Flush",
+        baseChips: 200,
+        baseMult: 10,
+      }),
+    );
+  });
+
+  it("detects a royal flush", () => {
     const hand = parseCards(["AH", "KH", "QH", "JH", "10H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
@@ -34,7 +51,7 @@ describe("scoreResolver", () => {
     );
   });
 
-  it("detects a straight flush and creates the correct eventLog", () => {
+  it("detects a straight flush", () => {
     const hand = parseCards(["9H", "8H", "7H", "6H", "5H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
@@ -50,7 +67,7 @@ describe("scoreResolver", () => {
     );
   });
 
-  it("detects four of a kind and creates the correct eventLog", () => {
+  it("detects four of a kind", () => {
     const hand = parseCards(["9H", "9D", "9C", "9S", "5H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
@@ -66,7 +83,7 @@ describe("scoreResolver", () => {
     );
   });
 
-  it("detects a full house and creates the correct eventLog", () => {
+  it("detects a full house", () => {
     const hand = parseCards(["9H", "9D", "9C", "8S", "8H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
@@ -82,7 +99,7 @@ describe("scoreResolver", () => {
     );
   });
 
-  it("detects a flush and creates the correct eventLog", () => {
+  it("detects a flush", () => {
     const hand = parseCards(["9H", "8H", "7H", "6H", "4H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
@@ -98,7 +115,7 @@ describe("scoreResolver", () => {
     );
   });
 
-  it("detects a straight and creates the correct eventLog", () => {
+  it("detects a straight", () => {
     const hand = parseCards(["9H", "8D", "7C", "6S", "5H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
@@ -114,7 +131,7 @@ describe("scoreResolver", () => {
     );
   });
 
-  it("detects three of a kind and creates the correct eventLog", () => {
+  it("detects three of a kind", () => {
     const hand = parseCards(["9H", "9D", "9C", "6S", "5H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
@@ -130,7 +147,7 @@ describe("scoreResolver", () => {
     );
   });
 
-  it("detects two pair and creates the correct eventLog", () => {
+  it("detects two pair", () => {
     const hand = parseCards(["9H", "9D", "8C", "8S", "5H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
@@ -146,7 +163,7 @@ describe("scoreResolver", () => {
     );
   });
 
-  it("detects a pair and creates the correct eventLog", () => {
+  it("detects a pair", () => {
     const hand = parseCards(["5H", "5D", "KC", "QS", "JH"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
@@ -162,7 +179,7 @@ describe("scoreResolver", () => {
     );
   });
 
-  it("detects a high card and creates the correct eventLog", () => {
+  it("detects a high card", () => {
     const hand = parseCards(["9H", "8D", "7C", "6S", "4H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HAND_MAP, [], {});
 
