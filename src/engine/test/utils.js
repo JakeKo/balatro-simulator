@@ -1,9 +1,11 @@
+import { SUIT_MAP } from "../constants.js";
+
 function parseCard(cardStr) {
   const suitMap = {
-    H: "hearts",
-    D: "diamonds",
-    C: "clubs",
-    S: "spades",
+    H: SUIT_MAP.HEARTS,
+    D: SUIT_MAP.DIAMONDS,
+    C: SUIT_MAP.CLUBS,
+    S: SUIT_MAP.SPADES,
   };
   const rankMap = {
     A: 14,

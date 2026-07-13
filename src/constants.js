@@ -154,4 +154,28 @@ const JOKERS_MAP = {
 
 const JOKERS_LIST = Object.values(JOKERS_MAP);
 
-export { JOKERS_MAP, JOKERS_LIST };
+const RANK_TO_NAME = {
+  14: "Ace",
+  13: "King",
+  12: "Queen",
+  11: "Jack",
+  10: "Ten",
+  9: "Nine",
+  8: "Eight",
+  7: "Seven",
+  6: "Six",
+  5: "Five",
+  4: "Four",
+  3: "Three",
+  2: "Two",
+  0: "None",
+};
+
+const SUIT_MAP = {
+  HEARTS: "Hearts",
+  DIAMONDS: "Diamonds",
+  CLUBS: "Clubs",
+  SPADES: "Spades",
+};
+
+export { JOKERS_MAP, JOKERS_LIST, RANK_TO_NAME, SUIT_MAP };

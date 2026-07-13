@@ -1,3 +1,5 @@
+import { RANK_TO_NAME, SUIT_MAP } from "../constants";
+
 function CardPicker({ card, onChange }) {
   function onRankChange(event) {
     const rank = parseInt(event.target.value, 10);
@@ -12,26 +14,18 @@ function CardPicker({ card, onChange }) {
   return (
     <div className="card-picker">
       <select value={card.rank} onChange={onRankChange}>
-        <option value="0">None</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-        <option value="4">Four</option>
-        <option value="5">Five</option>
-        <option value="6">Six</option>
-        <option value="7">Seven</option>
-        <option value="8">Eight</option>
-        <option value="9">Nine</option>
-        <option value="10">Ten</option>
-        <option value="11">Jack</option>
-        <option value="12">Queen</option>
-        <option value="13">King</option>
-        <option value="14">Ace</option>
+        {Object.entries(RANK_TO_NAME).map(([rank, name]) => (
+          <option key={rank} value={rank}>
+            {name}
+          </option>
+        ))}
       </select>
       <select value={card.suit} onChange={onSuitChange}>
-        <option value="Hearts">Hearts</option>
-        <option value="Diamonds">Diamonds</option>
-        <option value="Clubs">Clubs</option>
-        <option value="Spades">Spades</option>
+        {Object.values(SUIT_MAP).map((suit) => (
+          <option key={suit} value={suit}>
+            {suit}
+          </option>
+        ))}
       </select>
     </div>
   );

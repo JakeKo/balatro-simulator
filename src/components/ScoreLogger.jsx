@@ -1,3 +1,5 @@
+import { SUIT_MAP } from "../constants";
+
 function stringifyCard(card) {
   const { rank, suit } = card;
   const rankString =
@@ -11,13 +13,13 @@ function stringifyCard(card) {
             ? "J"
             : rank.toString();
   const suitString =
-    suit === "Hearts"
+    suit === SUIT_MAP.HEARTS
       ? "H"
-      : suit === "Diamonds"
+      : suit === SUIT_MAP.DIAMONDS
         ? "D"
-        : suit === "Clubs"
+        : suit === SUIT_MAP.CLUBS
           ? "C"
-          : suit === "Spades"
+          : suit === SUIT_MAP.SPADES
             ? "S"
             : "";
   return `${rankString}${suitString}`;
