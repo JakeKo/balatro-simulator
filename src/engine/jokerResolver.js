@@ -256,7 +256,7 @@ const resolvedJokers = {
           addEvent({
             type: EVENT_TYPES.JOKER_SCORED,
             joker: JOKERS.PHOTOGRAPH,
-            addMult: 2,
+            multMult: 2,
           });
         }
       }
