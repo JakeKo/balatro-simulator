@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const JOKERS = [
   "None",
   // "8 Ball",

@@ -44,7 +44,7 @@ function stringifyJokerScored(entry) {
   return `${joker} | ${operations.join(", ")}`;
 }
 
-function stringifyHandEnded(entry) {
+function stringifyHandEnded() {
   return "Hand Ended |";
 }
 
@@ -53,16 +53,23 @@ function ScoreLogger({ log }) {
     <div className="score-logger">
       {log.length === 0 && <code>No Hand</code>}
       {log.map((entry, index) => {
+        let logString = "";
         switch (entry.type) {
           case "HAND_PLAYED":
-            return <code>{stringifyHandPlayed(entry)}</code>;
+            logString = stringifyHandPlayed(entry);
+            break;
           case "CARD_SCORED":
-            return <code>{stringifyCardScored(entry)}</code>;
+            logString = stringifyCardScored(entry);
+            break;
           case "JOKER_SCORED":
-            return <code>{stringifyJokerScored(entry)}</code>;
+            logString = stringifyJokerScored(entry);
+            break;
           case "HAND_ENDED":
-            return <code>{stringifyHandEnded(entry)}</code>;
+            logString = stringifyHandEnded();
+            break;
         }
+
+        return <code key={index}>{logString}</code>;
       })}
     </div>
   );

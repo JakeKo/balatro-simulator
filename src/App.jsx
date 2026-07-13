@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   CardPicker,
   HandTable,
@@ -9,9 +9,6 @@ import {
 import { resolveScore } from "./engine/scoreResolver.js";
 
 function App() {
-  const [log, setLog] = useState([]);
-  const [chips, setChips] = useState(0);
-  const [mult, setMult] = useState(1);
   const [handMap, setHandMap] = useState({
     "Flush Five": [160, 16],
     "Flush House": [140, 14],
@@ -49,21 +46,16 @@ function App() {
     {},
   ]);
 
-  useEffect(() => {
-    const gameMetadata = allJokerMetadata.reduce(
-      (metadata, jokerMetadata) => ({ ...metadata, ...jokerMetadata }),
-      {},
-    );
-    const [newChips, newMult, log] = resolveScore(
-      allCards,
-      handMap,
-      allJokers,
-      gameMetadata,
-    );
-    setChips(newChips);
-    setMult(newMult);
-    setLog(log);
-  }, [allCards, handMap, allJokers, allJokerMetadata]);
+  const gameMetadata = allJokerMetadata.reduce(
+    (metadata, jokerMetadata) => ({ ...metadata, ...jokerMetadata }),
+    {},
+  );
+  const [chips, mult, eventLog] = resolveScore(
+    allCards,
+    handMap,
+    allJokers,
+    gameMetadata,
+  );
 
   return (
     <div className="app">
@@ -101,7 +93,7 @@ function App() {
           />
         ))}
       </div>
-      <ScoreLogger log={log} />
+      <ScoreLogger log={eventLog} />
     </div>
   );
 }

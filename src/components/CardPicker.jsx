@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 function CardPicker({ card, onChange }) {
   function onRankChange(event) {
     const rank = parseInt(event.target.value, 10);
