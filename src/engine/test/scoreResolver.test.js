@@ -8,7 +8,7 @@ describe("scoreResolver", () => {
     const customHandMap = { ...BASIC_HANDS, [HANDS.ROYAL_FLUSH]: [200, 10] };
     const [chips, mult, eventLog] = resolveScore(hand, customHandMap, [], {});
 
-    expect(chips).toBe(260);
+    expect(chips).toBe(254);
     expect(mult).toBe(10);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
@@ -24,7 +24,7 @@ describe("scoreResolver", () => {
     const hand = parseCards(["AH", "KH", "QH", "JH", "10H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, [], {});
 
-    expect(chips).toBe(160);
+    expect(chips).toBe(154);
     expect(mult).toBe(8);
     expect(eventLog).toContainEqual(
       expect.objectContaining({

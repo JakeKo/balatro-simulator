@@ -33,11 +33,13 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   // BODY OF ROUND - CYCLE THROUGH PLAYED CARDS
   for (let i = 0; i < scoredCards.length; i++) {
     const card = scoredCards[i];
+    const rankForScoring = [14, 13, 12].includes(card.rank) ? 11 : card.rank;
+
     addEvent({
       type: EVENT_TYPES.CARD_SCORED,
       card,
       index: i,
-      addChips: card.rank,
+      addChips: rankForScoring,
     });
   }
 
