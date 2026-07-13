@@ -70,7 +70,7 @@ const resolvedJokers = {
       addEvent({
         type: EVENT_TYPES.JOKER_SCORED,
         joker: JOKERS.CAVENDISH,
-        addMult: 3,
+        multMult: 3,
       });
     },
   },
