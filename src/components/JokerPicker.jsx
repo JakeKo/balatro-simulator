@@ -1,4 +1,4 @@
-import { JOKERS, JOKERS_LIST, JOKER_METADATA_TEMPLATES } from "../constants";
+import { JOKERS_LIST, JOKER_METADATA_TEMPLATES } from "../constants";
 
 function getMetadataTemplate(joker) {
   return JOKER_METADATA_TEMPLATES[joker] || [];

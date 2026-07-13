@@ -1,4 +1,4 @@
-import { SUITS } from "../constants.js";
+import { SUITS } from "../../constants.js";
 
 function parseCard(cardStr) {
   const suitMap = {

@@ -1,34 +1,19 @@
 import { resolveScore } from "../scoreResolver.js";
 import { parseCards } from "./utils.js";
-
-const BASIC_HANDS = {
-  "Flush Five": [160, 16],
-  "Flush House": [140, 14],
-  "Five of a Kind": [120, 12],
-  "Royal Flush": [100, 8],
-  "Straight Flush": [100, 8],
-  "Four of a Kind": [60, 7],
-  "Full House": [40, 4],
-  Flush: [35, 4],
-  Straight: [30, 4],
-  "Three of a Kind": [30, 3],
-  "Two Pair": [20, 2],
-  Pair: [10, 2],
-  "High Card": [5, 1],
-};
+import { BASIC_HANDS, HANDS, EVENT_TYPES } from "../../constants.js";
 
 describe("scoreResolver", () => {
   it("handles a custom hand map", () => {
     const hand = parseCards(["AH", "KH", "QH", "JH", "10H"]);
-    const customHandMap = { ...BASIC_HANDS, "Royal Flush": [200, 10] };
+    const customHandMap = { ...BASIC_HANDS, [HANDS.ROYAL_FLUSH]: [200, 10] };
     const [chips, mult, eventLog] = resolveScore(hand, customHandMap, [], {});
 
     expect(chips).toBe(260);
     expect(mult).toBe(10);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Royal Flush",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.ROYAL_FLUSH,
         baseChips: 200,
         baseMult: 10,
       }),
@@ -43,8 +28,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(8);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Royal Flush",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.ROYAL_FLUSH,
         baseChips: 100,
         baseMult: 8,
       }),
@@ -59,8 +44,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(8);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Straight Flush",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.STRAIGHT_FLUSH,
         baseChips: 100,
         baseMult: 8,
       }),
@@ -75,8 +60,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(7);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Four of a Kind",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.FOUR_OF_A_KIND,
         baseChips: 60,
         baseMult: 7,
       }),
@@ -91,8 +76,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(4);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Full House",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.FULL_HOUSE,
         baseChips: 40,
         baseMult: 4,
       }),
@@ -107,8 +92,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(4);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Flush",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.FLUSH,
         baseChips: 35,
         baseMult: 4,
       }),
@@ -123,8 +108,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(4);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Straight",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.STRAIGHT,
         baseChips: 30,
         baseMult: 4,
       }),
@@ -139,8 +124,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(3);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Three of a Kind",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.THREE_OF_A_KIND,
         baseChips: 30,
         baseMult: 3,
       }),
@@ -155,8 +140,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(2);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Two Pair",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.TWO_PAIR,
         baseChips: 20,
         baseMult: 2,
       }),
@@ -171,8 +156,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(2);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "Pair",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.PAIR,
         baseChips: 10,
         baseMult: 2,
       }),
@@ -187,8 +172,8 @@ describe("scoreResolver", () => {
     expect(mult).toBe(1);
     expect(eventLog).toContainEqual(
       expect.objectContaining({
-        type: "HAND_PLAYED",
-        hand: "High Card",
+        type: EVENT_TYPES.HAND_PLAYED,
+        hand: HANDS.HIGH_CARD,
         baseChips: 5,
         baseMult: 1,
       }),
