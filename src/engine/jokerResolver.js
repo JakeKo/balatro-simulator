@@ -203,7 +203,7 @@ const resolvedJokers = {
       addEvent({
         type: EVENT_TYPES.JOKER_SCORED,
         joker: JOKERS.JOKER,
-        addMult: 2,
+        addMult: 4,
       });
     },
   },
