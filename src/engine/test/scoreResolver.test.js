@@ -194,6 +194,51 @@ describe("scoreResolver handling different hands", () => {
 });
 
 /*
+  CARD MODIFIERS - UNIT TESTS
+*/
+describe("scoreResolver - Card Modifiers", () => {
+  it("Bonus Card", () => {
+    const hand = parseCards(["9HBXX"]);
+    const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, [], {});
+
+    expect(chips).toBe(44); // 5 (high card) + 9 (hand) + 30 (bonus card)
+    expect(mult).toBe(1); // 1 (high card)
+  });
+
+  it("Mult Card", () => {
+    const hand = parseCards(["9HMXX"]);
+    const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, [], {});
+
+    expect(chips).toBe(14); // 5 (high card) + 9 (hand)
+    expect(mult).toBe(5); // 1 (high card) + 4 (mult card)
+  });
+
+  it("Glass Card", () => {
+    const hand = parseCards(["9HGXX"]);
+    const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, [], {});
+
+    expect(chips).toBe(14); // 5 (high card) + 9 (hand)
+    expect(mult).toBe(2); // 1 (high card) * 2 (glass card)
+  });
+
+  it("Stone Card", () => {
+    const hand = parseCards(["9HOXX"]);
+    const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, [], {});
+
+    expect(chips).toBe(55); // 5 (high card) + 50 (hand + stone)
+    expect(mult).toBe(1); // 1 (high card)
+  });
+
+  it("Lucky Card", () => {
+    const hand = parseCards(["9HLXX"]);
+    const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, [], {});
+
+    expect(chips).toBe(14); // 5 (high card) + 9 (hand)
+    expect(mult).toBe(21); // 1 (high card) + 20 (lucky card)
+  });
+});
+
+/*
  JOKERS - UNIT AND INTEGRATION TESTS
 */
 describe("scoreResolver handling different jokers", () => {

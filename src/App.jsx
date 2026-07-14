@@ -7,7 +7,7 @@ import {
   ScoreLogger,
 } from "./components";
 import { resolveScore } from "./engine/scoreResolver.js";
-import { JOKERS, BASIC_HANDS, SUITS, BLANK_CARD } from "./constants.js";
+import { JOKERS, BASIC_HANDS, BLANK_CARD } from "./constants.js";
 
 function App() {
   const [handMap, setHandMap] = useState(BASIC_HANDS);

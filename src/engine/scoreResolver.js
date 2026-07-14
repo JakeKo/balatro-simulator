@@ -1,5 +1,6 @@
 import { identifyHandPlayed } from "./handResolver.js";
 import { resolveJoker } from "./jokerResolver.js";
+import { resolveCard } from "./cardResolver.js";
 import { JOKERS, HANDS, EVENT_TYPES } from "../constants.js";
 
 function resolveScore(allCards, handMap, allJokers, gameMetadata) {
@@ -33,13 +34,15 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   // BODY OF ROUND - CYCLE THROUGH PLAYED CARDS
   for (let i = 0; i < scoredCards.length; i++) {
     const card = scoredCards[i];
-    const rankForScoring = [14, 13, 12].includes(card.rank) ? 11 : card.rank;
+    const [addChips, addMult, multMult] = resolveCard(card);
 
     addEvent({
       type: EVENT_TYPES.CARD_SCORED,
       card,
       index: i,
-      addChips: rankForScoring,
+      addChips,
+      addMult,
+      multMult,
     });
   }
 
