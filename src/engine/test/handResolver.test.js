@@ -23,59 +23,79 @@ import {
 import { parseCards } from "./utils.js";
 
 describe("handIsRoyalFlush", () => {
-  it("is true when royal flush is present", () => {
+  it("Royal flush present", () => {
     const playedCards = parseCards(["AH", "KH", "QH", "JH", "10H"]);
     expect(handIsRoyalFlush(playedCards)).toBe(true);
   });
 
-  it("is false when ranks are not consecutive", () => {
+  it("Royal flush present with wild card", () => {
+    const playedCards = parseCards(["AH", "KH", "QDWXX", "JH", "10H"]);
+    expect(handIsRoyalFlush(playedCards)).toBe(true);
+  });
+
+  it("Ranks not consecutive", () => {
     const playedCards = parseCards(["AH", "KH", "QH", "JH", "9H"]);
     expect(handIsRoyalFlush(playedCards)).toBe(false);
   });
 
-  it("is false when cards are not all the same suit", () => {
+  it("Suits not all the same", () => {
     const playedCards = parseCards(["AH", "KH", "QH", "JH", "10D"]);
     expect(handIsRoyalFlush(playedCards)).toBe(false);
   });
 
-  it("is false when there are not enough cards for royal flush", () => {
+  it("Not enough cards", () => {
     const playedCards = parseCards(["AH", "KH", "QH"]);
     expect(handIsRoyalFlush(playedCards)).toBe(false);
   });
 });
 
 describe("findRoyalFlush", () => {
-  it("returns the correct cards for a royal flush", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["AH", "KH", "QH", "JH", "10H"]);
+    expect(findRoyalFlush(playedCards)).toEqual(playedCards);
+  });
+
+  it("Wild card", () => {
+    const playedCards = parseCards(["AH", "KH", "QDWXX", "JH", "10H"]);
     expect(findRoyalFlush(playedCards)).toEqual(playedCards);
   });
 });
 
 describe("handIsStraightFlush", () => {
-  it("is true when straight flush is present", () => {
+  it("Straight flush present", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "5H"]);
     expect(handIsStraightFlush(playedCards)).toBe(true);
   });
 
-  it("is false when ranks are not consecutive", () => {
+  it("Straight flush present with wild card", () => {
+    const playedCards = parseCards(["9H", "8H", "7H", "6H", "5DWXX"]);
+    expect(handIsStraightFlush(playedCards)).toBe(true);
+  });
+
+  it("Ranks not consecutive", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "4H"]);
     expect(handIsStraightFlush(playedCards)).toBe(false);
   });
 
-  it("is false when cards are not all the same suit", () => {
+  it("Suits not all the same", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "5D"]);
     expect(handIsStraightFlush(playedCards)).toBe(false);
   });
 
-  it("is false when there are not enough cards for straight flush", () => {
+  it("Not enough cards", () => {
     const playedCards = parseCards(["9H", "8H", "7H"]);
     expect(handIsStraightFlush(playedCards)).toBe(false);
   });
 });
 
 describe("findStraightFlush", () => {
-  it("returns the correct cards for a straight flush", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "5H"]);
+    expect(findStraightFlush(playedCards)).toEqual(playedCards);
+  });
+
+  it("Wild card", () => {
+    const playedCards = parseCards(["9H", "8H", "7H", "6H", "5DWXX"]);
     expect(findStraightFlush(playedCards)).toEqual(playedCards);
   });
 });
@@ -136,25 +156,35 @@ describe("findFullHouse", () => {
 });
 
 describe("handIsFlush", () => {
-  it("is true when flush is present", () => {
+  it("Flush is present", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "5H"]);
     expect(handIsFlush(playedCards)).toBe(true);
   });
 
-  it("is false when cards are not all the same suit", () => {
+  it("Flush is present with wild card", () => {
+    const playedCards = parseCards(["9H", "8H", "7H", "6H", "5DWXX"]);
+    expect(handIsFlush(playedCards)).toBe(true);
+  });
+
+  it("Suits not all the same", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "5D"]);
     expect(handIsFlush(playedCards)).toBe(false);
   });
 
-  it("is false when there are not enough cards for flush", () => {
+  it("Not enough cards", () => {
     const playedCards = parseCards(["9H", "8H", "7H"]);
     expect(handIsFlush(playedCards)).toBe(false);
   });
 });
 
 describe("findFlush", () => {
-  it("returns the correct cards for a flush", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "5H"]);
+    expect(findFlush(playedCards)).toEqual(playedCards);
+  });
+
+  it("Wild card", () => {
+    const playedCards = parseCards(["9H", "8H", "7H", "6H", "5DWXX"]);
     expect(findFlush(playedCards)).toEqual(playedCards);
   });
 });

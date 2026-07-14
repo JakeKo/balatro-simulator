@@ -1,4 +1,4 @@
-import { HANDS } from "../constants.js";
+import { HANDS, ENHANCEMENTS, SUIT_LIST } from "../constants.js";
 
 function sortCardsByRank(playedCards) {
   return [...playedCards].sort((a, b) => (a.rank < b.rank ? -1 : 1));
@@ -13,7 +13,14 @@ function countRanks(playedCards) {
 
 function countSuits(playedCards) {
   return playedCards.reduce((counter, card) => {
-    counter[card.suit] = (counter[card.suit] || 0) + 1;
+    // If the card has the wild enhancement, it counts as every suit
+    if (card.enhancement === ENHANCEMENTS.WILD) {
+      SUIT_LIST.forEach((suit) => {
+        counter[suit] = (counter[suit] || 0) + 1;
+      });
+    } else {
+      counter[card.suit] = (counter[card.suit] || 0) + 1;
+    }
     return counter;
   }, {});
 }
@@ -27,6 +34,14 @@ function findRanksWithCount(rankCounts, count) {
   return Object.entries(rankCounts)
     .filter(([, c]) => c === count)
     .map(([rankString]) => Number.parseInt(rankString, 10));
+}
+
+function suitsMatch(firstCard, secondCard) {
+  return (
+    firstCard.suit === secondCard.suit ||
+    firstCard.enhancement === ENHANCEMENTS.WILD ||
+    secondCard.enhancement === ENHANCEMENTS.WILD
+  );
 }
 
 function handIsRoyalFlush(playedCards) {
@@ -47,7 +62,7 @@ function handIsStraightFlush(playedCards) {
     const prev = sortedCards[i - 1];
     const curr = sortedCards[i];
 
-    if (curr.suit !== prev.suit || curr.rank !== prev.rank + 1) {
+    if (!suitsMatch(curr, prev) || curr.rank !== prev.rank + 1) {
       return false;
     }
   }

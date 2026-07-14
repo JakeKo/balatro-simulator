@@ -2,6 +2,35 @@
 
 This application allows a user to simulate a hand in Balatro given a custom configuration of cards, jokers, and game state.
 
+Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https://balatrogame.fandom.com/wiki/Balatro_Wiki).
+
+# Card Modifier Tally
+
+#### Enhancements
+
+- [ ] Bonus Card
+- [ ] Glass Card
+- [ ] Gold Card
+- [ ] Lucky Card
+- [ ] Mult Card
+- [ ] Steel Card
+- [ ] Stone Card
+- [x] Wild Card
+
+#### Editions
+
+- [ ] Foil
+- [ ] Holographic
+- [ ] Polychrome
+- [ ] Negative
+
+#### Chips
+
+- [ ] Gold
+- [ ] Red
+- [ ] Blue
+- [ ] Purple
+
 # Joker Tally (30 / 150)
 
 - [ ] 8 Ball

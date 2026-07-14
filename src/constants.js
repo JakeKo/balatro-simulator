@@ -193,7 +193,7 @@ const JOKER_METADATA_TEMPLATES = {
   ],
 };
 
-const RANK_TO_NAME = {
+const RANKS = {
   14: "Ace",
   13: "King",
   12: "Queen",
@@ -210,12 +210,16 @@ const RANK_TO_NAME = {
   0: "None",
 };
 
+const RANK_LIST = Object.keys(RANKS).map((rank) => parseInt(rank, 10));
+
 const SUITS = {
   HEARTS: "Hearts",
   DIAMONDS: "Diamonds",
   CLUBS: "Clubs",
   SPADES: "Spades",
 };
+
+const SUIT_LIST = Object.values(SUITS);
 
 const BASIC_HANDS = {
   "Flush Five": [160, 16],
@@ -301,8 +305,10 @@ export {
   JOKERS,
   JOKERS_LIST,
   JOKER_METADATA_TEMPLATES,
-  RANK_TO_NAME,
+  RANKS,
+  RANK_LIST,
   SUITS,
+  SUIT_LIST,
   BASIC_HANDS,
   HANDS,
   HANDS_LIST,
