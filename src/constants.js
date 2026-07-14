@@ -259,6 +259,44 @@ const EVENT_TYPES = {
   JOKER_SCORED: "Joker Scored",
 };
 
+const ENHANCEMENTS = {
+  NONE: "None",
+  BONUS: "Bonus",
+  MULT: "Mult",
+  WILD: "Wild",
+  GLASS: "Glass",
+  STEEL: "Steel",
+  STONE: "Stone",
+  GOLD: "Gold",
+  LUCKY: "Lucky",
+};
+
+const EDITIONS = {
+  NONE: "None",
+  FOIL: "Foil",
+  HOLOGRAPHIC: "Holographic",
+  POLYCHROME: "Polychrome",
+  NEGATIVE: "Negative",
+};
+
+const SEALS = {
+  NONE: "None",
+  GOLD: "Gold",
+  RED: "Red",
+  BLUE: "Blue",
+  PURPLE: "Purple",
+};
+
+function BLANK_CARD() {
+  return {
+    rank: 0,
+    suit: SUITS.HEARTS,
+    enhancement: ENHANCEMENTS.NONE,
+    edition: EDITIONS.NONE,
+    seal: SEALS.NONE,
+  };
+}
+
 export {
   JOKERS,
   JOKERS_LIST,
@@ -269,4 +307,8 @@ export {
   HANDS,
   HANDS_LIST,
   EVENT_TYPES,
+  ENHANCEMENTS,
+  EDITIONS,
+  SEALS,
+  BLANK_CARD,
 };

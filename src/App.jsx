@@ -7,16 +7,16 @@ import {
   ScoreLogger,
 } from "./components";
 import { resolveScore } from "./engine/scoreResolver.js";
-import { JOKERS, BASIC_HANDS, SUITS } from "./constants.js";
+import { JOKERS, BASIC_HANDS, SUITS, BLANK_CARD } from "./constants.js";
 
 function App() {
   const [handMap, setHandMap] = useState(BASIC_HANDS);
   const [allCards, setAllCards] = useState([
-    { rank: 0, suit: SUITS.HEARTS },
-    { rank: 0, suit: SUITS.HEARTS },
-    { rank: 0, suit: SUITS.HEARTS },
-    { rank: 0, suit: SUITS.HEARTS },
-    { rank: 0, suit: SUITS.HEARTS },
+    BLANK_CARD(),
+    BLANK_CARD(),
+    BLANK_CARD(),
+    BLANK_CARD(),
+    BLANK_CARD(),
   ]);
   const [allJokers, setAllJokers] = useState([
     JOKERS.NONE,
