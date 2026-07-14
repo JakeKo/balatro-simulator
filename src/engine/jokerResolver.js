@@ -1,17 +1,24 @@
-import { identifyAllHandsPlayed } from "./handResolver";
+import {
+  handIsPair,
+  handIsTwoPair,
+  handIsThreeOfAKind,
+  handIsStraight,
+  handIsFlush,
+} from "./handResolver";
 import { JOKERS, HANDS, EVENT_TYPES } from "../constants";
+import { isOddRank, isEvenRank, isFaceCard } from "./cardResolver";
 
-function isOddRank(card) {
-  // Rank 14 is an Ace, which is treated instead as rank 1 in this context
-  return [14, 9, 7, 5, 3].includes(card.rank);
-}
+function jokerScored(joker, addChips, addMult, multMult) {
+  const event = {
+    type: EVENT_TYPES.JOKER_SCORED,
+    joker,
+  };
 
-function isEvenRank(card) {
-  return [10, 8, 6, 4, 2].includes(card.rank);
-}
+  if (addChips) event.addChips = addChips;
+  if (addMult) event.addMult = addMult;
+  if (multMult) event.multMult = multMult;
 
-function isFaceCard(card, gameMetadata) {
-  return gameMetadata.pareidolia || (card.rank >= 11 && card.rank <= 13);
+  return event;
 }
 
 const resolvedJokers = {
@@ -19,22 +26,14 @@ const resolvedJokers = {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       const addMult = 3 * gameMetadata.jokerCount;
-      addEvent({
-        type: EVENT_TYPES.JOKER_SCORED,
-        joker: JOKERS.ABSTRACT_JOKER,
-        addMult,
-      });
+      addEvent(jokerScored(JOKERS.ABSTRACT_JOKER, 0, addMult, 0));
     },
   },
   [JOKERS.ACROBAT]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (gameMetadata.finalHand) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ACROBAT,
-          multMult: 3,
-        });
+        addEvent(jokerScored(JOKERS.ACROBAT, 0, 0, 3));
       }
     },
   },
@@ -43,11 +42,7 @@ const resolvedJokers = {
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (gameMetadata.remainingDiscards > 0) {
         const addChips = 30 * gameMetadata.remainingDiscards;
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BANNER,
-          addChips,
-        });
+        addEvent(jokerScored(JOKERS.BANNER, addChips, 0, 0));
       }
     },
   },
@@ -56,86 +51,53 @@ const resolvedJokers = {
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (gameMetadata.remainingCardsInDeck > 0) {
         const addChips = 2 * gameMetadata.remainingCardsInDeck;
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BLUE_JOKER,
-          addChips,
-        });
+        addEvent(jokerScored(JOKERS.BLUE_JOKER, addChips, 0, 0));
       }
     },
   },
   [JOKERS.CAVENDISH]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      addEvent({
-        type: EVENT_TYPES.JOKER_SCORED,
-        joker: JOKERS.CAVENDISH,
-        multMult: 3,
-      });
+      addEvent(jokerScored(JOKERS.CAVENDISH, 0, 0, 3));
     },
   },
   [JOKERS.CLEVER_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.TWO_PAIR)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CLEVER_JOKER,
-          addChips: 80,
-        });
+      if (handIsTwoPair(scoredCards)) {
+        addEvent(jokerScored(JOKERS.CLEVER_JOKER, 80, 0, 0));
       }
     },
   },
   [JOKERS.CRAFTY_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.FLUSH)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CRAFTY_JOKER,
-          addChips: 80,
-        });
+      if (handIsFlush(scoredCards)) {
+        addEvent(jokerScored(JOKERS.CRAFTY_JOKER, 80, 0, 0));
       }
     },
   },
   [JOKERS.CRAZY_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.STRAIGHT)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CRAZY_JOKER,
-          addMult: 12,
-        });
+      if (handIsStraight(scoredCards)) {
+        addEvent(jokerScored(JOKERS.CRAZY_JOKER, 0, 12, 0));
       }
     },
   },
   [JOKERS.DEVIOUS_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.STRAIGHT)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.DEVIOUS_JOKER,
-          addChips: 100,
-        });
+      if (handIsStraight(scoredCards)) {
+        addEvent(jokerScored(JOKERS.DEVIOUS_JOKER, 100, 0, 0));
       }
     },
   },
   [JOKERS.DROLL_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.FLUSH)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.DROLL_JOKER,
-          addMult: 10,
-        });
+      if (handIsFlush(scoredCards)) {
+        addEvent(jokerScored(JOKERS.DROLL_JOKER, 0, 10, 0));
       }
     },
   },
@@ -143,11 +105,7 @@ const resolvedJokers = {
     when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (isEvenRank(entry.card)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.EVEN_STEVEN,
-          addMult: 4,
-        });
+        addEvent(jokerScored(JOKERS.EVEN_STEVEN, 0, 4, 0));
       }
     },
   },
@@ -155,32 +113,20 @@ const resolvedJokers = {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       const addMult = gameMetadata.cardsUsedThisRun + scoredCards.length;
-      addEvent({
-        type: EVENT_TYPES.JOKER_SCORED,
-        joker: JOKERS.FORTUNE_TELLER,
-        addMult,
-      });
+      addEvent(jokerScored(JOKERS.FORTUNE_TELLER, 0, addMult, 0));
     },
   },
   [JOKERS.GROS_MICHEL]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      addEvent({
-        type: EVENT_TYPES.JOKER_SCORED,
-        joker: JOKERS.GROS_MICHEL,
-        addMult: 15,
-      });
+      addEvent(jokerScored(JOKERS.GROS_MICHEL, 0, 15, 0));
     },
   },
   [JOKERS.HALF_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (scoredCards.length <= 3) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.HALF_JOKER,
-          addMult: 20,
-        });
+        addEvent(jokerScored(JOKERS.HALF_JOKER, 0, 20, 0));
       }
     },
   },
@@ -188,10 +134,7 @@ const resolvedJokers = {
     when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (entry.index === 0 && !entry.hangingChadApplied) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.HANGING_CHAD,
-        });
+        addEvent(jokerScored(JOKERS.HANGING_CHAD, 0, 0, 0));
         addEvent({ ...entry, hangingChadApplied: true });
         addEvent({ ...entry, hangingChadApplied: true });
       }
@@ -200,36 +143,22 @@ const resolvedJokers = {
   [JOKERS.JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      addEvent({
-        type: EVENT_TYPES.JOKER_SCORED,
-        joker: JOKERS.JOKER,
-        addMult: 4,
-      });
+      addEvent(jokerScored(JOKERS.JOKER, 0, 4, 0));
     },
   },
   [JOKERS.JOLLY_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.PAIR)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.JOLLY_JOKER,
-          addMult: 8,
-        });
+      if (handIsPair(scoredCards)) {
+        addEvent(jokerScored(JOKERS.JOLLY_JOKER, 0, 8, 0));
       }
     },
   },
   [JOKERS.MAD_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.TWO_PAIR)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.MAD_JOKER,
-          addMult: 10,
-        });
+      if (handIsTwoPair(scoredCards)) {
+        addEvent(jokerScored(JOKERS.MAD_JOKER, 0, 10, 0));
       }
     },
   },
@@ -237,11 +166,7 @@ const resolvedJokers = {
     when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (isOddRank(entry.card)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ODD_TODD,
-          addChips: 31,
-        });
+        addEvent(jokerScored(JOKERS.ODD_TODD, 31, 0, 0));
       }
     },
   },
@@ -253,11 +178,7 @@ const resolvedJokers = {
           .slice(0, entry.index)
           .every((card) => !isFaceCard(card, gameMetadata));
         if (isFirstFaceCard) {
-          addEvent({
-            type: EVENT_TYPES.JOKER_SCORED,
-            joker: JOKERS.PHOTOGRAPH,
-            multMult: 2,
-          });
+          addEvent(jokerScored(JOKERS.PHOTOGRAPH, 0, 0, 2));
         }
       }
     },
@@ -266,11 +187,7 @@ const resolvedJokers = {
     when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (isFaceCard(entry.card, gameMetadata)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCARY_FACE,
-          addChips: 30,
-        });
+        addEvent(jokerScored(JOKERS.SCARY_FACE, 30, 0, 0));
       }
     },
   },
@@ -278,25 +195,15 @@ const resolvedJokers = {
     when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (entry.card.rank === 14) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCHOLAR,
-          addChips: 20,
-          addMult: 4,
-        });
+        addEvent(jokerScored(JOKERS.SCHOLAR, 20, 4, 0));
       }
     },
   },
   [JOKERS.SLY_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.PAIR)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SLY_JOKER,
-          addChips: 50,
-        });
+      if (handIsPair(scoredCards)) {
+        addEvent(jokerScored(JOKERS.SLY_JOKER, 50, 0, 0));
       }
     },
   },
@@ -304,11 +211,7 @@ const resolvedJokers = {
     when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (isFaceCard(entry.card, gameMetadata)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SMILEY_FACE,
-          addMult: 5,
-        });
+        addEvent(jokerScored(JOKERS.SMILEY_FACE, 0, 5, 0));
       }
     },
   },
@@ -316,38 +219,23 @@ const resolvedJokers = {
     when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
       if (entry.card.rank === 4 || entry.card.rank === 10) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WALKIE_TALKIE,
-          addChips: 10,
-          addMult: 4,
-        });
+        addEvent(jokerScored(JOKERS.WALKIE_TALKIE, 10, 4, 0));
       }
     },
   },
   [JOKERS.WILY_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.THREE_OF_A_KIND)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WILY_JOKER,
-          addChips: 100,
-        });
+      if (handIsThreeOfAKind(scoredCards)) {
+        addEvent(jokerScored(JOKERS.WILY_JOKER, 100, 0, 0));
       }
     },
   },
   [JOKERS.ZANY_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      const allHandsPlayed = identifyAllHandsPlayed(scoredCards);
-      if (allHandsPlayed.includes(HANDS.THREE_OF_A_KIND)) {
-        addEvent({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ZANY_JOKER,
-          addMult: 12,
-        });
+      if (handIsThreeOfAKind(scoredCards)) {
+        addEvent(jokerScored(JOKERS.ZANY_JOKER, 0, 12, 0));
       }
     },
   },

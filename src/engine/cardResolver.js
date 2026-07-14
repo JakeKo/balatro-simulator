@@ -1,5 +1,18 @@
 import { ENHANCEMENTS } from "../constants.js";
 
+function isOddRank(card) {
+  // Rank 14 is an Ace, which is treated instead as rank 1 in this context
+  return [14, 9, 7, 5, 3].includes(card.rank);
+}
+
+function isEvenRank(card) {
+  return [10, 8, 6, 4, 2].includes(card.rank);
+}
+
+function isFaceCard(card) {
+  return card.rank >= 11 && card.rank <= 13;
+}
+
 function resolveCard(card) {
   let addChips = [14, 13, 12].includes(card.rank) ? 11 : card.rank;
   if (card.enhancement === ENHANCEMENTS.BONUS) addChips = addChips + 30;
@@ -14,4 +27,4 @@ function resolveCard(card) {
   return [addChips, addMult, multMult];
 }
 
-export { resolveCard };
+export { isOddRank, isEvenRank, isFaceCard, resolveCard };
