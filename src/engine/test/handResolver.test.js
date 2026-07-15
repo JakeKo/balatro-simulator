@@ -39,7 +39,7 @@ describe("handIsRoyalFlush", () => {
   });
 
   it("Royal flush with other card modifiers", () => {
-    const playedCards = parseCards(["AHB", "KH", "QH", "JH", "10H"]);
+    const playedCards = parseCards(["AHB", "KHG", "QHL", "JHM", "10H"]);
     expect(handIsRoyalFlush(playedCards)).toBe(true);
   });
 
@@ -69,6 +69,16 @@ describe("findRoyalFlush", () => {
     const playedCards = parseCards(["AH", "KH", "QDWXX", "JH", "10H"]);
     expect(findRoyalFlush(playedCards)).toEqual(playedCards);
   });
+
+  it("All wild cards", () => {
+    const playedCards = parseCards(["AHW", "KHW", "QDW", "JHW", "10DW"]);
+    expect(findRoyalFlush(playedCards)).toEqual(playedCards);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["AHB", "KHG", "QHL", "JHM", "10H"]);
+    expect(findRoyalFlush(playedCards)).toEqual(playedCards);
+  });
 });
 
 describe("handIsStraightFlush", () => {
@@ -88,7 +98,7 @@ describe("handIsStraightFlush", () => {
   });
 
   it("Straight flush with other card modifiers", () => {
-    const playedCards = parseCards(["9HB", "8H", "7H", "6H", "5H"]);
+    const playedCards = parseCards(["9HB", "8HG", "7HL", "6HM", "5H"]);
     expect(handIsStraightFlush(playedCards)).toBe(true);
   });
 
@@ -118,6 +128,16 @@ describe("findStraightFlush", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "5DWXX"]);
     expect(findStraightFlush(playedCards)).toEqual(playedCards);
   });
+
+  it("All wild cards", () => {
+    const playedCards = parseCards(["9DW", "8HW", "7DW", "6HW", "5DW"]);
+    expect(findStraightFlush(playedCards)).toEqual(playedCards);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "8HG", "7HL", "6HM", "5H"]);
+    expect(findStraightFlush(playedCards)).toEqual(playedCards);
+  });
 });
 
 describe("handIsFourOfAKind", () => {
@@ -127,7 +147,7 @@ describe("handIsFourOfAKind", () => {
   });
 
   it("Four of a kind with other card modifiers", () => {
-    const playedCards = parseCards(["9HB", "9D", "9C", "9S", "5H"]);
+    const playedCards = parseCards(["9HB", "9DG", "9CL", "9SM", "5HW"]);
     expect(handIsFourOfAKind(playedCards)).toBe(true);
   });
 
@@ -143,9 +163,15 @@ describe("handIsFourOfAKind", () => {
 });
 
 describe("findFourOfAKind", () => {
-  it("returns the correct cards for four of a kind", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["9H", "9D", "9C", "9S", "5H"]);
     const expected = parseCards(["9H", "9D", "9C", "9S"]);
+    expect(findFourOfAKind(playedCards)).toEqual(expected);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9DG", "9CL", "9SM", "5HW"]);
+    const expected = parseCards(["9HB", "9DG", "9CL", "9SM"]);
     expect(findFourOfAKind(playedCards)).toEqual(expected);
   });
 });
@@ -157,7 +183,7 @@ describe("handIsFullHouse", () => {
   });
 
   it("Full house with other card modifiers", () => {
-    const playedCards = parseCards(["9HB", "9D", "9C", "8S", "8H"]);
+    const playedCards = parseCards(["9HB", "9DG", "9CL", "8SM", "8HW"]);
     expect(handIsFullHouse(playedCards)).toBe(true);
   });
 
@@ -178,10 +204,14 @@ describe("handIsFullHouse", () => {
 });
 
 describe("findFullHouse", () => {
-  it("returns the correct cards for a full house", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["9H", "9D", "9C", "8S", "8H"]);
-    const expected = parseCards(["9H", "9D", "9C", "8S", "8H"]);
-    expect(findFullHouse(playedCards)).toEqual(expected);
+    expect(findFullHouse(playedCards)).toEqual(playedCards);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9DG", "9CL", "8SM", "8HW"]);
+    expect(findFullHouse(playedCards)).toEqual(playedCards);
   });
 });
 
@@ -202,7 +232,7 @@ describe("handIsFlush", () => {
   });
 
   it("Flush with other card modifiers", () => {
-    const playedCards = parseCards(["9HB", "8H", "7H", "6H", "4H"]);
+    const playedCards = parseCards(["9HB", "8HG", "7HL", "6HM", "4H"]);
     expect(handIsFlush(playedCards)).toBe(true);
   });
 
@@ -227,6 +257,16 @@ describe("findFlush", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "5DWXX"]);
     expect(findFlush(playedCards)).toEqual(playedCards);
   });
+
+  it("All wild cards", () => {
+    const playedCards = parseCards(["9DW", "8DW", "7DW", "6DW", "5DW"]);
+    expect(findFlush(playedCards)).toEqual(playedCards);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "8HG", "7HL", "6HM", "5H"]);
+    expect(findFlush(playedCards)).toEqual(playedCards);
+  });
 });
 
 describe("handIsStraight", () => {
@@ -236,7 +276,7 @@ describe("handIsStraight", () => {
   });
 
   it("Straight with other card modifiers", () => {
-    const playedCards = parseCards(["9HB", "8D", "7C", "6S", "5H"]);
+    const playedCards = parseCards(["9HB", "8DG", "7CL", "6SM", "5HW"]);
     expect(handIsStraight(playedCards)).toBe(true);
   });
 
@@ -252,8 +292,13 @@ describe("handIsStraight", () => {
 });
 
 describe("findStraight", () => {
-  it("returns the correct cards for a straight", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["9H", "8D", "7C", "6S", "5H"]);
+    expect(findStraight(playedCards)).toEqual(playedCards);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "8DG", "7CL", "6SM", "5HW"]);
     expect(findStraight(playedCards)).toEqual(playedCards);
   });
 });
@@ -265,7 +310,7 @@ describe("handIsThreeOfAKind", () => {
   });
 
   it("Three of a kind with other card modifiers", () => {
-    const playedCards = parseCards(["9HB", "9D", "9C", "6S", "5H"]);
+    const playedCards = parseCards(["9HB", "9DG", "9CL", "6SM", "5HW"]);
     expect(handIsThreeOfAKind(playedCards)).toBe(true);
   });
 
@@ -281,9 +326,15 @@ describe("handIsThreeOfAKind", () => {
 });
 
 describe("findThreeOfAKind", () => {
-  it("returns the correct cards for three of a kind", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["9H", "9D", "9C", "6S", "5H"]);
     const expected = parseCards(["9H", "9D", "9C"]);
+    expect(findThreeOfAKind(playedCards)).toEqual(expected);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9DG", "9CL", "6SM", "5HW"]);
+    const expected = parseCards(["9HB", "9DG", "9CL"]);
     expect(findThreeOfAKind(playedCards)).toEqual(expected);
   });
 });
@@ -295,7 +346,7 @@ describe("handIsTwoPair", () => {
   });
 
   it("Two pair with other card modifiers", () => {
-    const playedCards = parseCards(["9HB", "9D", "8C", "8S", "5H"]);
+    const playedCards = parseCards(["9HB", "9DG", "8CL", "8SM", "5HW"]);
     expect(handIsTwoPair(playedCards)).toBe(true);
   });
 
@@ -311,9 +362,15 @@ describe("handIsTwoPair", () => {
 });
 
 describe("findTwoPair", () => {
-  it("returns the correct cards for two pair", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["9H", "9D", "8C", "8S", "5H"]);
     const expected = parseCards(["9H", "9D", "8C", "8S"]);
+    expect(findTwoPair(playedCards)).toEqual(expected);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9DG", "8CL", "8SM", "5HW"]);
+    const expected = parseCards(["9HB", "9DG", "8CL", "8SM"]);
     expect(findTwoPair(playedCards)).toEqual(expected);
   });
 });
@@ -325,7 +382,7 @@ describe("handIsPair", () => {
   });
 
   it("Pair with other card modifiers", () => {
-    const playedCards = parseCards(["9HB", "9D", "8C", "7S", "5H"]);
+    const playedCards = parseCards(["9HB", "9DG", "8CL", "7SM", "5HW"]);
     expect(handIsPair(playedCards)).toBe(true);
   });
 
@@ -341,9 +398,15 @@ describe("handIsPair", () => {
 });
 
 describe("findPair", () => {
-  it("returns the correct cards for a pair", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["9H", "9D", "8C", "7S", "5H"]);
     const expected = parseCards(["9H", "9D"]);
+    expect(findPair(playedCards)).toEqual(expected);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9DG", "8CL", "7SM", "5HW"]);
+    const expected = parseCards(["9HB", "9DG"]);
     expect(findPair(playedCards)).toEqual(expected);
   });
 });
@@ -355,7 +418,7 @@ describe("handIsHighCard", () => {
   });
 
   it("High card with other card modifiers", () => {
-    const playedCards = parseCards(["9HB", "8D", "7C", "6S", "4H"]);
+    const playedCards = parseCards(["9HB", "8DG", "7CL", "6SM", "4HW"]);
     expect(handIsHighCard(playedCards)).toBe(true);
   });
 
@@ -366,9 +429,15 @@ describe("handIsHighCard", () => {
 });
 
 describe("findHighCard", () => {
-  it("returns the correct card for high card", () => {
+  it("Normal", () => {
     const playedCards = parseCards(["9H", "8D", "7C", "6S", "4H"]);
     const expected = parseCards(["9H"]);
+    expect(findHighCard(playedCards)).toEqual(expected);
+  });
+
+  it("Other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "8DG", "7CL", "6SM", "4HW"]);
+    const expected = parseCards(["9HB"]);
     expect(findHighCard(playedCards)).toEqual(expected);
   });
 });

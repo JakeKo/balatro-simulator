@@ -9,10 +9,10 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 #### Enhancements
 
 - [x] Bonus Card
-- [ ] Glass Card
+- [x] Glass Card
 - [ ] Gold Card
-- [ ] Lucky Card
-- [ ] Mult Card
+- [x] Lucky Card
+- [x] Mult Card
 - [ ] Steel Card
 - [ ] Stone Card
 - [x] Wild Card
