@@ -36,8 +36,8 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] 8 Ball
 - [x] Abstract Joker
 - [x] Acrobat
-- [ ] Ancient Joker
-- [ ] Arrowhead
+- [x] Ancient Joker
+- [x] Arrowhead
 - [ ] Astronomer
 - [x] Banner
 - [ ] Baron

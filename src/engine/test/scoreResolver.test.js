@@ -416,6 +416,50 @@ describe("scoreResolver handling different jokers", () => {
     });
   });
 
+  describe("Arrowhead", () => {
+    it("Single", () => {
+      const hand = parseCards(["2S"]);
+      const jokers = [JOKERS.ARROWHEAD];
+      const [chips, mult, eventLog] = resolveScore(
+        hand,
+        BASIC_HANDS,
+        jokers,
+        {},
+      );
+
+      expect(chips).toBe(57); // 5 (high card) + 2 (hand) + 50 (arrowhead)
+      expect(mult).toBe(1); // 1m (high card)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: JOKERS.ARROWHEAD,
+          addChips: 50,
+        }),
+      );
+    });
+
+    it("Multiple", () => {
+      const hand = parseCards(["2DW"]);
+      const jokers = [JOKERS.ARROWHEAD, JOKERS.ARROWHEAD];
+      const [chips, mult, eventLog] = resolveScore(
+        hand,
+        BASIC_HANDS,
+        jokers,
+        {},
+      );
+
+      expect(chips).toBe(107); // 5 (high card) + 2 (hand) + 50 (arrowhead) + 50 (arrowhead)
+      expect(mult).toBe(1); // 1m (high card)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: JOKERS.ARROWHEAD,
+          addChips: 50,
+        }),
+      );
+    });
+  });
+
   describe("Banner", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);

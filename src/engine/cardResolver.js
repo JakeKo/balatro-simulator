@@ -1,4 +1,4 @@
-import { ENHANCEMENTS, EDITIONS } from "../constants.js";
+import { ENHANCEMENTS, EDITIONS, SUITS } from "../constants.js";
 
 function isOddRank(card) {
   // Rank 14 is an Ace, which is treated instead as rank 1 in this context
@@ -11,6 +11,10 @@ function isEvenRank(card) {
 
 function isFaceCard(card) {
   return card.rank >= 11 && card.rank <= 13;
+}
+
+function isSuit(card, suit) {
+  return card.suit === suit || card.enhancement === ENHANCEMENTS.WILD;
 }
 
 function resolveCard(card) {
@@ -33,4 +37,4 @@ function resolveCard(card) {
   return [addChips, addMult, multMult];
 }
 
-export { isOddRank, isEvenRank, isFaceCard, resolveCard };
+export { isOddRank, isEvenRank, isFaceCard, isSuit, resolveCard };

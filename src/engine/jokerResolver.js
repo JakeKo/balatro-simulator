@@ -5,8 +5,8 @@ import {
   handIsStraight,
   handIsFlush,
 } from "./handResolver";
-import { JOKERS, EVENT_TYPES } from "../constants";
-import { isOddRank, isEvenRank, isFaceCard } from "./cardResolver";
+import { JOKERS, EVENT_TYPES, SUITS } from "../constants";
+import { isOddRank, isEvenRank, isFaceCard, isSuit } from "./cardResolver";
 
 function jokerScored(joker, addChips, addMult, multMult) {
   const event = {
@@ -40,8 +40,16 @@ const resolvedJokers = {
   [JOKERS.ANCIENT_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      if (entry.card.suit === gameMetadata.suit) {
+      if (isSuit(entry.card, gameMetadata.suit)) {
         addEvent(jokerScored(JOKERS.ANCIENT_JOKER, 0, 0, 1.5));
+      }
+    },
+  },
+  [JOKERS.ARROWHEAD]: {
+    when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      if (isSuit(entry.card, SUITS.SPADES)) {
+        addEvent(jokerScored(JOKERS.ARROWHEAD, 50, 0, 0));
       }
     },
   },
