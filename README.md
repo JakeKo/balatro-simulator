@@ -8,7 +8,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 
 #### Enhancements
 
-- [ ] Bonus Card
+- [x] Bonus Card
 - [ ] Glass Card
 - [ ] Gold Card
 - [ ] Lucky Card

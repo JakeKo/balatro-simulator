@@ -28,8 +28,18 @@ describe("handIsRoyalFlush", () => {
     expect(handIsRoyalFlush(playedCards)).toBe(true);
   });
 
-  it("Royal flush present with wild card", () => {
+  it("Royal flush with wild card", () => {
     const playedCards = parseCards(["AH", "KH", "QDWXX", "JH", "10H"]);
+    expect(handIsRoyalFlush(playedCards)).toBe(true);
+  });
+
+  it("Royal flush with all wild cards", () => {
+    const playedCards = parseCards(["ADW", "KHW", "QDW", "JHW", "10DW"]);
+    expect(handIsRoyalFlush(playedCards)).toBe(true);
+  });
+
+  it("Royal flush with other card modifiers", () => {
+    const playedCards = parseCards(["AHB", "KH", "QH", "JH", "10H"]);
     expect(handIsRoyalFlush(playedCards)).toBe(true);
   });
 
@@ -67,8 +77,18 @@ describe("handIsStraightFlush", () => {
     expect(handIsStraightFlush(playedCards)).toBe(true);
   });
 
-  it("Straight flush present with wild card", () => {
+  it("Straight flush with wild card", () => {
     const playedCards = parseCards(["9H", "8H", "7H", "6H", "5DWXX"]);
+    expect(handIsStraightFlush(playedCards)).toBe(true);
+  });
+
+  it("Straight flush with all wild cards", () => {
+    const playedCards = parseCards(["9DW", "8HW", "7DW", "6HW", "5DW"]);
+    expect(handIsStraightFlush(playedCards)).toBe(true);
+  });
+
+  it("Straight flush with other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "8H", "7H", "6H", "5H"]);
     expect(handIsStraightFlush(playedCards)).toBe(true);
   });
 
@@ -101,17 +121,22 @@ describe("findStraightFlush", () => {
 });
 
 describe("handIsFourOfAKind", () => {
-  it("is true when four of a kind is present", () => {
+  it("Four of a kind present", () => {
     const playedCards = parseCards(["9H", "9D", "9C", "9S", "5H"]);
     expect(handIsFourOfAKind(playedCards)).toBe(true);
   });
 
-  it("is false when there are not four cards of the same rank", () => {
+  it("Four of a kind with other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9D", "9C", "9S", "5H"]);
+    expect(handIsFourOfAKind(playedCards)).toBe(true);
+  });
+
+  it("Ranks not all the same", () => {
     const playedCards = parseCards(["9H", "9D", "9C", "8S", "5H"]);
     expect(handIsFourOfAKind(playedCards)).toBe(false);
   });
 
-  it("is false when there are not enough cards for four of a kind", () => {
+  it("Not enough cards", () => {
     const playedCards = parseCards(["9H", "9D", "9C"]);
     expect(handIsFourOfAKind(playedCards)).toBe(false);
   });
@@ -126,22 +151,27 @@ describe("findFourOfAKind", () => {
 });
 
 describe("handIsFullHouse", () => {
-  it("is true when full house is present", () => {
+  it("Full house present", () => {
     const playedCards = parseCards(["9H", "9D", "9C", "8S", "8H"]);
     expect(handIsFullHouse(playedCards)).toBe(true);
   });
 
-  it("is false when there are not three cards of the same rank", () => {
+  it("Full house with other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9D", "9C", "8S", "8H"]);
+    expect(handIsFullHouse(playedCards)).toBe(true);
+  });
+
+  it("No three of a kind", () => {
     const playedCards = parseCards(["9H", "9D", "8C", "8S", "7H"]);
     expect(handIsFullHouse(playedCards)).toBe(false);
   });
 
-  it("is false when there are not two cards of the same rank", () => {
+  it("No pair", () => {
     const playedCards = parseCards(["9H", "9D", "9C", "8S", "7H"]);
     expect(handIsFullHouse(playedCards)).toBe(false);
   });
 
-  it("is false when there are not enough cards for full house", () => {
+  it("Not enough cards", () => {
     const playedCards = parseCards(["9H", "9D", "9C"]);
     expect(handIsFullHouse(playedCards)).toBe(false);
   });
@@ -157,17 +187,27 @@ describe("findFullHouse", () => {
 
 describe("handIsFlush", () => {
   it("Flush is present", () => {
-    const playedCards = parseCards(["9H", "8H", "7H", "6H", "5H"]);
+    const playedCards = parseCards(["9H", "8H", "7H", "6H", "4H"]);
     expect(handIsFlush(playedCards)).toBe(true);
   });
 
-  it("Flush is present with wild card", () => {
-    const playedCards = parseCards(["9H", "8H", "7H", "6H", "5DWXX"]);
+  it("Flush with wild card", () => {
+    const playedCards = parseCards(["9H", "8H", "7H", "6H", "4DWXX"]);
+    expect(handIsFlush(playedCards)).toBe(true);
+  });
+
+  it("Flush with all wild cards", () => {
+    const playedCards = parseCards(["9DW", "8DW", "7DW", "6DW", "4DW"]);
+    expect(handIsFlush(playedCards)).toBe(true);
+  });
+
+  it("Flush with other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "8H", "7H", "6H", "4H"]);
     expect(handIsFlush(playedCards)).toBe(true);
   });
 
   it("Suits not all the same", () => {
-    const playedCards = parseCards(["9H", "8H", "7H", "6H", "5D"]);
+    const playedCards = parseCards(["9H", "8H", "7H", "6H", "4D"]);
     expect(handIsFlush(playedCards)).toBe(false);
   });
 
@@ -190,17 +230,22 @@ describe("findFlush", () => {
 });
 
 describe("handIsStraight", () => {
-  it("is true when straight is present", () => {
+  it("Straight is present", () => {
     const playedCards = parseCards(["9H", "8D", "7C", "6S", "5H"]);
     expect(handIsStraight(playedCards)).toBe(true);
   });
 
-  it("is false when ranks are not consecutive", () => {
+  it("Straight with other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "8D", "7C", "6S", "5H"]);
+    expect(handIsStraight(playedCards)).toBe(true);
+  });
+
+  it("Ranks not consecutive", () => {
     const playedCards = parseCards(["9H", "8D", "7C", "6S", "4H"]);
     expect(handIsStraight(playedCards)).toBe(false);
   });
 
-  it("is false when there are not enough cards for straight", () => {
+  it("Not enough cards", () => {
     const playedCards = parseCards(["9H", "8D", "7C"]);
     expect(handIsStraight(playedCards)).toBe(false);
   });
@@ -214,17 +259,22 @@ describe("findStraight", () => {
 });
 
 describe("handIsThreeOfAKind", () => {
-  it("is true when three of a kind is present", () => {
+  it("Three of a kind is present", () => {
     const playedCards = parseCards(["9H", "9D", "9C", "6S", "5H"]);
     expect(handIsThreeOfAKind(playedCards)).toBe(true);
   });
 
-  it("is false when there are not three cards of the same rank", () => {
+  it("Three of a kind with other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9D", "9C", "6S", "5H"]);
+    expect(handIsThreeOfAKind(playedCards)).toBe(true);
+  });
+
+  it("Less than three of a kind", () => {
     const playedCards = parseCards(["9H", "9D", "8C", "6S", "5H"]);
     expect(handIsThreeOfAKind(playedCards)).toBe(false);
   });
 
-  it("is false when there are not enough cards for three of a kind", () => {
+  it("Not enough cards", () => {
     const playedCards = parseCards(["9H", "9D"]);
     expect(handIsThreeOfAKind(playedCards)).toBe(false);
   });
@@ -239,17 +289,22 @@ describe("findThreeOfAKind", () => {
 });
 
 describe("handIsTwoPair", () => {
-  it("is true when two pair is present", () => {
+  it("Two pair is present", () => {
     const playedCards = parseCards(["9H", "9D", "8C", "8S", "5H"]);
     expect(handIsTwoPair(playedCards)).toBe(true);
   });
 
-  it("is false when there are not two pairs of the same rank", () => {
+  it("Two pair with other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9D", "8C", "8S", "5H"]);
+    expect(handIsTwoPair(playedCards)).toBe(true);
+  });
+
+  it("Not two pairs of the same rank", () => {
     const playedCards = parseCards(["9H", "9D", "8C", "7S", "5H"]);
     expect(handIsTwoPair(playedCards)).toBe(false);
   });
 
-  it("is false when there are not enough cards for two pair", () => {
+  it("Not enough cards", () => {
     const playedCards = parseCards(["9H", "9D"]);
     expect(handIsTwoPair(playedCards)).toBe(false);
   });
@@ -264,17 +319,22 @@ describe("findTwoPair", () => {
 });
 
 describe("handIsPair", () => {
-  it("is true when pair is present", () => {
+  it("Pair is present", () => {
     const playedCards = parseCards(["9H", "9D", "8C", "7S", "5H"]);
     expect(handIsPair(playedCards)).toBe(true);
   });
 
-  it("is false when there are not two cards of the same rank", () => {
+  it("Pair with other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "9D", "8C", "7S", "5H"]);
+    expect(handIsPair(playedCards)).toBe(true);
+  });
+
+  it("Not two cards of the same rank", () => {
     const playedCards = parseCards(["9H", "8D", "7C", "6S", "5H"]);
     expect(handIsPair(playedCards)).toBe(false);
   });
 
-  it("is false when there are not enough cards for pair", () => {
+  it("Not enough cards", () => {
     const playedCards = parseCards(["9H"]);
     expect(handIsPair(playedCards)).toBe(false);
   });
@@ -289,12 +349,17 @@ describe("findPair", () => {
 });
 
 describe("handIsHighCard", () => {
-  it("is true when no other hand is present", () => {
+  it("High card is present", () => {
     const playedCards = parseCards(["9H", "8D", "7C", "6S", "4H"]);
     expect(handIsHighCard(playedCards)).toBe(true);
   });
 
-  it("is false when there are no cards played", () => {
+  it("High card with other card modifiers", () => {
+    const playedCards = parseCards(["9HB", "8D", "7C", "6S", "4H"]);
+    expect(handIsHighCard(playedCards)).toBe(true);
+  });
+
+  it("No cards played", () => {
     const playedCards = [];
     expect(handIsHighCard(playedCards)).toBe(false);
   });
