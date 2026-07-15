@@ -11,8 +11,8 @@ describe("scoreResolver handling different hands", () => {
     const customHandMap = { ...BASIC_HANDS, [HANDS.ROYAL_FLUSH]: [200, 10] };
     const [chips, mult, eventLog] = resolveScore(hand, customHandMap, [], {});
 
-    expect(chips).toBe(254);
-    expect(mult).toBe(10);
+    expect(chips).toBe(251); // 200 (royal flush) + 51 (hand)
+    expect(mult).toBe(10); // 10 (royal flush)
     expect(eventLog).toContainEqual(
       expect.objectContaining({
         type: EVENT_TYPES.HAND_PLAYED,
@@ -27,8 +27,8 @@ describe("scoreResolver handling different hands", () => {
     const hand = parseCards(["AH", "KH", "QH", "JH", "10H"]);
     const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, [], {});
 
-    expect(chips).toBe(154);
-    expect(mult).toBe(8);
+    expect(chips).toBe(151); // 100 (royal flush) + 51 (hand)
+    expect(mult).toBe(8); // 8 (royal flush)
     expect(eventLog).toContainEqual(
       expect.objectContaining({
         type: EVENT_TYPES.HAND_PLAYED,
@@ -1395,7 +1395,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(16); // 5 (high card) + 11 (hand)
+      expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(2); // 1 (high card) * 2 (photograph)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1416,7 +1416,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(32); // 10 (pair) + 22 (hand)
+      expect(chips).toBe(30); // 10 (pair) + 20 (hand)
       expect(mult).toBe(4); // 2 (pair) * 2 (photograph)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1437,7 +1437,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(38); // 5 (high card) + 33 (hand + hanging chad)
+      expect(chips).toBe(35); // 5 (high card) + 30 (hand + hanging chad)
       expect(mult).toBe(8); // 1 (high card) * 8 (photograph + hanging chad)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1458,7 +1458,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(16); // 5 (high card) + 11 (hand)
+      expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(4); // 1 (high card) * 2 (photograph) * 2 (photograph)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1502,7 +1502,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(46); // 5 (high card) + 11 (hand) + 30 (scary face)
+      expect(chips).toBe(45); // 5 (high card) + 10 (hand) + 30 (scary face)
       expect(mult).toBe(1); // 1 (high card)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1523,7 +1523,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(92); // 10 (pair) + 22 (hand) + 60 (scary face)
+      expect(chips).toBe(90); // 10 (pair) + 20 (hand) + 60 (scary face)
       expect(mult).toBe(2); // 2 (pair)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1544,7 +1544,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(128); // 5 (high card) + 33 (hand + hanging chad) + 90 (scary face + hanging chad)
+      expect(chips).toBe(125); // 5 (high card) + 30 (hand + hanging chad) + 90 (scary face + hanging chad)
       expect(mult).toBe(1); // 1 (high card)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1565,7 +1565,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(76); // 5 (high card) + 11 (hand) + 30 (scary face) + 30 (scary face)
+      expect(chips).toBe(75); // 5 (high card) + 10 (hand) + 30 (scary face) + 30 (scary face)
       expect(mult).toBe(1); // 1 (high card)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1742,7 +1742,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(16); // 5 (high card) + 11 (hand)
+      expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(6); // 1 (high card) + 5 (smiley face)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1763,7 +1763,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(32); // 10 (pair) + 22 (hand)
+      expect(chips).toBe(30); // 10 (pair) + 20 (hand)
       expect(mult).toBe(12); // 2 (pair) + 10 (smiley face)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1784,7 +1784,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(38); // 5 (high card) + 33 (hand + hanging chad)
+      expect(chips).toBe(35); // 5 (high card) + 30 (hand + hanging chad)
       expect(mult).toBe(16); // 1 (high card) + 15 (smiley face + hanging chad)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
@@ -1805,7 +1805,7 @@ describe("scoreResolver handling different jokers", () => {
         {},
       );
 
-      expect(chips).toBe(16); // 5 (high card) + 11 (hand)
+      expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(11); // 1 (high card) + 5 (smiley face) + 5 (smiley face)
       expect(eventLog).toContainEqual(
         expect.objectContaining({

@@ -14,7 +14,11 @@ function isFaceCard(card) {
 }
 
 function resolveCard(card) {
-  let addChips = [14, 13, 12].includes(card.rank) ? 11 : card.rank;
+  let addChips;
+  if (card.rank === 14) addChips = 11;
+  else if ([13, 12, 11].includes(card.rank)) addChips = 10;
+  else addChips = card.rank;
+
   if (card.enhancement === ENHANCEMENTS.BONUS) addChips = addChips + 30;
   if (card.enhancement === ENHANCEMENTS.STONE) addChips = 50;
 

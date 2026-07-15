@@ -5,7 +5,7 @@ import {
   handIsStraight,
   handIsFlush,
 } from "./handResolver";
-import { JOKERS, HANDS, EVENT_TYPES } from "../constants";
+import { JOKERS, EVENT_TYPES } from "../constants";
 import { isOddRank, isEvenRank, isFaceCard } from "./cardResolver";
 
 function jokerScored(joker, addChips, addMult, multMult) {
