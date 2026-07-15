@@ -42,7 +42,7 @@ h2 {
 
 .app {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-columns: 20% 60% 20%;
   grid-template-rows: repeat(3, min-content);
 }
 
@@ -120,9 +120,19 @@ h2 {
   background: grey;
 }
 
-.joker-picker input {
+.joker-picker-name {
+  width: 100%;
+}
+
+.joker-picker-number {
   width: 100%;
   box-sizing: border-box;
+}
+
+.joker-picker-boolean {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .score-logger {

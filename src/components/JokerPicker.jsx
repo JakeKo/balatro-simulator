@@ -29,7 +29,11 @@ function JokerPicker({ joker, metadata, onChange }) {
 
   return (
     <div className="joker-picker">
-      <select value={joker} onChange={(e) => onJokerChange(e.target.value)}>
+      <select
+        className="joker-picker-name"
+        value={joker}
+        onChange={(e) => onJokerChange(e.target.value)}
+      >
         {JOKERS_LIST.map((joker) => (
           <option key={joker}>{joker}</option>
         ))}
@@ -39,6 +43,8 @@ function JokerPicker({ joker, metadata, onChange }) {
           case "number":
             return (
               <input
+                key={key}
+                className="joker-picker-number"
                 value={metadata[key]}
                 placeholder={label}
                 type="number"
@@ -49,8 +55,8 @@ function JokerPicker({ joker, metadata, onChange }) {
             );
           case "boolean":
             return (
-              <div>
-                <label>{label}</label>
+              <div key={key} className="joker-picker-boolean">
+                {label}
                 <input
                   checked={metadata[key]}
                   type="checkbox"
@@ -63,6 +69,8 @@ function JokerPicker({ joker, metadata, onChange }) {
           case "suit":
             return (
               <select
+                key={key}
+                className="joker-picker-suit"
                 value={metadata[key]}
                 onChange={(e) => onMetadataChange({ [key]: e.target.value })}
               >

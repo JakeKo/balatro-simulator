@@ -41,7 +41,7 @@ function stringifyJokerScored(entry) {
   const operations = [];
   if (addChips) operations.push(`+${addChips}c`);
   if (addMult) operations.push(`+${addMult}m`);
-  if (multMult) operations.push(`+×${multMult}m`);
+  if (multMult) operations.push(`×${multMult}m`);
 
   return `${joker} | ${operations.join(", ")}`;
 }
