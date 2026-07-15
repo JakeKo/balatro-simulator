@@ -1,4 +1,4 @@
-import { ENHANCEMENTS } from "../constants.js";
+import { ENHANCEMENTS, EDITIONS } from "../constants.js";
 
 function isOddRank(card) {
   // Rank 14 is an Ace, which is treated instead as rank 1 in this context
@@ -19,8 +19,10 @@ function resolveCard(card) {
   else if ([13, 12, 11].includes(card.rank)) addChips = 10;
   else addChips = card.rank;
 
-  if (card.enhancement === ENHANCEMENTS.BONUS) addChips = addChips + 30;
+  if (card.enhancement === ENHANCEMENTS.BONUS) addChips += 30;
   if (card.enhancement === ENHANCEMENTS.STONE) addChips = 50;
+
+  if (card.edition === EDITIONS.FOIL) addChips += 50;
 
   let addMult = 0;
   let multMult = 1;

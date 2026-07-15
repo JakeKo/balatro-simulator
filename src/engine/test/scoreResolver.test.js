@@ -236,6 +236,14 @@ describe("scoreResolver - Card Modifiers", () => {
     expect(chips).toBe(14); // 5 (high card) + 9 (hand)
     expect(mult).toBe(21); // 1 (high card) + 20 (lucky card)
   });
+
+  it("Foil", () => {
+    const hand = parseCards(["9HXFX"]);
+    const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, [], {});
+
+    expect(chips).toBe(64); // 5 (high card) + 59 (hand)
+    expect(mult).toBe(1); // 1 (high card)
+  });
 });
 
 /*
