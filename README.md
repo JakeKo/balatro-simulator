@@ -19,7 +19,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 
 #### Editions
 
-- [ ] Foil
+- [x] Foil
 - [ ] Holographic
 - [ ] Polychrome
 - [ ] Negative
@@ -27,7 +27,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 #### Chips
 
 - [ ] Gold
-- [ ] Red
+- [x] Red
 - [ ] Blue
 - [ ] Purple
 

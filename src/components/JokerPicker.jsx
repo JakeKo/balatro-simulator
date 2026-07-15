@@ -1,4 +1,4 @@
-import { JOKERS_LIST, JOKER_METADATA_TEMPLATES } from "../constants";
+import { JOKERS_LIST, JOKER_METADATA_TEMPLATES, SUIT_LIST } from "../constants";
 
 function getMetadataTemplate(joker) {
   return JOKER_METADATA_TEMPLATES[joker] || [];
@@ -59,6 +59,19 @@ function JokerPicker({ joker, metadata, onChange }) {
                   }
                 />
               </div>
+            );
+          case "suit":
+            return (
+              <select
+                value={metadata[key]}
+                onChange={(e) => onMetadataChange({ [key]: e.target.value })}
+              >
+                {SUIT_LIST.map((suit) => (
+                  <option key={suit} value={suit}>
+                    {suit}
+                  </option>
+                ))}
+              </select>
             );
         }
       })}

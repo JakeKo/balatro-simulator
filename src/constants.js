@@ -154,45 +154,6 @@ const JOKERS = {
 
 const JOKERS_LIST = Object.values(JOKERS);
 
-// Some jokers require additional information to calculate
-// E.g., Banner needs to know how many discards are remaining
-// Rather than implement entire game state tracking, prompt the user to provide the hard-coded values
-// The map connects a selected Joker to the metadata that needs to be gathered
-const JOKER_METADATA_TEMPLATES = {
-  [JOKERS.ACROBAT]: [
-    {
-      key: "finalHand",
-      label: "Final Hand",
-      type: "boolean",
-      default: false,
-    },
-  ],
-  [JOKERS.BANNER]: [
-    {
-      key: "remainingDiscards",
-      label: "Remaining Discards",
-      type: "number",
-      default: 0,
-    },
-  ],
-  [JOKERS.BLUE_JOKER]: [
-    {
-      key: "remainingCardsInDeck",
-      label: "Remaining Cards in Deck",
-      type: "number",
-      default: 0,
-    },
-  ],
-  [JOKERS.FORTUNE_TELLER]: [
-    {
-      key: "cardsUsedThisRun",
-      label: "Cards Used This Run",
-      type: "number",
-      default: 0,
-    },
-  ],
-};
-
 const RANKS = {
   14: "Ace",
   13: "King",
@@ -220,6 +181,53 @@ const SUITS = {
 };
 
 const SUIT_LIST = Object.values(SUITS);
+
+// Some jokers require additional information to calculate
+// E.g., Banner needs to know how many discards are remaining
+// Rather than implement entire game state tracking, prompt the user to provide the hard-coded values
+// The map connects a selected Joker to the metadata that needs to be gathered
+const JOKER_METADATA_TEMPLATES = {
+  [JOKERS.ACROBAT]: [
+    {
+      key: "finalHand",
+      label: "Final Hand",
+      type: "boolean",
+      default: false,
+    },
+  ],
+  [JOKERS.ANCIENT_JOKER]: [
+    {
+      key: "suit",
+      label: "Suit",
+      type: "suit",
+      default: SUITS.HEARTS,
+    },
+  ],
+  [JOKERS.BANNER]: [
+    {
+      key: "remainingDiscards",
+      label: "Remaining Discards",
+      type: "number",
+      default: 0,
+    },
+  ],
+  [JOKERS.BLUE_JOKER]: [
+    {
+      key: "remainingCardsInDeck",
+      label: "Remaining Cards in Deck",
+      type: "number",
+      default: 0,
+    },
+  ],
+  [JOKERS.FORTUNE_TELLER]: [
+    {
+      key: "cardsUsedThisRun",
+      label: "Cards Used This Run",
+      type: "number",
+      default: 0,
+    },
+  ],
+};
 
 const BASIC_HANDS = {
   "Flush Five": [160, 16],

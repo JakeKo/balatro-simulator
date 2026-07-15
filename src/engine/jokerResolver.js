@@ -37,6 +37,14 @@ const resolvedJokers = {
       }
     },
   },
+  [JOKERS.ANCIENT_JOKER]: {
+    when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      if (entry.card.suit === gameMetadata.suit) {
+        addEvent(jokerScored(JOKERS.ANCIENT_JOKER, 0, 0, 1.5));
+      }
+    },
+  },
   [JOKERS.BANNER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {

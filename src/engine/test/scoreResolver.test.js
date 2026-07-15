@@ -1,6 +1,12 @@
 import { resolveScore } from "../scoreResolver.js";
 import { parseCards } from "./utils.js";
-import { JOKERS, BASIC_HANDS, HANDS, EVENT_TYPES } from "../../constants.js";
+import {
+  JOKERS,
+  BASIC_HANDS,
+  HANDS,
+  EVENT_TYPES,
+  SUITS,
+} from "../../constants.js";
 
 /*
   HANDS - UNIT TESTS
@@ -359,6 +365,52 @@ describe("scoreResolver handling different jokers", () => {
           type: EVENT_TYPES.JOKER_SCORED,
           joker: JOKERS.ACROBAT,
           multMult: 3,
+        }),
+      );
+    });
+  });
+
+  describe("Ancient Joker", () => {
+    it("Single", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [JOKERS.ANCIENT_JOKER];
+      const metadata = { suit: SUITS.HEARTS };
+      const [chips, mult, eventLog] = resolveScore(
+        hand,
+        BASIC_HANDS,
+        jokers,
+        metadata,
+      );
+
+      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
+      expect(mult).toBe(1.5); // 1m (high card) * 1.5m (ancient joker)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: JOKERS.ANCIENT_JOKER,
+          multMult: 1.5,
+        }),
+      );
+    });
+
+    it("Multiple", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [JOKERS.ANCIENT_JOKER, JOKERS.ANCIENT_JOKER];
+      const metadata = { suit: SUITS.HEARTS };
+      const [chips, mult, eventLog] = resolveScore(
+        hand,
+        BASIC_HANDS,
+        jokers,
+        metadata,
+      );
+
+      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
+      expect(mult).toBe(2.25); // 1m (high card) * 1.5m (ancient joker) * 1.5m (ancient joker)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: JOKERS.ANCIENT_JOKER,
+          multMult: 1.5,
         }),
       );
     });
