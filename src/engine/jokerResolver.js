@@ -133,10 +133,10 @@ const resolvedJokers = {
   [JOKERS.HANGING_CHAD]: {
     when: (entry) => entry.type === EVENT_TYPES.CARD_SCORED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {
-      if (entry.index === 0 && !entry.hangingChadApplied) {
+      if (entry.index === 0 && !entry.retriggered) {
         addEvent(jokerScored(JOKERS.HANGING_CHAD, 0, 0, 0));
-        addEvent({ ...entry, hangingChadApplied: true });
-        addEvent({ ...entry, hangingChadApplied: true });
+        addEvent({ ...entry, retriggered: true });
+        addEvent({ ...entry, retriggered: true });
       }
     },
   },

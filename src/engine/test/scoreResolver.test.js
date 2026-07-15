@@ -1151,6 +1151,26 @@ describe("scoreResolver handling different jokers", () => {
         }),
       );
     });
+
+    it("Single, red seal", () => {
+      const hand = parseCards(["2HXXR"]);
+      const jokers = [JOKERS.HANGING_CHAD];
+      const [chips, mult, eventLog] = resolveScore(
+        hand,
+        BASIC_HANDS,
+        jokers,
+        {},
+      );
+
+      expect(chips).toBe(13); // 5 (high card) + 8 (hand + hanging chad + red seal)
+      expect(mult).toBe(1); // 1 (high card)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: JOKERS.HANGING_CHAD,
+        }),
+      );
+    });
   });
 
   describe("Joker", () => {

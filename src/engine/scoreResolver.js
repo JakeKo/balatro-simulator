@@ -1,7 +1,7 @@
 import { identifyHandPlayed } from "./handResolver.js";
 import { resolveJoker } from "./jokerResolver.js";
 import { resolveCard } from "./cardResolver.js";
-import { JOKERS, HANDS, EVENT_TYPES } from "../constants.js";
+import { JOKERS, HANDS, EVENT_TYPES, SEALS } from "../constants.js";
 
 function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
@@ -44,6 +44,18 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
       addMult,
       multMult,
     });
+
+    if (card.seal === SEALS.RED) {
+      addEvent({
+        type: EVENT_TYPES.CARD_SCORED,
+        card,
+        index: i,
+        addChips,
+        addMult,
+        multMult,
+        retriggered: true,
+      });
+    }
   }
 
   // END OF HAND - CYCLE THROUGH JOKERS
