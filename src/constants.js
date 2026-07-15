@@ -211,6 +211,14 @@ const JOKER_METADATA_TEMPLATES = {
       default: 0,
     },
   ],
+  [JOKERS.BARON]: [
+    {
+      key: "kingsInHand",
+      label: "Kings in Hand",
+      type: "number",
+      default: 0,
+    },
+  ],
   [JOKERS.BLUE_JOKER]: [
     {
       key: "remainingCardsInDeck",

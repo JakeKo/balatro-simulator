@@ -62,6 +62,15 @@ const resolvedJokers = {
       }
     },
   },
+  [JOKERS.BARON]: {
+    when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
+    score: (entry, scoredCards, gameMetadata, addEvent) => {
+      if (gameMetadata.kingsInHand > 0) {
+        const multMult = Math.pow(1.5, gameMetadata.kingsInHand);
+        addEvent(jokerScored(JOKERS.BARON, 0, 0, multMult));
+      }
+    },
+  },
   [JOKERS.BLUE_JOKER]: {
     when: (entry) => entry.type === EVENT_TYPES.HAND_ENDED,
     score: (entry, scoredCards, gameMetadata, addEvent) => {

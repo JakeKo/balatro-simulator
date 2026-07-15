@@ -528,6 +528,96 @@ describe("scoreResolver handling different jokers", () => {
     });
   });
 
+  describe("Baron", () => {
+    it("Single", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [JOKERS.BARON];
+      const metadata = { kingsInHand: 1 };
+      const [chips, mult, eventLog] = resolveScore(
+        hand,
+        BASIC_HANDS,
+        jokers,
+        metadata,
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(1.5); // 1 (high card) * 1.5 (baron)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: JOKERS.BARON,
+          multMult: 1.5,
+        }),
+      );
+    });
+
+    it("Double Barons", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [JOKERS.BARON, JOKERS.BARON];
+      const metadata = { kingsInHand: 1 };
+      const [chips, mult, eventLog] = resolveScore(
+        hand,
+        BASIC_HANDS,
+        jokers,
+        metadata,
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(2.25); // 1 (high card) * 1.5 (baron) * 1.5 (baron)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: JOKERS.BARON,
+          multMult: 1.5,
+        }),
+      );
+    });
+
+    it("Double Kings", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [JOKERS.BARON];
+      const metadata = { kingsInHand: 2 };
+      const [chips, mult, eventLog] = resolveScore(
+        hand,
+        BASIC_HANDS,
+        jokers,
+        metadata,
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(2.25); // 1 (high card) * 2.25 (baron)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: JOKERS.BARON,
+          multMult: 2.25,
+        }),
+      );
+    });
+
+    it("No kings in Hand", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [JOKERS.BARON];
+      const metadata = { kingsInHand: 0 };
+      const [chips, mult, eventLog] = resolveScore(
+        hand,
+        BASIC_HANDS,
+        jokers,
+        metadata,
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(1); // 1 (high card)
+      expect(eventLog).not.toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: JOKERS.BARON,
+          multMult: 1.5,
+        }),
+      );
+    });
+  });
+
   describe("Blue Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);

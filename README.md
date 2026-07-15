@@ -31,7 +31,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Blue
 - [ ] Purple
 
-# Joker Tally (30 / 150)
+# Joker Tally (33 / 150)
 
 - [ ] 8 Ball
 - [x] Abstract Joker
@@ -40,7 +40,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [x] Arrowhead
 - [ ] Astronomer
 - [x] Banner
-- [ ] Baron
+- [x] Baron
 - [ ] Baseball Card
 - [ ] Blackboard
 - [ ] Bloodstone
@@ -183,3 +183,8 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Wrathful Joker
 - [ ] Yorick
 - [x] Zany Joker
+
+# Known Failing Hands
+
+- Any hands using jokers or card modifiers not indicated above
+- Any hands requiring input from the blind (e.g. The Hook impacting cards in hand mid-round)
