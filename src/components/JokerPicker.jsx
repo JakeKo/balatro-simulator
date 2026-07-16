@@ -42,16 +42,18 @@ function JokerPicker({ joker, onChange }) {
         switch (type) {
           case "number":
             return (
-              <input
-                key={key}
-                className="joker-picker-number"
-                value={joker.metadata[key]}
-                placeholder={label}
-                type="number"
-                onChange={(e) =>
-                  onMetadataChange({ [key]: parseInt(e.target.value, 10) })
-                }
-              />
+              <div key={key} className="joker-picker-number">
+                <div>{label}</div>
+                <input
+                  key={key}
+                  value={joker.metadata[key]}
+                  placeholder={label}
+                  type="number"
+                  onChange={(e) =>
+                    onMetadataChange({ [key]: parseInt(e.target.value, 10) })
+                  }
+                />
+              </div>
             );
           case "boolean":
             return (
