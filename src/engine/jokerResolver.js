@@ -217,6 +217,43 @@ function resolveJoker(joker, { on }) {
         }
       });
     },
+    [JOKERS.THE_ORDER]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
+        if (handIsStraight(round.scoredCards)) {
+          node.addChild(jokerScored(joker, 0, 0, 3));
+        }
+      });
+    },
+    [JOKERS.THE_TRIBE]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
+        if (handIsFlush(round.scoredCards)) {
+          node.addChild(jokerScored(joker, 0, 0, 2));
+        }
+      });
+    },
+    [JOKERS.THE_TRIO]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
+        if (handIsThreeOfAKind(round.scoredCards)) {
+          node.addChild(jokerScored(joker, 0, 0, 3));
+        }
+      });
+    },
+    [JOKERS.THROWBACK]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        if (joker.metadata.blindsSkipped > 0) {
+          const multMult = 1 + 0.25 * joker.metadata.blindsSkipped;
+          node.addChild(jokerScored(joker, 0, 0, multMult));
+        }
+      });
+    },
+    [JOKERS.TRIBOULET]: () => {
+      on(EVENT_TYPES.CARD_SCORED, (node) => {
+        const { card } = node.payload;
+        if (card.rank === 12 || card.rank === 13) {
+          node.addChild(jokerScored(joker, 0, 0, 2));
+        }
+      });
+    },
     [JOKERS.WALKIE_TALKIE]: () => {
       on(EVENT_TYPES.CARD_SCORED, (node) => {
         if (node.payload.card.rank === 4 || node.payload.card.rank === 10) {

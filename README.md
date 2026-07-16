@@ -31,7 +31,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Blue
 - [ ] Purple
 
-# Joker Tally (34 / 150)
+# Joker Tally (38 / 150)
 
 **8 Ball**
 
@@ -666,25 +666,21 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - Description: Each played \[rank\] of \[suit\] gives X2 Mult when scored Card changes every round
 - Anticipated changes: None - joker metadata
 
-**The Order**
+**✅ The Order**
 
 - Description: X3 Mult if played hand contains a Straight
-- Anticipated changes: None
 
-**The Tribe**
+**✅ The Tribe**
 
 - Description: X2 Mult if played hand contains a Flush
-- Anticipated changes: None
 
-**The Trio**
+**✅ The Trio**
 
 - Description: X3 Mult if played hand contains a Three of a Kind
-- Anticipated changes: None
 
-**Throwback**
+**✅ Throwback**
 
 - Description: X0.25 Mult for each Blind skipped this run (Currently X1 Mult)
-- Anticipated changes: None - joker metadata
 
 **To Do List**
 
@@ -701,10 +697,9 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - Description: If first discard of round has only 1 card, destroy it and earn $3
 - Anticipated changes: Track money
 
-**Triboulet**
+**✅ Triboulet**
 
 - Description: Played Kings and Queens each give X2 Mult when scored
-- Anticipated changes: None
 
 **Troubadour**
 
