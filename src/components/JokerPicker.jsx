@@ -36,7 +36,9 @@ function JokerPicker({ joker, onChange }) {
           <option key={jokerName}>{jokerName}</option>
         ))}
       </select>
-      {metadataTemplate.map(({ key, label, type }) => {
+      {metadataTemplate.map(({ key, label, type, readonly }) => {
+        if (readonly) return null;
+
         switch (type) {
           case "number":
             return (

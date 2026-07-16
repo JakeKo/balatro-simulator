@@ -1705,6 +1705,49 @@ describe("scoreResolver handling different jokers", () => {
       );
     });
   });
+  describe("Wee Joker", () => {
+    it("Single", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.WEE_JOKER()];
+      jokers[0].metadata.extraChipsBase = 8;
+      const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, jokers);
+
+      expect(chips).toBe(23); // 5 (high card) + 2 (hand) + 16 (wee joker)
+      expect(mult).toBe(1); // 1 (high card)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: jokers[0],
+          addChips: 16,
+        }),
+      );
+    });
+
+    it("Multiple", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.WEE_JOKER(), FULL_JOKERS.WEE_JOKER()];
+      jokers[0].metadata.extraChipsBase = 0;
+      jokers[1].metadata.extraChipsBase = 8;
+      const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, jokers);
+
+      expect(chips).toBe(31); // 5 (high card) + 2 (hand) + 8 (wee joker) + 16 (wee joker)
+      expect(mult).toBe(1); // 1 (high card)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: jokers[0],
+          addChips: 8,
+        }),
+      );
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: jokers[1],
+          addChips: 16,
+        }),
+      );
+    });
+  });
 
   describe("Wily Joker", () => {
     it("Single", () => {
@@ -1831,7 +1874,7 @@ describe("scoreResolver handling different jokers", () => {
       const hand = parseCards(["2H"]);
       const jokers = [FULL_JOKERS.YORICK(), FULL_JOKERS.YORICK()];
       jokers[0].metadata.cardsDiscarded = 23;
-      jokers[0].metadata.cardsDiscarded = 23;
+      jokers[1].metadata.cardsDiscarded = 23;
       const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, jokers);
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)

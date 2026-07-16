@@ -31,7 +31,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Blue
 - [ ] Purple
 
-# Joker Tally (32 / 150)
+# Joker Tally (34 / 150)
 
 **8 Ball**
 
@@ -730,10 +730,9 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 
 - Description: Each played 10 or 4 gives +10 Chips and +4 Mult when scored
 
-**Wee Joker**
+**✅ Wee Joker**
 
 - Description: This Joker gains +8 Chips when each played 2 is scored (Currently +0 Chips)
-- Anticipated changes: Persistent, mutable joker metadata
 
 **✅ Wily Joker**
 

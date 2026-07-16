@@ -238,6 +238,27 @@ function resolveJoker(joker, { on }) {
         }
       });
     },
+    [JOKERS.WEE_JOKER]: () => {
+      on(EVENT_TYPES.CARD_SCORED, (node) => {
+        if (node.payload.card.rank === 2) {
+          const { metadata } = joker;
+          metadata.extraChipsAdded += 8;
+          node.addChild(jokerScored(joker, 0, 0, 0));
+        }
+      });
+
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        const { metadata } = joker;
+        const addChips = metadata.extraChipsBase + metadata.extraChipsAdded;
+
+        if (addChips > 0) {
+          node.addChild(jokerScored(joker, addChips, 0, 0));
+        }
+      });
+
+      // Zero out the extraChipsAdded for the next hand
+      joker.metadata.extraChipsAdded = 0;
+    },
     [JOKERS.YORICK]: () => {
       on(EVENT_TYPES.HAND_ENDED, (node) => {
         const multMult = 1 + Math.floor(joker.metadata.cardsDiscarded / 23);
