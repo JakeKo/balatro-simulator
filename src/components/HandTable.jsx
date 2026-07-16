@@ -38,7 +38,7 @@ function HandTable({ handMap, onChange }) {
               onMultChange(hand, Number.parseInt(event.target.value, 10))
             }
           />
-          <strong className="hand-table-total">{chip * mult}</strong>
+          <div className="hand-table-total">{chip * mult}</div>
         </Fragment>
       ))}
     </div>

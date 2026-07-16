@@ -54,6 +54,7 @@ h2 {
   display: grid;
   grid-template-columns: min-content 1fr;
   grid-template-rows: repeat(4, min-content);
+  background: #35654d;
 }
 
 .scoreboard {
@@ -64,7 +65,6 @@ h2 {
   align-items: center;
   font-size: 2rem;
   font-weight: bold;
-  background-color: #35654d;
   color: white;
 }
 
@@ -74,12 +74,15 @@ h2 {
   display: grid;
   grid-template-columns: 1fr 50px 50px min-content;
   width: max-content;
+  height: min-content;
   gap: 4px;
   padding: 8px 12px;
   font-size: 0.75rem;
-  font-family: monospace;
-  background: black;
+  background: rgb(32, 32, 32);
+  border: 3px solid darkgoldenrod;
+  border-left: none;
   color: white;
+  font-family: monospace;
 }
 
 .hand-table * {
@@ -91,17 +94,29 @@ h2 {
 .hand-table-chip,
 .hand-table-mult {
   border: none;
-  background: lightgrey;
   text-align: center;
-  font-family: monospace;
+  color: white;
+  font-weight: bold;
 }
 
 .hand-table-chip {
-  color: blue;
+  background: rgb(42, 156, 201);
 }
 
 .hand-table-mult {
-  color: red;
+  background: rgb(255, 65, 65);
+}
+
+.reset-button {
+  grid-column: 1 / -1;
+  padding: 8px;
+  font-size: 0.75rem;
+  background: grey;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-family: monospace;
+  font-weight: bold;
 }
 
 .joker-pickers,
@@ -111,7 +126,6 @@ h2 {
   justify-content: center;
   gap: 12px;
   padding: 12px;
-  background: #35654d;
 }
 
 .joker-picker,

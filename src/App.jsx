@@ -10,7 +10,9 @@ import { resolveScore } from "./engine/scoreResolver.js";
 import { BASIC_HANDS, BLANK_CARD, FULL_JOKERS } from "./constants.js";
 
 function App() {
-  const [handMap, setHandMap] = useState(BASIC_HANDS);
+  const [handMap, setHandMap] = useState(
+    JSON.parse(JSON.stringify(BASIC_HANDS)),
+  );
   const [allCards, setAllCards] = useState([
     BLANK_CARD(),
     BLANK_CARD(),
