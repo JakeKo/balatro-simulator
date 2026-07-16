@@ -245,6 +245,29 @@ const JOKER_METADATA_TEMPLATES = {
   ],
 };
 
+const FULL_JOKERS = Object.entries(JOKERS).reduce((acc, [key, value]) => {
+  const metadata =
+    JOKER_METADATA_TEMPLATES[value]?.reduce(
+      (metadata, entry) => ({ ...metadata, [entry.key]: entry.default }),
+      {},
+    ) || {};
+
+  return {
+    ...acc,
+    [key]: () => ({
+      name: value,
+      edition: EDITIONS.NONE,
+      seal: SEALS.NONE,
+      metadata,
+    }),
+  };
+}, {});
+
+function fullJokerByName(jokerName) {
+  const jokerKey = Object.keys(JOKERS).find((key) => JOKERS[key] === jokerName);
+  return FULL_JOKERS[jokerKey]();
+}
+
 const BASIC_HANDS = {
   "Flush Five": [160, 16],
   "Flush House": [140, 14],
@@ -329,6 +352,8 @@ export {
   JOKERS,
   JOKERS_LIST,
   JOKER_METADATA_TEMPLATES,
+  FULL_JOKERS,
+  fullJokerByName,
   RANKS,
   RANK_LIST,
   SUITS,

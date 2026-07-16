@@ -7,7 +7,7 @@ import {
   ScoreLogger,
 } from "./components";
 import { resolveScore } from "./engine/scoreResolver.js";
-import { JOKERS, BASIC_HANDS, BLANK_CARD } from "./constants.js";
+import { JOKERS, BASIC_HANDS, BLANK_CARD, FULL_JOKERS } from "./constants.js";
 
 function App() {
   const [handMap, setHandMap] = useState(BASIC_HANDS);
@@ -19,22 +19,15 @@ function App() {
     BLANK_CARD(),
   ]);
   const [allJokers, setAllJokers] = useState([
-    JOKERS.NONE,
-    JOKERS.NONE,
-    JOKERS.NONE,
-    JOKERS.NONE,
-    JOKERS.NONE,
-  ]);
-  const [allJokerMetadata, setAllJokerMetadata] = useState([
-    {},
-    {},
-    {},
-    {},
-    {},
+    FULL_JOKERS.NONE(),
+    FULL_JOKERS.NONE(),
+    FULL_JOKERS.NONE(),
+    FULL_JOKERS.NONE(),
+    FULL_JOKERS.NONE(),
   ]);
 
-  const gameMetadata = allJokerMetadata.reduce(
-    (metadata, jokerMetadata) => ({ ...metadata, ...jokerMetadata }),
+  const gameMetadata = allJokers.reduce(
+    (metadata, joker) => ({ ...metadata, ...joker.metadata }),
     {},
   );
   const [chips, mult, eventLog] = resolveScore(
@@ -53,16 +46,10 @@ function App() {
           <JokerPicker
             key={index}
             joker={joker}
-            metadata={allJokerMetadata[index]}
-            onChange={({ joker, metadata }) => {
+            onChange={(joker) => {
               const newJokers = JSON.parse(JSON.stringify(allJokers));
-              const newMetadata = JSON.parse(JSON.stringify(allJokerMetadata));
-
               newJokers[index] = joker;
-              newMetadata[index] = metadata;
-
               setAllJokers(newJokers);
-              setAllJokerMetadata(newMetadata);
             }}
           />
         ))}

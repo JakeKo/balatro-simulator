@@ -742,12 +742,10 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 **✅ Wrathful Joker**
 
 - Description: Played cards with Spade suit give +3 Mult when scored
-- Anticipated changes: None
 
 **✅ Yorick**
 
 - Description: This Joker gains X1 Mult every 23 \[23\] cards discarded (Currently X1 Mult)
-- Anticipated changes: None - joker metadata
 
 **✅ Zany Joker**
 

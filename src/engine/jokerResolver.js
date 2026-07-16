@@ -253,7 +253,7 @@ function resolveJoker(joker, { on }) {
     },
   };
 
-  if (joker in resolvedJokers) resolvedJokers[joker]();
+  if (joker.name in resolvedJokers) resolvedJokers[joker.name]();
 }
 
 export { resolveJoker };

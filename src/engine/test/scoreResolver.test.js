@@ -2,6 +2,7 @@ import { resolveScore } from "../scoreResolver.js";
 import { parseCards } from "./utils.js";
 import {
   JOKERS,
+  FULL_JOKERS,
   BASIC_HANDS,
   HANDS,
   EVENT_TYPES,
@@ -259,7 +260,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Abstract Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ABSTRACT_JOKER];
+      const jokers = [FULL_JOKERS.ABSTRACT_JOKER()];
       const metadata = { jokerCount: 1 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -273,7 +274,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ABSTRACT_JOKER,
+          joker: jokers[0],
           addMult: 3,
         }),
       );
@@ -281,7 +282,10 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ABSTRACT_JOKER, JOKERS.ABSTRACT_JOKER];
+      const jokers = [
+        FULL_JOKERS.ABSTRACT_JOKER(),
+        FULL_JOKERS.ABSTRACT_JOKER(),
+      ];
       const metadata = { jokerCount: 2 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -295,7 +299,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ABSTRACT_JOKER,
+          joker: jokers[0],
           addMult: 6,
         }),
       );
@@ -305,7 +309,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Acrobat", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ACROBAT];
+      const jokers = [FULL_JOKERS.ACROBAT()];
       const metadata = { finalHand: true };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -319,7 +323,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ACROBAT,
+          joker: jokers[0],
           multMult: 3,
         }),
       );
@@ -327,7 +331,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ACROBAT, JOKERS.ACROBAT];
+      const jokers = [FULL_JOKERS.ACROBAT(), FULL_JOKERS.ACROBAT()];
       const metadata = { finalHand: true };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -341,7 +345,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ACROBAT,
+          joker: jokers[0],
           multMult: 3,
         }),
       );
@@ -349,7 +353,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not final hand", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ACROBAT];
+      const jokers = [FULL_JOKERS.ACROBAT()];
       const metadata = { finalHand: false };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -363,7 +367,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ACROBAT,
+          joker: jokers[0],
           multMult: 3,
         }),
       );
@@ -373,7 +377,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Ancient Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ANCIENT_JOKER];
+      const jokers = [FULL_JOKERS.ANCIENT_JOKER()];
       const metadata = { suit: SUITS.HEARTS };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -387,7 +391,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ANCIENT_JOKER,
+          joker: jokers[0],
           multMult: 1.5,
         }),
       );
@@ -395,7 +399,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ANCIENT_JOKER, JOKERS.ANCIENT_JOKER];
+      const jokers = [FULL_JOKERS.ANCIENT_JOKER(), FULL_JOKERS.ANCIENT_JOKER()];
       const metadata = { suit: SUITS.HEARTS };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -409,7 +413,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ANCIENT_JOKER,
+          joker: jokers[0],
           multMult: 1.5,
         }),
       );
@@ -419,7 +423,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Arrowhead", () => {
     it("Single", () => {
       const hand = parseCards(["2S"]);
-      const jokers = [JOKERS.ARROWHEAD];
+      const jokers = [FULL_JOKERS.ARROWHEAD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -432,7 +436,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ARROWHEAD,
+          joker: jokers[0],
           addChips: 50,
         }),
       );
@@ -440,7 +444,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2DW"]);
-      const jokers = [JOKERS.ARROWHEAD, JOKERS.ARROWHEAD];
+      const jokers = [FULL_JOKERS.ARROWHEAD(), FULL_JOKERS.ARROWHEAD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -453,7 +457,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ARROWHEAD,
+          joker: jokers[0],
           addChips: 50,
         }),
       );
@@ -463,7 +467,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Banner", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BANNER];
+      const jokers = [FULL_JOKERS.BANNER()];
       const metadata = { remainingDiscards: 1 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -477,7 +481,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BANNER,
+          joker: jokers[0],
           addChips: 30,
         }),
       );
@@ -485,7 +489,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BANNER, JOKERS.BANNER];
+      const jokers = [FULL_JOKERS.BANNER(), FULL_JOKERS.BANNER()];
       const metadata = { remainingDiscards: 1 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -499,7 +503,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BANNER,
+          joker: jokers[0],
           addChips: 30,
         }),
       );
@@ -507,7 +511,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No remaining discards", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BANNER];
+      const jokers = [FULL_JOKERS.BANNER()];
       const metadata = { remainingDiscards: 0 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -521,7 +525,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BANNER,
+          joker: jokers[0],
           addChips: 30,
         }),
       );
@@ -531,7 +535,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Baron", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BARON];
+      const jokers = [FULL_JOKERS.BARON()];
       const metadata = { kingsInHand: 1 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -545,7 +549,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BARON,
+          joker: jokers[0],
           multMult: 1.5,
         }),
       );
@@ -553,7 +557,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Double Barons", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BARON, JOKERS.BARON];
+      const jokers = [FULL_JOKERS.BARON(), FULL_JOKERS.BARON()];
       const metadata = { kingsInHand: 1 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -567,7 +571,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BARON,
+          joker: jokers[0],
           multMult: 1.5,
         }),
       );
@@ -575,7 +579,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Double Kings", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BARON];
+      const jokers = [FULL_JOKERS.BARON()];
       const metadata = { kingsInHand: 2 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -589,7 +593,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BARON,
+          joker: jokers[0],
           multMult: 2.25,
         }),
       );
@@ -597,7 +601,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No kings in Hand", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BARON];
+      const jokers = [FULL_JOKERS.BARON()];
       const metadata = { kingsInHand: 0 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -611,7 +615,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BARON,
+          joker: jokers[0],
           multMult: 1.5,
         }),
       );
@@ -621,7 +625,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Blue Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BLUE_JOKER];
+      const jokers = [FULL_JOKERS.BLUE_JOKER()];
       const metadata = { remainingCardsInDeck: 10 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -635,7 +639,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BLUE_JOKER,
+          joker: jokers[0],
           addChips: 20,
         }),
       );
@@ -643,7 +647,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BLUE_JOKER, JOKERS.BLUE_JOKER];
+      const jokers = [FULL_JOKERS.BLUE_JOKER(), FULL_JOKERS.BLUE_JOKER()];
       const metadata = { remainingCardsInDeck: 10 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -657,7 +661,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BLUE_JOKER,
+          joker: jokers[0],
           addChips: 20,
         }),
       );
@@ -665,7 +669,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No remaining cards in deck", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.BLUE_JOKER];
+      const jokers = [FULL_JOKERS.BLUE_JOKER()];
       const metadata = { remainingCardsInDeck: 0 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -679,7 +683,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.BLUE_JOKER,
+          joker: jokers[0],
           addChips: 20,
         }),
       );
@@ -689,7 +693,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Cavendish", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.CAVENDISH];
+      const jokers = [FULL_JOKERS.CAVENDISH()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -702,7 +706,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CAVENDISH,
+          joker: jokers[0],
           multMult: 3,
         }),
       );
@@ -710,7 +714,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.CAVENDISH, JOKERS.CAVENDISH];
+      const jokers = [FULL_JOKERS.CAVENDISH(), FULL_JOKERS.CAVENDISH()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -723,7 +727,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CAVENDISH,
+          joker: jokers[0],
           multMult: 3,
         }),
       );
@@ -733,7 +737,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Clever Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2H", "2D", "3H", "3D"]);
-      const jokers = [JOKERS.CLEVER_JOKER];
+      const jokers = [FULL_JOKERS.CLEVER_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -746,7 +750,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CLEVER_JOKER,
+          joker: jokers[0],
           addChips: 80,
         }),
       );
@@ -754,7 +758,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H", "2D", "3H", "3D"]);
-      const jokers = [JOKERS.CLEVER_JOKER, JOKERS.CLEVER_JOKER];
+      const jokers = [FULL_JOKERS.CLEVER_JOKER(), FULL_JOKERS.CLEVER_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -767,7 +771,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CLEVER_JOKER,
+          joker: jokers[0],
           addChips: 80,
         }),
       );
@@ -775,7 +779,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a two pair", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.CLEVER_JOKER];
+      const jokers = [FULL_JOKERS.CLEVER_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -788,7 +792,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CLEVER_JOKER,
+          joker: jokers[0],
           addChips: 80,
         }),
       );
@@ -798,7 +802,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Crafty Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2D", "4D", "6D", "8D", "10D"]);
-      const jokers = [JOKERS.CRAFTY_JOKER];
+      const jokers = [FULL_JOKERS.CRAFTY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -811,7 +815,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CRAFTY_JOKER,
+          joker: jokers[0],
           addChips: 80,
         }),
       );
@@ -819,7 +823,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2D", "4D", "6D", "8D", "10D"]);
-      const jokers = [JOKERS.CRAFTY_JOKER, JOKERS.CRAFTY_JOKER];
+      const jokers = [FULL_JOKERS.CRAFTY_JOKER(), FULL_JOKERS.CRAFTY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -832,7 +836,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CRAFTY_JOKER,
+          joker: jokers[0],
           addChips: 80,
         }),
       );
@@ -840,7 +844,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a flush", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.CRAFTY_JOKER];
+      const jokers = [FULL_JOKERS.CRAFTY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -853,7 +857,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CRAFTY_JOKER,
+          joker: jokers[0],
           addChips: 80,
         }),
       );
@@ -863,7 +867,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Crazy Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2D", "3D", "4S", "5D", "6D"]);
-      const jokers = [JOKERS.CRAZY_JOKER];
+      const jokers = [FULL_JOKERS.CRAZY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -876,7 +880,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CRAZY_JOKER,
+          joker: jokers[0],
           addMult: 12,
         }),
       );
@@ -884,7 +888,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2D", "3D", "4S", "5D", "6D"]);
-      const jokers = [JOKERS.CRAZY_JOKER, JOKERS.CRAZY_JOKER];
+      const jokers = [FULL_JOKERS.CRAZY_JOKER(), FULL_JOKERS.CRAZY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -897,7 +901,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CRAZY_JOKER,
+          joker: jokers[0],
           addMult: 12,
         }),
       );
@@ -905,7 +909,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a straight", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.CRAZY_JOKER];
+      const jokers = [FULL_JOKERS.CRAZY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -918,7 +922,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.CRAZY_JOKER,
+          joker: jokers[0],
           addMult: 12,
         }),
       );
@@ -928,7 +932,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Devious Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2D", "3D", "4S", "5D", "6D"]);
-      const jokers = [JOKERS.DEVIOUS_JOKER];
+      const jokers = [FULL_JOKERS.DEVIOUS_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -941,7 +945,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.DEVIOUS_JOKER,
+          joker: jokers[0],
           addChips: 100,
         }),
       );
@@ -949,7 +953,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2D", "3D", "4S", "5D", "6D"]);
-      const jokers = [JOKERS.DEVIOUS_JOKER, JOKERS.DEVIOUS_JOKER];
+      const jokers = [FULL_JOKERS.DEVIOUS_JOKER(), FULL_JOKERS.DEVIOUS_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -962,7 +966,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.DEVIOUS_JOKER,
+          joker: jokers[0],
           addChips: 100,
         }),
       );
@@ -970,7 +974,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a straight", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.DEVIOUS_JOKER];
+      const jokers = [FULL_JOKERS.DEVIOUS_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -983,7 +987,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.DEVIOUS_JOKER,
+          joker: jokers[0],
           addChips: 100,
         }),
       );
@@ -993,7 +997,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Droll Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2D", "4D", "6D", "8D", "10D"]);
-      const jokers = [JOKERS.DROLL_JOKER];
+      const jokers = [FULL_JOKERS.DROLL_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1006,7 +1010,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.DROLL_JOKER,
+          joker: jokers[0],
           addMult: 10,
         }),
       );
@@ -1014,7 +1018,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2D", "4D", "6D", "8D", "10D"]);
-      const jokers = [JOKERS.DROLL_JOKER, JOKERS.DROLL_JOKER];
+      const jokers = [FULL_JOKERS.DROLL_JOKER(), FULL_JOKERS.DROLL_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1027,7 +1031,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.DROLL_JOKER,
+          joker: jokers[0],
           addMult: 10,
         }),
       );
@@ -1035,7 +1039,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a flush", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.DROLL_JOKER];
+      const jokers = [FULL_JOKERS.DROLL_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1048,7 +1052,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.DROLL_JOKER,
+          joker: jokers[0],
           addMult: 10,
         }),
       );
@@ -1058,7 +1062,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Even Steven", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.EVEN_STEVEN];
+      const jokers = [FULL_JOKERS.EVEN_STEVEN()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1071,7 +1075,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.EVEN_STEVEN,
+          joker: jokers[0],
           addMult: 4,
         }),
       );
@@ -1079,7 +1083,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.EVEN_STEVEN, JOKERS.EVEN_STEVEN];
+      const jokers = [FULL_JOKERS.EVEN_STEVEN(), FULL_JOKERS.EVEN_STEVEN()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1092,7 +1096,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.EVEN_STEVEN,
+          joker: jokers[0],
           addMult: 4,
         }),
       );
@@ -1100,7 +1104,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No even ranks", () => {
       const hand = parseCards(["3H"]);
-      const jokers = [JOKERS.EVEN_STEVEN];
+      const jokers = [FULL_JOKERS.EVEN_STEVEN()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1113,7 +1117,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.EVEN_STEVEN,
+          joker: jokers[0],
           addMult: 4,
         }),
       );
@@ -1123,7 +1127,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Fortune Teller", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.FORTUNE_TELLER];
+      const jokers = [FULL_JOKERS.FORTUNE_TELLER()];
       const metadata = { tarotCardsUsed: 5 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -1137,7 +1141,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.FORTUNE_TELLER,
+          joker: jokers[0],
           addMult: 5,
         }),
       );
@@ -1145,7 +1149,10 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.FORTUNE_TELLER, JOKERS.FORTUNE_TELLER];
+      const jokers = [
+        FULL_JOKERS.FORTUNE_TELLER(),
+        FULL_JOKERS.FORTUNE_TELLER(),
+      ];
       const metadata = { tarotCardsUsed: 5 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -1159,7 +1166,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.FORTUNE_TELLER,
+          joker: jokers[0],
           addMult: 5,
         }),
       );
@@ -1167,7 +1174,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No cards used this run", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.FORTUNE_TELLER];
+      const jokers = [FULL_JOKERS.FORTUNE_TELLER()];
       const metadata = { tarotCardsUsed: 0 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -1181,7 +1188,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.FORTUNE_TELLER,
+          joker: jokers[0],
           addMult: 1,
         }),
       );
@@ -1191,7 +1198,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Gros Michel", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.GROS_MICHEL];
+      const jokers = [FULL_JOKERS.GROS_MICHEL()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1204,7 +1211,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.GROS_MICHEL,
+          joker: jokers[0],
           addMult: 15,
         }),
       );
@@ -1212,7 +1219,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.GROS_MICHEL, JOKERS.GROS_MICHEL];
+      const jokers = [FULL_JOKERS.GROS_MICHEL(), FULL_JOKERS.GROS_MICHEL()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1225,7 +1232,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.GROS_MICHEL,
+          joker: jokers[0],
           addMult: 15,
         }),
       );
@@ -1235,7 +1242,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Half Joker", () => {
     it("Single", () => {
       const hand = parseCards(["3D", "3H", "3S"]);
-      const jokers = [JOKERS.HALF_JOKER];
+      const jokers = [FULL_JOKERS.HALF_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1248,7 +1255,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.HALF_JOKER,
+          joker: jokers[0],
           addMult: 20,
         }),
       );
@@ -1256,7 +1263,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["3D", "3H", "3S"]);
-      const jokers = [JOKERS.HALF_JOKER, JOKERS.HALF_JOKER];
+      const jokers = [FULL_JOKERS.HALF_JOKER(), FULL_JOKERS.HALF_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1269,7 +1276,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.HALF_JOKER,
+          joker: jokers[0],
           addMult: 20,
         }),
       );
@@ -1277,7 +1284,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("More than three cards", () => {
       const hand = parseCards(["2H", "2D", "4H", "4D"]);
-      const jokers = [JOKERS.HALF_JOKER];
+      const jokers = [FULL_JOKERS.HALF_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1290,7 +1297,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.HALF_JOKER,
+          joker: jokers[0],
           addMult: 20,
         }),
       );
@@ -1300,7 +1307,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Hanging Chad", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.HANGING_CHAD];
+      const jokers = [FULL_JOKERS.HANGING_CHAD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1313,14 +1320,14 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.HANGING_CHAD,
+          joker: jokers[0],
         }),
       );
     });
 
     it("Multiple", () => {
       const hand = parseCards(["2H", "3H"]);
-      const jokers = [JOKERS.HANGING_CHAD, JOKERS.HANGING_CHAD];
+      const jokers = [FULL_JOKERS.HANGING_CHAD(), FULL_JOKERS.HANGING_CHAD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1333,14 +1340,14 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.HANGING_CHAD,
+          joker: jokers[0],
         }),
       );
     });
 
     it("Single, red seal", () => {
       const hand = parseCards(["2HXXR"]);
-      const jokers = [JOKERS.HANGING_CHAD];
+      const jokers = [FULL_JOKERS.HANGING_CHAD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1353,7 +1360,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.HANGING_CHAD,
+          joker: jokers[0],
         }),
       );
     });
@@ -1362,7 +1369,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.JOKER];
+      const jokers = [FULL_JOKERS.JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1375,7 +1382,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.JOKER,
+          joker: jokers[0],
           addMult: 4,
         }),
       );
@@ -1383,7 +1390,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.JOKER, JOKERS.JOKER];
+      const jokers = [FULL_JOKERS.JOKER(), FULL_JOKERS.JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1396,7 +1403,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.JOKER,
+          joker: jokers[0],
           addMult: 4,
         }),
       );
@@ -1406,7 +1413,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Jolly Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2D", "2H"]);
-      const jokers = [JOKERS.JOLLY_JOKER];
+      const jokers = [FULL_JOKERS.JOLLY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1419,7 +1426,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.JOLLY_JOKER,
+          joker: jokers[0],
           addMult: 8,
         }),
       );
@@ -1427,7 +1434,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2D", "2H"]);
-      const jokers = [JOKERS.JOLLY_JOKER, JOKERS.JOLLY_JOKER];
+      const jokers = [FULL_JOKERS.JOLLY_JOKER(), FULL_JOKERS.JOLLY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1440,7 +1447,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.JOLLY_JOKER,
+          joker: jokers[0],
           addMult: 8,
         }),
       );
@@ -1448,7 +1455,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a pair", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.JOLLY_JOKER];
+      const jokers = [FULL_JOKERS.JOLLY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1461,7 +1468,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.JOLLY_JOKER,
+          joker: jokers[0],
           addMult: 8,
         }),
       );
@@ -1471,7 +1478,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Mad Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2D", "2H", "3D", "3H"]);
-      const jokers = [JOKERS.MAD_JOKER];
+      const jokers = [FULL_JOKERS.MAD_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1484,7 +1491,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.MAD_JOKER,
+          joker: jokers[0],
           addMult: 10,
         }),
       );
@@ -1492,7 +1499,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2D", "2H", "3D", "3H"]);
-      const jokers = [JOKERS.MAD_JOKER, JOKERS.MAD_JOKER];
+      const jokers = [FULL_JOKERS.MAD_JOKER(), FULL_JOKERS.MAD_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1505,7 +1512,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.MAD_JOKER,
+          joker: jokers[0],
           addMult: 10,
         }),
       );
@@ -1513,7 +1520,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a two pair", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.MAD_JOKER];
+      const jokers = [FULL_JOKERS.MAD_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1526,7 +1533,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.MAD_JOKER,
+          joker: jokers[0],
           addMult: 10,
         }),
       );
@@ -1536,7 +1543,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Odd Todd", () => {
     it("Single", () => {
       const hand = parseCards(["3H"]);
-      const jokers = [JOKERS.ODD_TODD];
+      const jokers = [FULL_JOKERS.ODD_TODD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1549,7 +1556,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ODD_TODD,
+          joker: jokers[0],
           addChips: 31,
         }),
       );
@@ -1557,7 +1564,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["AH"]);
-      const jokers = [JOKERS.ODD_TODD, JOKERS.ODD_TODD];
+      const jokers = [FULL_JOKERS.ODD_TODD(), FULL_JOKERS.ODD_TODD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1570,7 +1577,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ODD_TODD,
+          joker: jokers[0],
           addChips: 31,
         }),
       );
@@ -1578,7 +1585,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No odd ranks", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ODD_TODD];
+      const jokers = [FULL_JOKERS.ODD_TODD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1591,7 +1598,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ODD_TODD,
+          joker: jokers[0],
           addChips: 31,
         }),
       );
@@ -1601,7 +1608,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Photograph", () => {
     it("Single", () => {
       const hand = parseCards(["JH"]);
-      const jokers = [JOKERS.PHOTOGRAPH];
+      const jokers = [FULL_JOKERS.PHOTOGRAPH()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1614,7 +1621,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.PHOTOGRAPH,
+          joker: jokers[0],
           multMult: 2,
         }),
       );
@@ -1622,7 +1629,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Single, multiple face cards", () => {
       const hand = parseCards(["JH", "JD", "QS"]);
-      const jokers = [JOKERS.PHOTOGRAPH];
+      const jokers = [FULL_JOKERS.PHOTOGRAPH()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1635,7 +1642,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.PHOTOGRAPH,
+          joker: jokers[0],
           multMult: 2,
         }),
       );
@@ -1643,7 +1650,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Single, Hanging Chad applied", () => {
       const hand = parseCards(["JH"]);
-      const jokers = [JOKERS.PHOTOGRAPH, JOKERS.HANGING_CHAD];
+      const jokers = [FULL_JOKERS.PHOTOGRAPH(), FULL_JOKERS.HANGING_CHAD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1656,7 +1663,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.PHOTOGRAPH,
+          joker: jokers[0],
           multMult: 2,
         }),
       );
@@ -1664,7 +1671,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["JH"]);
-      const jokers = [JOKERS.PHOTOGRAPH, JOKERS.PHOTOGRAPH];
+      const jokers = [FULL_JOKERS.PHOTOGRAPH(), FULL_JOKERS.PHOTOGRAPH()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1677,7 +1684,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.PHOTOGRAPH,
+          joker: jokers[0],
           multMult: 2,
         }),
       );
@@ -1685,7 +1692,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No face cards", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.PHOTOGRAPH];
+      const jokers = [FULL_JOKERS.PHOTOGRAPH()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1698,7 +1705,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.PHOTOGRAPH,
+          joker: jokers[0],
           multMult: 2,
         }),
       );
@@ -1708,7 +1715,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Scary Face", () => {
     it("Single", () => {
       const hand = parseCards(["JH"]);
-      const jokers = [JOKERS.SCARY_FACE];
+      const jokers = [FULL_JOKERS.SCARY_FACE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1721,7 +1728,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCARY_FACE,
+          joker: jokers[0],
           addChips: 30,
         }),
       );
@@ -1729,7 +1736,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Single, multiple face cards", () => {
       const hand = parseCards(["JH", "JD", "QS"]);
-      const jokers = [JOKERS.SCARY_FACE];
+      const jokers = [FULL_JOKERS.SCARY_FACE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1742,7 +1749,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCARY_FACE,
+          joker: jokers[0],
           addChips: 30,
         }),
       );
@@ -1750,7 +1757,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Single, Hanging Chad applied", () => {
       const hand = parseCards(["JH"]);
-      const jokers = [JOKERS.SCARY_FACE, JOKERS.HANGING_CHAD];
+      const jokers = [FULL_JOKERS.SCARY_FACE(), FULL_JOKERS.HANGING_CHAD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1763,7 +1770,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCARY_FACE,
+          joker: jokers[0],
           addChips: 30,
         }),
       );
@@ -1771,7 +1778,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["JH"]);
-      const jokers = [JOKERS.SCARY_FACE, JOKERS.SCARY_FACE];
+      const jokers = [FULL_JOKERS.SCARY_FACE(), FULL_JOKERS.SCARY_FACE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1784,7 +1791,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCARY_FACE,
+          joker: jokers[0],
           addChips: 30,
         }),
       );
@@ -1792,7 +1799,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No face cards", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.SCARY_FACE];
+      const jokers = [FULL_JOKERS.SCARY_FACE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1805,7 +1812,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCARY_FACE,
+          joker: jokers[0],
           addChips: 30,
         }),
       );
@@ -1815,7 +1822,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Scholar", () => {
     it("Single", () => {
       const hand = parseCards(["AH"]);
-      const jokers = [JOKERS.SCHOLAR];
+      const jokers = [FULL_JOKERS.SCHOLAR()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1828,7 +1835,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCHOLAR,
+          joker: jokers[0],
           addChips: 20,
           addMult: 4,
         }),
@@ -1837,7 +1844,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["AH"]);
-      const jokers = [JOKERS.SCHOLAR, JOKERS.SCHOLAR];
+      const jokers = [FULL_JOKERS.SCHOLAR(), FULL_JOKERS.SCHOLAR()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1850,7 +1857,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCHOLAR,
+          joker: jokers[0],
           addChips: 20,
           addMult: 4,
         }),
@@ -1859,7 +1866,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No aces", () => {
       const hand = parseCards(["3H"]);
-      const jokers = [JOKERS.SCHOLAR];
+      const jokers = [FULL_JOKERS.SCHOLAR()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1872,7 +1879,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SCHOLAR,
+          joker: jokers[0],
           addChips: 20,
           addMult: 4,
         }),
@@ -1883,7 +1890,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Sly Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2D", "2H", "3D", "3H"]);
-      const jokers = [JOKERS.SLY_JOKER];
+      const jokers = [FULL_JOKERS.SLY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1896,7 +1903,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SLY_JOKER,
+          joker: jokers[0],
           addChips: 50,
         }),
       );
@@ -1904,7 +1911,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2D", "2H", "3D", "3H"]);
-      const jokers = [JOKERS.SLY_JOKER, JOKERS.SLY_JOKER];
+      const jokers = [FULL_JOKERS.SLY_JOKER(), FULL_JOKERS.SLY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1917,7 +1924,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SLY_JOKER,
+          joker: jokers[0],
           addChips: 50,
         }),
       );
@@ -1925,7 +1932,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a pair", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.SLY_JOKER];
+      const jokers = [FULL_JOKERS.SLY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1938,7 +1945,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SLY_JOKER,
+          joker: jokers[0],
           addChips: 50,
         }),
       );
@@ -1948,7 +1955,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Smiley Face", () => {
     it("Single", () => {
       const hand = parseCards(["JH"]);
-      const jokers = [JOKERS.SMILEY_FACE];
+      const jokers = [FULL_JOKERS.SMILEY_FACE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1961,7 +1968,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SMILEY_FACE,
+          joker: jokers[0],
           addMult: 5,
         }),
       );
@@ -1969,7 +1976,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Single, multiple face cards", () => {
       const hand = parseCards(["JH", "JD", "QS"]);
-      const jokers = [JOKERS.SMILEY_FACE];
+      const jokers = [FULL_JOKERS.SMILEY_FACE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1982,7 +1989,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SMILEY_FACE,
+          joker: jokers[0],
           addMult: 5,
         }),
       );
@@ -1990,7 +1997,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Single, Hanging Chad applied", () => {
       const hand = parseCards(["JH"]);
-      const jokers = [JOKERS.SMILEY_FACE, JOKERS.HANGING_CHAD];
+      const jokers = [FULL_JOKERS.SMILEY_FACE(), FULL_JOKERS.HANGING_CHAD()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2003,7 +2010,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SMILEY_FACE,
+          joker: jokers[0],
           addMult: 5,
         }),
       );
@@ -2011,7 +2018,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["JH"]);
-      const jokers = [JOKERS.SMILEY_FACE, JOKERS.SMILEY_FACE];
+      const jokers = [FULL_JOKERS.SMILEY_FACE(), FULL_JOKERS.SMILEY_FACE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2024,7 +2031,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SMILEY_FACE,
+          joker: jokers[0],
           addMult: 5,
         }),
       );
@@ -2032,7 +2039,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No face cards", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.SMILEY_FACE];
+      const jokers = [FULL_JOKERS.SMILEY_FACE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2045,7 +2052,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.SMILEY_FACE,
+          joker: jokers[0],
           addMult: 5,
         }),
       );
@@ -2055,7 +2062,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Walkie Talkie", () => {
     it("Single", () => {
       const hand = parseCards(["10H", "10D", "4H", "4D"]);
-      const jokers = [JOKERS.WALKIE_TALKIE];
+      const jokers = [FULL_JOKERS.WALKIE_TALKIE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2068,7 +2075,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WALKIE_TALKIE,
+          joker: jokers[0],
           addChips: 10,
           addMult: 4,
         }),
@@ -2077,7 +2084,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["10H", "10D", "4H", "4D"]);
-      const jokers = [JOKERS.WALKIE_TALKIE, JOKERS.WALKIE_TALKIE];
+      const jokers = [FULL_JOKERS.WALKIE_TALKIE(), FULL_JOKERS.WALKIE_TALKIE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2090,7 +2097,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WALKIE_TALKIE,
+          joker: jokers[0],
           addChips: 10,
           addMult: 4,
         }),
@@ -2099,7 +2106,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No 10s or 4s", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.WALKIE_TALKIE];
+      const jokers = [FULL_JOKERS.WALKIE_TALKIE()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2112,7 +2119,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WALKIE_TALKIE,
+          joker: jokers[0],
           addChips: 10,
           addMult: 4,
         }),
@@ -2123,7 +2130,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Wily Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2D", "2H", "2S"]);
-      const jokers = [JOKERS.WILY_JOKER];
+      const jokers = [FULL_JOKERS.WILY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2136,7 +2143,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WILY_JOKER,
+          joker: jokers[0],
           addChips: 100,
         }),
       );
@@ -2144,7 +2151,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2D", "2H", "2S"]);
-      const jokers = [JOKERS.WILY_JOKER, JOKERS.WILY_JOKER];
+      const jokers = [FULL_JOKERS.WILY_JOKER(), FULL_JOKERS.WILY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2157,7 +2164,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WILY_JOKER,
+          joker: jokers[0],
           addChips: 100,
         }),
       );
@@ -2165,7 +2172,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a three of a kind", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.WILY_JOKER];
+      const jokers = [FULL_JOKERS.WILY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2178,7 +2185,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WILY_JOKER,
+          joker: jokers[0],
           addChips: 100,
         }),
       );
@@ -2188,7 +2195,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Wrathful Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2S"]);
-      const jokers = [JOKERS.WRATHFUL_JOKER];
+      const jokers = [FULL_JOKERS.WRATHFUL_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2201,7 +2208,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WRATHFUL_JOKER,
+          joker: jokers[0],
           addMult: 3,
         }),
       );
@@ -2209,7 +2216,10 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2S"]);
-      const jokers = [JOKERS.WRATHFUL_JOKER, JOKERS.WRATHFUL_JOKER];
+      const jokers = [
+        FULL_JOKERS.WRATHFUL_JOKER(),
+        FULL_JOKERS.WRATHFUL_JOKER(),
+      ];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2222,7 +2232,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WRATHFUL_JOKER,
+          joker: jokers[0],
           addMult: 3,
         }),
       );
@@ -2230,7 +2240,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("No spades", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.WRATHFUL_JOKER];
+      const jokers = [FULL_JOKERS.WRATHFUL_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2243,7 +2253,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.WRATHFUL_JOKER,
+          joker: jokers[0],
           addMult: 3,
         }),
       );
@@ -2253,7 +2263,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Yorick", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.YORICK];
+      const jokers = [FULL_JOKERS.YORICK()];
       const metadata = { cardsDiscarded: 23 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -2267,7 +2277,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.YORICK,
+          joker: jokers[0],
           multMult: 2,
         }),
       );
@@ -2275,7 +2285,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.YORICK, JOKERS.YORICK];
+      const jokers = [FULL_JOKERS.YORICK(), FULL_JOKERS.YORICK()];
       const metadata = { cardsDiscarded: 23 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -2289,7 +2299,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.YORICK,
+          joker: jokers[0],
           multMult: 2,
         }),
       );
@@ -2297,7 +2307,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not enough cards discarded", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ZANY_JOKER];
+      const jokers = [FULL_JOKERS.ZANY_JOKER()];
       const metadata = { cardsDiscarded: 22 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
@@ -2311,7 +2321,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.YORICK,
+          joker: jokers[0],
           multMult: 2,
         }),
       );
@@ -2321,7 +2331,7 @@ describe("scoreResolver handling different jokers", () => {
   describe("Zany Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2D", "2H", "2S"]);
-      const jokers = [JOKERS.ZANY_JOKER];
+      const jokers = [FULL_JOKERS.ZANY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2334,7 +2344,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ZANY_JOKER,
+          joker: jokers[0],
           addMult: 12,
         }),
       );
@@ -2342,7 +2352,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Multiple", () => {
       const hand = parseCards(["2D", "2H", "2S"]);
-      const jokers = [JOKERS.ZANY_JOKER, JOKERS.ZANY_JOKER];
+      const jokers = [FULL_JOKERS.ZANY_JOKER(), FULL_JOKERS.ZANY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2355,7 +2365,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ZANY_JOKER,
+          joker: jokers[0],
           addMult: 12,
         }),
       );
@@ -2363,7 +2373,7 @@ describe("scoreResolver handling different jokers", () => {
 
     it("Not a three of a kind", () => {
       const hand = parseCards(["2H"]);
-      const jokers = [JOKERS.ZANY_JOKER];
+      const jokers = [FULL_JOKERS.ZANY_JOKER()];
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -2376,7 +2386,7 @@ describe("scoreResolver handling different jokers", () => {
       expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
-          joker: JOKERS.ZANY_JOKER,
+          joker: jokers[0],
           addMult: 12,
         }),
       );

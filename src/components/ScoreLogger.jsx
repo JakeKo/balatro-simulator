@@ -43,7 +43,7 @@ function stringifyJokerScored(entry) {
   if (addMult) operations.push(`+${addMult}m`);
   if (multMult) operations.push(`×${multMult}m`);
 
-  return `${joker} | ${operations.join(", ")}`;
+  return `${joker.name} | ${operations.join(", ")}`;
 }
 
 function stringifyHandEnded() {

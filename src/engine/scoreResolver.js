@@ -62,7 +62,7 @@ function createEventGraph() {
 
 function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
-  const playedJokers = allJokers.filter((joker) => joker !== JOKERS.NONE);
+  const playedJokers = allJokers.filter((joker) => joker.name !== JOKERS.NONE);
 
   const [handPlayed, scoredCards] = identifyHandPlayed(playedCards);
   if (handPlayed === HANDS.NONE) return [0, 0, []];

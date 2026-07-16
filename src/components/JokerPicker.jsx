@@ -1,41 +1,40 @@
-import { JOKERS_LIST, JOKER_METADATA_TEMPLATES, SUIT_LIST } from "../constants";
+import {
+  JOKERS_LIST,
+  JOKER_METADATA_TEMPLATES,
+  SUIT_LIST,
+  FULL_JOKERS,
+  fullJokerByName,
+} from "../constants";
 
 function getMetadataTemplate(joker) {
-  return JOKER_METADATA_TEMPLATES[joker] || [];
+  return JOKER_METADATA_TEMPLATES[joker.name] || [];
 }
 
-function JokerPicker({ joker, metadata, onChange }) {
+function JokerPicker({ joker, onChange }) {
   const metadataTemplate = getMetadataTemplate(joker);
 
-  function onJokerChange(newJoker) {
-    const newMetadataTemplate = getMetadataTemplate(newJoker);
-    const newMetadata = newMetadataTemplate.reduce(
-      (metadata, entry) => ({ ...metadata, [entry.key]: entry.default }),
-      {},
-    );
-
-    onChange({
-      joker: newJoker,
-      metadata: newMetadata,
-    });
+  function onJokerChange(jokerName) {
+    const fullJoker = fullJokerByName(jokerName);
+    onChange(fullJoker);
   }
 
   function onMetadataChange(newMetadata) {
-    onChange({
-      joker,
-      metadata: { ...metadata, ...newMetadata },
-    });
+    const updatedJoker = {
+      ...joker,
+      metadata: { ...joker.metadata, ...newMetadata },
+    };
+    onChange(updatedJoker);
   }
 
   return (
     <div className="joker-picker">
       <select
         className="joker-picker-name"
-        value={joker}
+        value={joker.name}
         onChange={(e) => onJokerChange(e.target.value)}
       >
-        {JOKERS_LIST.map((joker) => (
-          <option key={joker}>{joker}</option>
+        {JOKERS_LIST.map((jokerName) => (
+          <option key={jokerName}>{jokerName}</option>
         ))}
       </select>
       {metadataTemplate.map(({ key, label, type }) => {
@@ -45,7 +44,7 @@ function JokerPicker({ joker, metadata, onChange }) {
               <input
                 key={key}
                 className="joker-picker-number"
-                value={metadata[key]}
+                value={joker.metadata[key]}
                 placeholder={label}
                 type="number"
                 onChange={(e) =>
@@ -58,7 +57,7 @@ function JokerPicker({ joker, metadata, onChange }) {
               <div key={key} className="joker-picker-boolean">
                 {label}
                 <input
-                  checked={metadata[key]}
+                  checked={joker.metadata[key]}
                   type="checkbox"
                   onChange={(e) =>
                     onMetadataChange({ [key]: e.target.checked })
@@ -71,7 +70,7 @@ function JokerPicker({ joker, metadata, onChange }) {
               <select
                 key={key}
                 className="joker-picker-suit"
-                value={metadata[key]}
+                value={joker.metadata[key]}
                 onChange={(e) => onMetadataChange({ [key]: e.target.value })}
               >
                 {SUIT_LIST.map((suit) => (
