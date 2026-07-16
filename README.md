@@ -31,7 +31,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Blue
 - [ ] Purple
 
-# Joker Tally (33 / 150)
+# Joker Tally (32 / 150)
 
 **8 Ball**
 
@@ -48,7 +48,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 
 **✅ Ancient Joker**
 
-- Description: Each played card with [suit] gives X1.5 Mult when scored, suit changes at end of round
+- Description: Each played card with \[suit\] gives X1.5 Mult when scored, suit changes at end of round
 
 **✅ Arrowhead**
 
@@ -739,12 +739,12 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 
 - Description: +100 Chips if played hand contains a Three of a Kind
 
-**Wrathful Joker**
+**✅ Wrathful Joker**
 
 - Description: Played cards with Spade suit give +3 Mult when scored
 - Anticipated changes: None
 
-**Yorick**
+**✅ Yorick**
 
 - Description: This Joker gains X1 Mult every 23 \[23\] cards discarded (Currently X1 Mult)
 - Anticipated changes: None - joker metadata

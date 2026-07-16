@@ -235,6 +235,14 @@ const JOKER_METADATA_TEMPLATES = {
       default: 0,
     },
   ],
+  [JOKERS.YORICK]: [
+    {
+      key: "cardsDiscarded",
+      label: "Cards Discarded",
+      type: "number",
+      default: 0,
+    },
+  ],
 };
 
 const BASIC_HANDS = {

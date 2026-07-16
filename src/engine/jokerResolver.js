@@ -231,6 +231,19 @@ function resolveJoker(joker, { on }) {
         }
       });
     },
+    [JOKERS.WRATHFUL_JOKER]: () => {
+      on(EVENT_TYPES.CARD_SCORED, (node, round) => {
+        if (isSuit(node.payload.card, SUITS.SPADES)) {
+          node.addChild(jokerScored(joker, 0, 3, 0));
+        }
+      });
+    },
+    [JOKERS.YORICK]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
+        const multMult = 1 + Math.floor(round.metadata.cardsDiscarded / 23);
+        node.addChild(jokerScored(joker, 0, 0, multMult));
+      });
+    },
     [JOKERS.ZANY_JOKER]: () => {
       on(EVENT_TYPES.HAND_ENDED, (node, round) => {
         if (handIsThreeOfAKind(round.scoredCards)) {
