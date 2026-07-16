@@ -1124,7 +1124,7 @@ describe("scoreResolver handling different jokers", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
       const jokers = [JOKERS.FORTUNE_TELLER];
-      const metadata = { cardsUsedThisRun: 5 };
+      const metadata = { tarotCardsUsed: 5 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1133,12 +1133,12 @@ describe("scoreResolver handling different jokers", () => {
       );
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
-      expect(mult).toBe(7); // 1 (high card) + 6 (fortune teller)
+      expect(mult).toBe(6); // 1 (high card) + 5 (fortune teller)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
           joker: JOKERS.FORTUNE_TELLER,
-          addMult: 6,
+          addMult: 5,
         }),
       );
     });
@@ -1146,7 +1146,7 @@ describe("scoreResolver handling different jokers", () => {
     it("Multiple", () => {
       const hand = parseCards(["2H"]);
       const jokers = [JOKERS.FORTUNE_TELLER, JOKERS.FORTUNE_TELLER];
-      const metadata = { cardsUsedThisRun: 5 };
+      const metadata = { tarotCardsUsed: 5 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1155,12 +1155,12 @@ describe("scoreResolver handling different jokers", () => {
       );
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
-      expect(mult).toBe(13); // 1 (high card) + 6 (fortune teller) + 6 (fortune teller)
+      expect(mult).toBe(11); // 1 (high card) + 5 (fortune teller) + 5 (fortune teller)
       expect(eventLog).toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
           joker: JOKERS.FORTUNE_TELLER,
-          addMult: 6,
+          addMult: 5,
         }),
       );
     });
@@ -1168,7 +1168,7 @@ describe("scoreResolver handling different jokers", () => {
     it("No cards used this run", () => {
       const hand = parseCards(["2H"]);
       const jokers = [JOKERS.FORTUNE_TELLER];
-      const metadata = { cardsUsedThisRun: 0 };
+      const metadata = { tarotCardsUsed: 0 };
       const [chips, mult, eventLog] = resolveScore(
         hand,
         BASIC_HANDS,
@@ -1177,8 +1177,8 @@ describe("scoreResolver handling different jokers", () => {
       );
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
-      expect(mult).toBe(2); // 1 (high card) + 1 (fortune teller)
-      expect(eventLog).toContainEqual(
+      expect(mult).toBe(1); // 1 (high card)
+      expect(eventLog).not.toContainEqual(
         expect.objectContaining({
           type: EVENT_TYPES.JOKER_SCORED,
           joker: JOKERS.FORTUNE_TELLER,

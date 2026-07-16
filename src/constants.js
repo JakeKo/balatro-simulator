@@ -229,8 +229,8 @@ const JOKER_METADATA_TEMPLATES = {
   ],
   [JOKERS.FORTUNE_TELLER]: [
     {
-      key: "cardsUsedThisRun",
-      label: "Cards Used This Run",
+      key: "tarotCardsUsed",
+      label: "Tarot Cards Used",
       type: "number",
       default: 0,
     },
