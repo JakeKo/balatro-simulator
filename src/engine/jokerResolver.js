@@ -44,7 +44,7 @@ function resolveJoker(joker, { on }) {
       });
     },
     [JOKERS.ARROWHEAD]: () => {
-      on(EVENT_TYPES.CARD_SCORED, (node, round) => {
+      on(EVENT_TYPES.CARD_SCORED, (node) => {
         if (isSuit(node.payload.card, SUITS.SPADES)) {
           node.addChild(jokerScored(joker, 50, 0, 0));
         }

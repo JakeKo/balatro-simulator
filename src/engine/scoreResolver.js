@@ -1,7 +1,7 @@
 import { identifyHandPlayed } from "./handResolver.js";
 import { resolveJoker } from "./jokerResolver.js";
 import { resolveCard } from "./cardResolver.js";
-import { JOKERS, HANDS, EVENT_TYPES, SEALS } from "../constants.js";
+import { JOKERS, HANDS, EVENT_TYPES } from "../constants.js";
 
 function createNode(payload) {
   const node = { payload, children: [], parent: null };

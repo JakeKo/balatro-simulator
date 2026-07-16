@@ -1,10 +1,4 @@
-import {
-  ENHANCEMENTS,
-  EDITIONS,
-  SUITS,
-  EVENT_TYPES,
-  SEALS,
-} from "../constants.js";
+import { ENHANCEMENTS, EDITIONS, EVENT_TYPES, SEALS } from "../constants.js";
 
 function isOddRank(card) {
   // Rank 14 is an Ace, which is treated instead as rank 1 in this context
