@@ -66,6 +66,13 @@ function resolveJoker(joker, { on }) {
         }
       });
     },
+    [JOKERS.BLACKBOARD]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        if (joker.metadata.allSpadesClubsInHand) {
+          node.addChild(jokerScored(joker, 0, 0, 3));
+        }
+      });
+    },
     [JOKERS.BLUE_JOKER]: () => {
       on(EVENT_TYPES.HAND_ENDED, (node) => {
         if (joker.metadata.remainingCardsInDeck > 0) {

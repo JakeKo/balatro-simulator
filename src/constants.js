@@ -9,7 +9,7 @@ const JOKERS = {
   BANNER: "Banner",
   BARON: "Baron",
   // BASEBALL_CARD: "Baseball Card",
-  // BLACKBOARD: "Blackboard",
+  BLACKBOARD: "Blackboard",
   // BLOODSTONE: "Bloodstone",
   BLUE_JOKER: "Blue Joker",
   // BLUEPRINT: "Blueprint",
@@ -217,6 +217,14 @@ const JOKER_METADATA_TEMPLATES = {
       label: "Kings in Hand",
       type: "number",
       default: 0,
+    },
+  ],
+  [JOKERS.BLACKBOARD]: [
+    {
+      key: "allSpadesClubsInHand",
+      label: "All Spades/Clubs in Hand",
+      type: "boolean",
+      default: false,
     },
   ],
   [JOKERS.BLUE_JOKER]: [

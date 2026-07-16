@@ -544,6 +544,60 @@ describe("scoreResolver handling different jokers", () => {
     });
   });
 
+  describe("Blackboard", () => {
+    it("Single", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.BLACKBOARD()];
+      jokers[0].metadata.allSpadesClubsInHand = true;
+      const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, jokers);
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(3); // 1 (high card) * 3 (blackboard)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: jokers[0],
+          multMult: 3,
+        }),
+      );
+    });
+
+    it("Multiple", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.BLACKBOARD(), FULL_JOKERS.BLACKBOARD()];
+      jokers[0].metadata.allSpadesClubsInHand = true;
+      jokers[1].metadata.allSpadesClubsInHand = true;
+      const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, jokers);
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(9); // 1 (high card) * 3 (blackboard) * 3 (blackboard)
+      expect(eventLog).toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: jokers[0],
+          multMult: 3,
+        }),
+      );
+    });
+
+    it("Not all spades or clubs in hand", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.BLACKBOARD()];
+      jokers[0].metadata.allSpadesClubsInHand = false;
+      const [chips, mult, eventLog] = resolveScore(hand, BASIC_HANDS, jokers);
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(1); // 1 (high card)
+      expect(eventLog).not.toContainEqual(
+        expect.objectContaining({
+          type: EVENT_TYPES.JOKER_SCORED,
+          joker: jokers[0],
+          multMult: 3,
+        }),
+      );
+    });
+  });
+
   describe("Blue Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);

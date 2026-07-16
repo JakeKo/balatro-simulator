@@ -31,7 +31,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Blue
 - [ ] Purple
 
-# Joker Tally (38 / 150)
+# Joker Tally (39 / 150)
 
 **8 Ball**
 
@@ -72,7 +72,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - Description: Uncommon Jokers each give X1.5 Mult
 - Anticipated changes: Traverse jokers, identify uncommon jokers, activate on visiting uncommon joker even if not scored
 
-**Blackboard**
+**✅ Blackboard**
 
 - Description: X3 Mult if all cards held in hand are Spades or Clubs
 - Anticipated changes: None - joker metadata
