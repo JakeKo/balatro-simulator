@@ -2,7 +2,6 @@ import {
   JOKERS_LIST,
   JOKER_METADATA_TEMPLATES,
   SUIT_LIST,
-  FULL_JOKERS,
   fullJokerByName,
 } from "../constants";
 

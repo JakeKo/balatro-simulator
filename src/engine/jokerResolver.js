@@ -30,15 +30,15 @@ function resolveJoker(joker, { on }) {
       });
     },
     [JOKERS.ACROBAT]: () => {
-      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
-        if (round.metadata.finalHand) {
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        if (joker.metadata.finalHand) {
           node.addChild(jokerScored(joker, 0, 0, 3));
         }
       });
     },
     [JOKERS.ANCIENT_JOKER]: () => {
-      on(EVENT_TYPES.CARD_SCORED, (node, round) => {
-        if (isSuit(node.payload.card, round.metadata.suit)) {
+      on(EVENT_TYPES.CARD_SCORED, (node) => {
+        if (isSuit(node.payload.card, joker.metadata.suit)) {
           node.addChild(jokerScored(joker, 0, 0, 1.5));
         }
       });
@@ -51,25 +51,25 @@ function resolveJoker(joker, { on }) {
       });
     },
     [JOKERS.BANNER]: () => {
-      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
-        if (round.metadata.remainingDiscards > 0) {
-          const addChips = 30 * round.metadata.remainingDiscards;
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        if (joker.metadata.remainingDiscards > 0) {
+          const addChips = 30 * joker.metadata.remainingDiscards;
           node.addChild(jokerScored(joker, addChips, 0, 0));
         }
       });
     },
     [JOKERS.BARON]: () => {
-      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
-        if (round.metadata.kingsInHand > 0) {
-          const multMult = Math.pow(1.5, round.metadata.kingsInHand);
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        if (joker.metadata.kingsInHand > 0) {
+          const multMult = Math.pow(1.5, joker.metadata.kingsInHand);
           node.addChild(jokerScored(joker, 0, 0, multMult));
         }
       });
     },
     [JOKERS.BLUE_JOKER]: () => {
-      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
-        if (round.metadata.remainingCardsInDeck > 0) {
-          const addChips = 2 * round.metadata.remainingCardsInDeck;
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        if (joker.metadata.remainingCardsInDeck > 0) {
+          const addChips = 2 * joker.metadata.remainingCardsInDeck;
           node.addChild(jokerScored(joker, addChips, 0, 0));
         }
       });
@@ -122,10 +122,10 @@ function resolveJoker(joker, { on }) {
       });
     },
     [JOKERS.FORTUNE_TELLER]: () => {
-      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
-        if (round.metadata.tarotCardsUsed > 0) {
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        if (joker.metadata.tarotCardsUsed > 0) {
           node.addChild(
-            jokerScored(joker, 0, round.metadata.tarotCardsUsed, 0),
+            jokerScored(joker, 0, joker.metadata.tarotCardsUsed, 0),
           );
         }
       });
@@ -232,15 +232,15 @@ function resolveJoker(joker, { on }) {
       });
     },
     [JOKERS.WRATHFUL_JOKER]: () => {
-      on(EVENT_TYPES.CARD_SCORED, (node, round) => {
+      on(EVENT_TYPES.CARD_SCORED, (node) => {
         if (isSuit(node.payload.card, SUITS.SPADES)) {
           node.addChild(jokerScored(joker, 0, 3, 0));
         }
       });
     },
     [JOKERS.YORICK]: () => {
-      on(EVENT_TYPES.HAND_ENDED, (node, round) => {
-        const multMult = 1 + Math.floor(round.metadata.cardsDiscarded / 23);
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        const multMult = 1 + Math.floor(joker.metadata.cardsDiscarded / 23);
         node.addChild(jokerScored(joker, 0, 0, multMult));
       });
     },

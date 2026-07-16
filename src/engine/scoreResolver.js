@@ -60,7 +60,7 @@ function createEventGraph() {
   return { root, on, activate };
 }
 
-function resolveScore(allCards, handMap, allJokers, gameMetadata) {
+function resolveScore(allCards, handMap, allJokers) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
   const playedJokers = allJokers.filter((joker) => joker.name !== JOKERS.NONE);
 
@@ -68,13 +68,7 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   if (handPlayed === HANDS.NONE) return [0, 0, []];
   const [baseChips, baseMult] = handMap[handPlayed];
 
-  const round = {
-    playedCards,
-    scoredCards,
-    jokers: playedJokers,
-    metadata: gameMetadata,
-  };
-
+  const round = { playedCards, scoredCards, jokers: playedJokers };
   const { root, on, activate } = createEventGraph();
 
   // Resolve jokers and their effects
@@ -98,6 +92,7 @@ function resolveScore(allCards, handMap, allJokers, gameMetadata) {
   // Activate the event graph, which will trigger all listeners and resolve all effects
   activate(root, round);
 
+  // Resolve the event graph into a flat event log and calculate the final chips and multiplier
   const eventLog = traverse(root).slice(1);
   const [chips, mult] = eventLog.reduce(
     ([chips, mult], entry) => {

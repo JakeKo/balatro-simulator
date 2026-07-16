@@ -7,7 +7,7 @@ import {
   ScoreLogger,
 } from "./components";
 import { resolveScore } from "./engine/scoreResolver.js";
-import { JOKERS, BASIC_HANDS, BLANK_CARD, FULL_JOKERS } from "./constants.js";
+import { BASIC_HANDS, BLANK_CARD, FULL_JOKERS } from "./constants.js";
 
 function App() {
   const [handMap, setHandMap] = useState(BASIC_HANDS);
@@ -25,17 +25,7 @@ function App() {
     FULL_JOKERS.NONE(),
     FULL_JOKERS.NONE(),
   ]);
-
-  const gameMetadata = allJokers.reduce(
-    (metadata, joker) => ({ ...metadata, ...joker.metadata }),
-    {},
-  );
-  const [chips, mult, eventLog] = resolveScore(
-    allCards,
-    handMap,
-    allJokers,
-    gameMetadata,
-  );
+  const [chips, mult, eventLog] = resolveScore(allCards, handMap, allJokers);
 
   return (
     <div className="app">
