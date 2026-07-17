@@ -2,63 +2,7 @@ import { identifyHandPlayed } from "./handResolver.js";
 import { resolveJoker } from "./jokerResolver.js";
 import { resolveCard } from "./cardResolver.js";
 import { JOKERS, HANDS, EVENT_TYPES } from "../constants.js";
-
-function createNode(payload) {
-  const node = { payload, children: [], parent: null };
-
-  function addChild(childPayload) {
-    const childNode = createNode(childPayload);
-    childNode.parent = node;
-    node.children.push(childNode);
-
-    return childNode;
-  }
-
-  node.addChild = addChild;
-  return node;
-}
-
-function traverse(node) {
-  const log = [];
-
-  function visit(node) {
-    log.push(node.payload);
-    node.children.forEach(visit);
-  }
-
-  visit(node);
-  return log;
-}
-
-function createEventGraph() {
-  const root = createNode({ root: true });
-  const listeners = Object.values(EVENT_TYPES).reduce(
-    (acc, type) => ({ ...acc, [type]: [] }),
-    {},
-  );
-
-  function on(type, callback) {
-    listeners[type].push(callback);
-  }
-
-  function activate(node, round) {
-    const eventType = node.payload.type;
-
-    // Call all listeners for this event type
-    // Callbacks can sometimes add child nodes or even siblings (children of the parent node)
-    for (let i = 0; i < listeners[eventType]?.length; i++) {
-      const callback = listeners[eventType][i];
-      callback(node, round);
-    }
-
-    for (let i = 0; i < node.children.length; i++) {
-      const child = node.children[i];
-      activate(child, round);
-    }
-  }
-
-  return { root, on, activate };
-}
+import { createEventGraph, traverseEventGraph } from "./eventGraph.js";
 
 function resolveScore(allCards, handMap, allJokers) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
@@ -93,7 +37,7 @@ function resolveScore(allCards, handMap, allJokers) {
   activate(root, round);
 
   // Resolve the event graph into a flat event log and calculate the final chips and multiplier
-  const eventLog = traverse(root).slice(1);
+  const eventLog = traverseEventGraph(root).slice(1);
   const [chips, mult] = eventLog.reduce(
     ([chips, mult], entry) => {
       const addChips = entry.addChips || entry.baseChips || 0;
