@@ -194,3 +194,8 @@ h2 {
   box-sizing: border-box;
   height: 100%;
 }
+
+.score-logger-graph {
+  position: relative;
+  min-height: 200px;
+}

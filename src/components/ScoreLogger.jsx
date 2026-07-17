@@ -1,4 +1,5 @@
 import { SUITS, EVENT_TYPES } from "../constants";
+import { GraphCanvas } from "reagraph";
 
 function stringifyCard(card) {
   const { rank, suit } = card;
@@ -50,29 +51,48 @@ function stringifyHandEnded() {
   return "Hand Ended |";
 }
 
+function stringifyLogEntry(entry) {
+  switch (entry.type) {
+    case EVENT_TYPES.HAND_PLAYED:
+      return stringifyHandPlayed(entry);
+    case EVENT_TYPES.CARD_SCORED:
+      return stringifyCardScored(entry);
+    case EVENT_TYPES.JOKER_SCORED:
+      return stringifyJokerScored(entry);
+    case EVENT_TYPES.HAND_ENDED:
+      return stringifyHandEnded();
+  }
+
+  return "";
+}
+
 function ScoreLogger({ log }) {
+  const nodes = log.map((entry, index) => ({
+    id: index.toString(),
+    label: stringifyLogEntry(entry),
+  }));
+  const edges = log.slice(1).map((entry, index) => ({
+    id: `${index}->${index + 1}`,
+    source: index.toString(),
+    target: (index + 1).toString(),
+  }));
+
   return (
     <div className="score-logger">
       {log.length === 0 && <code>No Hand</code>}
       {log.map((entry, index) => {
-        let logString = "";
-        switch (entry.type) {
-          case EVENT_TYPES.HAND_PLAYED:
-            logString = stringifyHandPlayed(entry);
-            break;
-          case EVENT_TYPES.CARD_SCORED:
-            logString = stringifyCardScored(entry);
-            break;
-          case EVENT_TYPES.JOKER_SCORED:
-            logString = stringifyJokerScored(entry);
-            break;
-          case EVENT_TYPES.HAND_ENDED:
-            logString = stringifyHandEnded();
-            break;
-        }
-
+        const logString = stringifyLogEntry(entry);
         return <code key={index}>{logString}</code>;
       })}
+
+      <div className="score-logger-graph">
+        <GraphCanvas
+          style={{ width: "100%", height: "200px" }}
+          layoutType="hierarchicalLr"
+          nodes={nodes}
+          edges={edges}
+        />
+      </div>
     </div>
   );
 }
