@@ -51,9 +51,10 @@ h2 {
 }
 
 .app {
+  min-height: 100vh;
   display: grid;
   grid-template-columns: min-content 1fr;
-  grid-template-rows: repeat(4, min-content);
+  grid-template-rows: repeat(3, min-content) 1fr;
   background: #35654d;
 }
 
@@ -82,13 +83,13 @@ h2 {
   border: 3px solid darkgoldenrod;
   border-left: none;
   color: white;
-  font-family: monospace;
 }
 
 .hand-table * {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: monospace;
 }
 
 .hand-table-chip,
@@ -97,14 +98,17 @@ h2 {
   text-align: center;
   color: white;
   font-weight: bold;
+  padding: 0 4px;
 }
 
 .hand-table-chip {
   background: rgb(42, 156, 201);
+  text-align: right;
 }
 
 .hand-table-mult {
   background: rgb(255, 65, 65);
+  text-align: left;
 }
 
 .reset-button {
@@ -188,4 +192,5 @@ h2 {
   font-size: 0.75rem;
   width: 100%;
   box-sizing: border-box;
+  height: 100%;
 }
