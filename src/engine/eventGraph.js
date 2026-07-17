@@ -20,6 +20,8 @@ function traverseEventGraph(node) {
 
   function visit(node) {
     log.push(node.payload);
+    if (!node.children) console.log(node);
+
     node.children.forEach(visit);
   }
 

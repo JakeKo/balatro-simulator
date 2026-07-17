@@ -4,16 +4,17 @@ import { resolveCard } from "./cardResolver.js";
 import { JOKERS, HANDS, EVENT_TYPES } from "../constants.js";
 import { createEventGraph, traverseEventGraph } from "./eventGraph.js";
 
-function resolveScore(allCards, handMap, allJokers) {
+function resolveEventGraph(allCards, handMap, allJokers) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
   const playedJokers = allJokers.filter((joker) => joker.name !== JOKERS.NONE);
 
+  const { root, on, activate } = createEventGraph();
+
   const [handPlayed, scoredCards] = identifyHandPlayed(playedCards);
-  if (handPlayed === HANDS.NONE) return [0, 0, []];
+  if (handPlayed === HANDS.NONE) return root;
   const [baseChips, baseMult] = handMap[handPlayed];
 
   const round = { playedCards, scoredCards, jokers: playedJokers };
-  const { root, on, activate } = createEventGraph();
 
   // Resolve jokers and their effects
   playedJokers.forEach((joker) => resolveJoker(joker, { on }));
@@ -36,8 +37,14 @@ function resolveScore(allCards, handMap, allJokers) {
   // Activate the event graph, which will trigger all listeners and resolve all effects
   activate(root, round);
 
+  return root;
+}
+
+function resolveScore(allCards, handMap, allJokers) {
+  const eventGraph = resolveEventGraph(allCards, handMap, allJokers);
+
   // Resolve the event graph into a flat event log and calculate the final chips and multiplier
-  const eventLog = traverseEventGraph(root).slice(1);
+  const eventLog = traverseEventGraph(eventGraph).slice(1);
   const [chips, mult] = eventLog.reduce(
     ([chips, mult], entry) => {
       const addChips = entry.addChips || entry.baseChips || 0;
