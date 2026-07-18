@@ -1,5 +1,6 @@
 import { SUITS, EVENT_TYPES } from "../constants";
 import { GraphCanvas } from "reagraph";
+import { depthFirstTraversal } from "../engine/sequenceTree.js";
 
 function stringifyCard(card) {
   const { rank, suit } = card;
@@ -66,32 +67,27 @@ function stringifyLogEntry(entry) {
   return "";
 }
 
-function ScoreLogger({ log }) {
-  const nodes = log.map((entry, index) => ({
-    id: index.toString(),
-    label: stringifyLogEntry(entry),
-  }));
-  const edges = log.slice(1).map((entry, index) => ({
-    id: `${index}->${index + 1}`,
-    source: index.toString(),
-    target: (index + 1).toString(),
-  }));
+function ScoreLogger({ tree }) {
+  const nodes = [];
+  const edges = [];
+
+  depthFirstTraversal(tree, (node) => {
+    const logString = stringifyLogEntry(node.payload);
+    nodes.push({ id: node.id, label: logString });
+
+    if (node.parent) {
+      edges.push({
+        id: `${node.parent.id}->${node.id}`,
+        source: node.parent.id,
+        target: node.id,
+      });
+    }
+  });
 
   return (
     <div className="score-logger">
-      {log.length === 0 && <code>No Hand</code>}
-      {log.map((entry, index) => {
-        const logString = stringifyLogEntry(entry);
-        return <code key={index}>{logString}</code>;
-      })}
-
       <div className="score-logger-graph">
-        <GraphCanvas
-          style={{ width: "100%", height: "200px" }}
-          layoutType="hierarchicalLr"
-          nodes={nodes}
-          edges={edges}
-        />
+        <GraphCanvas layoutType="hierarchicalLr" nodes={nodes} edges={edges} />
       </div>
     </div>
   );

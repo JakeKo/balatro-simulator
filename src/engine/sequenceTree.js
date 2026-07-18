@@ -1,35 +1,34 @@
 import { EVENT_TYPES } from "../constants.js";
 
-function createNode(payload) {
-  const node = { payload, children: [], parent: null };
+// https://medium.com/@ryan_forrester_/javascript-unique-id-generation-how-to-guide-0d6752318823
+function uuidv4() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
+    const rand = (Math.random() * 16) | 0;
+    const id = char == "x" ? rand : (rand & 0x3) | 0x8;
+    return id.toString(16);
+  });
+}
+
+function createNode(payload, weight = 1) {
+  const node = { payload, id: uuidv4(), children: [], parent: null, weight };
 
   function addChild(childPayload) {
     const childNode = createNode(childPayload);
     childNode.parent = node;
     node.children.push(childNode);
-
-    return childNode;
   }
 
   node.addChild = addChild;
+
   return node;
 }
 
-function traverseEventGraph(node) {
-  const log = [];
-
-  function visit(node) {
-    log.push(node.payload);
-    if (!node.children) console.log(node);
-
-    node.children.forEach(visit);
-  }
-
-  visit(node);
-  return log;
+function depthFirstTraversal(node, callback) {
+  callback(node);
+  node.children.forEach((child) => depthFirstTraversal(child, callback));
 }
 
-function createEventGraph() {
+function createSequenceTree() {
   const root = createNode({ root: true });
   const listeners = Object.values(EVENT_TYPES).reduce(
     (acc, type) => ({ ...acc, [type]: [] }),
@@ -59,4 +58,4 @@ function createEventGraph() {
   return { root, on, activate };
 }
 
-export { createEventGraph, traverseEventGraph };
+export { createSequenceTree, depthFirstTraversal };

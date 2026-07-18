@@ -6,7 +6,7 @@ import {
   Scoreboard,
   ScoreLogger,
 } from "./components";
-import { resolveScore } from "./engine/scoreResolver.js";
+import { resolveSequenceTree, resolveScore } from "./engine/scoreResolver.js";
 import { BASIC_HANDS, BLANK_CARD, FULL_JOKERS } from "./constants.js";
 
 function App() {
@@ -27,7 +27,8 @@ function App() {
     FULL_JOKERS.NONE(),
     FULL_JOKERS.NONE(),
   ]);
-  const [chips, mult, eventLog] = resolveScore(allCards, handMap, allJokers);
+  const sequenceTree = resolveSequenceTree(allCards, handMap, allJokers);
+  const [chips, mult] = resolveScore(sequenceTree);
 
   return (
     <div className="app">
@@ -59,7 +60,7 @@ function App() {
           />
         ))}
       </div>
-      <ScoreLogger log={eventLog} />
+      <ScoreLogger tree={sequenceTree} />
     </div>
   );
 }

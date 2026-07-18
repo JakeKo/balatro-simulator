@@ -197,5 +197,5 @@ h2 {
 
 .score-logger-graph {
   position: relative;
-  min-height: 200px;
+  height: 750px;
 }

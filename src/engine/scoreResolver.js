@@ -2,13 +2,13 @@ import { identifyHandPlayed } from "./handResolver.js";
 import { resolveJoker } from "./jokerResolver.js";
 import { resolveCard } from "./cardResolver.js";
 import { JOKERS, HANDS, EVENT_TYPES } from "../constants.js";
-import { createEventGraph, traverseEventGraph } from "./eventGraph.js";
+import { createSequenceTree, depthFirstTraversal } from "./sequenceTree.js";
 
-function resolveEventGraph(allCards, handMap, allJokers) {
+function resolveSequenceTree(allCards, handMap, allJokers) {
   const playedCards = allCards.filter((card) => card.rank !== 0);
   const playedJokers = allJokers.filter((joker) => joker.name !== JOKERS.NONE);
 
-  const { root, on, activate } = createEventGraph();
+  const { root, on, activate } = createSequenceTree();
 
   const [handPlayed, scoredCards] = identifyHandPlayed(playedCards);
   if (handPlayed === HANDS.NONE) return root;
@@ -40,11 +40,18 @@ function resolveEventGraph(allCards, handMap, allJokers) {
   return root;
 }
 
-function resolveScore(allCards, handMap, allJokers) {
-  const eventGraph = resolveEventGraph(allCards, handMap, allJokers);
+function resolveScore(sequenceTree) {
+  // Resolve the event graph into a flat event log
+  const eventLog = [];
+  depthFirstTraversal(sequenceTree, (node) => {
+    eventLog.push(node.payload);
+  });
 
-  // Resolve the event graph into a flat event log and calculate the final chips and multiplier
-  const eventLog = traverseEventGraph(eventGraph).slice(1);
+  if (eventLog.length === 1) {
+    return [0, 0, []]; // No hand played, return 0 chips and 0 multiplier
+  }
+
+  // Calculate the final chips and multiplier
   const [chips, mult] = eventLog.reduce(
     ([chips, mult], entry) => {
       const addChips = entry.addChips || entry.baseChips || 0;
@@ -59,4 +66,4 @@ function resolveScore(allCards, handMap, allJokers) {
   return [chips, mult, eventLog];
 }
 
-export { resolveScore };
+export { resolveSequenceTree, resolveScore };
