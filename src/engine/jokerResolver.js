@@ -5,21 +5,8 @@ import {
   handIsStraight,
   handIsFlush,
 } from "./handResolver";
-import { JOKERS, EVENT_TYPES, SUITS } from "../constants";
+import { JOKERS, EVENT_TYPES, SUITS, jokerScored } from "../constants";
 import { isOddRank, isEvenRank, isFaceCard, isSuit } from "./cardResolver";
-
-function jokerScored(joker, addChips, addMult, multMult) {
-  const event = {
-    type: EVENT_TYPES.JOKER_SCORED,
-    joker,
-  };
-
-  if (addChips) event.addChips = addChips;
-  if (addMult) event.addMult = addMult;
-  if (multMult) event.multMult = multMult;
-
-  return event;
-}
 
 function resolveJoker(joker, { on }) {
   const resolvedJokers = {

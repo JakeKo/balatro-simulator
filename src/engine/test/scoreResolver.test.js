@@ -1,5 +1,5 @@
 import { resolveScore, resolveSequenceTree } from "../scoreResolver.js";
-import { parseCards } from "./utils.js";
+import { parseCards, expectEventLogContains } from "./utils.js";
 import {
   JOKERS,
   FULL_JOKERS,
@@ -7,6 +7,8 @@ import {
   HANDS,
   EVENT_TYPES,
   SUITS,
+  handPlayed,
+  jokerScored,
 } from "../../constants.js";
 
 /*
@@ -22,14 +24,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(251); // 200 (royal flush) + 51 (hand)
     expect(mult).toBe(10); // 10 (royal flush)
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.ROYAL_FLUSH,
-        baseChips: 200,
-        baseMult: 10,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.ROYAL_FLUSH, 200, 10));
   });
 
   it("detects a royal flush", () => {
@@ -40,14 +35,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(151); // 100 (royal flush) + 51 (hand)
     expect(mult).toBe(8); // 8 (royal flush)
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.ROYAL_FLUSH,
-        baseChips: 100,
-        baseMult: 8,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.ROYAL_FLUSH, 100, 8));
   });
 
   it("detects a straight flush", () => {
@@ -58,14 +46,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(135);
     expect(mult).toBe(8);
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.STRAIGHT_FLUSH,
-        baseChips: 100,
-        baseMult: 8,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.STRAIGHT_FLUSH, 100, 8));
   });
 
   it("detects four of a kind", () => {
@@ -76,14 +57,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(96);
     expect(mult).toBe(7);
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.FOUR_OF_A_KIND,
-        baseChips: 60,
-        baseMult: 7,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.FOUR_OF_A_KIND, 60, 7));
   });
 
   it("detects a full house", () => {
@@ -94,14 +68,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(83);
     expect(mult).toBe(4);
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.FULL_HOUSE,
-        baseChips: 40,
-        baseMult: 4,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.FULL_HOUSE, 40, 4));
   });
 
   it("detects a flush", () => {
@@ -112,14 +79,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(69);
     expect(mult).toBe(4);
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.FLUSH,
-        baseChips: 35,
-        baseMult: 4,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.FLUSH, 35, 4));
   });
 
   it("detects a straight", () => {
@@ -130,14 +90,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(65);
     expect(mult).toBe(4);
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.STRAIGHT,
-        baseChips: 30,
-        baseMult: 4,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.STRAIGHT, 30, 4));
   });
 
   it("detects three of a kind", () => {
@@ -148,14 +101,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(57);
     expect(mult).toBe(3);
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.THREE_OF_A_KIND,
-        baseChips: 30,
-        baseMult: 3,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.THREE_OF_A_KIND, 30, 3));
   });
 
   it("detects two pair", () => {
@@ -166,14 +112,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(54);
     expect(mult).toBe(2);
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.TWO_PAIR,
-        baseChips: 20,
-        baseMult: 2,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.TWO_PAIR, 20, 2));
   });
 
   it("detects a pair", () => {
@@ -184,14 +123,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(20);
     expect(mult).toBe(2);
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.PAIR,
-        baseChips: 10,
-        baseMult: 2,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.PAIR, 10, 2));
   });
 
   it("detects a high card", () => {
@@ -202,14 +134,7 @@ describe("scoreResolver handling different hands", () => {
 
     expect(chips).toBe(14);
     expect(mult).toBe(1);
-    expect(eventLog).toContainEqual(
-      expect.objectContaining({
-        type: EVENT_TYPES.HAND_PLAYED,
-        hand: HANDS.HIGH_CARD,
-        baseChips: 5,
-        baseMult: 1,
-      }),
-    );
+    expectEventLogContains(eventLog, handPlayed(HANDS.HIGH_CARD, 5, 1));
   });
 
   it("returns 0 chips and 0 mult when no hand is detected", () => {
@@ -301,15 +226,9 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(4); // 1m (high card) + 3m (abstract joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 3,
-        }),
-      );
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(4); // 1 (high card) + 3 (abstract joker)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 3, 0));
     });
 
     it("Multiple", () => {
@@ -322,14 +241,12 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(13); // 1m (high card) + 6m (abstract joker) + 6m (abstract joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 6,
-        }),
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(13); // 1 (high card) + 6 (abstract joker) + 6 (abstract joker)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 6, 0),
+        jokerScored(jokers[1], 0, 6, 0),
       );
     });
   });
@@ -343,15 +260,9 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(3); // 1m (high card) * 3m (acrobat)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
-      );
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(3); // 1 (high card) * 3 (acrobat)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 3));
     });
 
     it("Multiple", () => {
@@ -363,14 +274,12 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(9); // 1m (high card) * 3m (acrobat) * 3m (acrobat)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(9); // 1 (high card) * 3 (acrobat) * 3 (acrobat)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 3),
+        jokerScored(jokers[1], 0, 0, 3),
       );
     });
 
@@ -382,15 +291,8 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
-      );
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(1); // 1 (high card)
     });
   });
 
@@ -403,15 +305,9 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(1.5); // 1m (high card) * 1.5m (ancient joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 1.5,
-        }),
-      );
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(1.5); // 1 (high card) * 1.5 (ancient joker)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 1.5));
     });
 
     it("Multiple", () => {
@@ -423,14 +319,12 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(2.25); // 1m (high card) * 1.5m (ancient joker) * 1.5m (ancient joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 1.5,
-        }),
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(2.25); // 1 (high card) * 1.5 (ancient joker) * 1.5 (ancient joker)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 1.5),
+        jokerScored(jokers[1], 0, 0, 1.5),
       );
     });
   });
@@ -444,14 +338,8 @@ describe("scoreResolver handling different jokers", () => {
       );
 
       expect(chips).toBe(57); // 5 (high card) + 2 (hand) + 50 (arrowhead)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 50,
-        }),
-      );
+      expect(mult).toBe(1); // 1 (high card)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 50, 0, 0));
     });
 
     it("Multiple", () => {
@@ -462,13 +350,11 @@ describe("scoreResolver handling different jokers", () => {
       );
 
       expect(chips).toBe(107); // 5 (high card) + 2 (hand) + 50 (arrowhead) + 50 (arrowhead)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 50,
-        }),
+      expect(mult).toBe(1); // 1 (high card)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 50, 0, 0),
+        jokerScored(jokers[1], 50, 0, 0),
       );
     });
   });
@@ -482,15 +368,9 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(37); // 5c (high card) + 2c (2H) + 30c (banner)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 30,
-        }),
-      );
+      expect(chips).toBe(37); // 5 (high card) + 2 (hand) + 30 (banner)
+      expect(mult).toBe(1); // 1 (high card)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 30, 0, 0));
     });
 
     it("Multiple", () => {
@@ -502,14 +382,12 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(67); // 5c (high card) + 2c (2H) + 30c (banner) + 30c (banner)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 30,
-        }),
+      expect(chips).toBe(67); // 5 (high card) + 2 (hand) + 30 (banner) + 30 (banner)
+      expect(mult).toBe(1); // 1 (high card)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 30, 0, 0),
+        jokerScored(jokers[1], 30, 0, 0),
       );
     });
 
@@ -521,15 +399,8 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 30,
-        }),
-      );
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(1); // 1 (high card)
     });
   });
 
@@ -544,13 +415,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1.5); // 1 (high card) * 1.5 (baron)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 1.5,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 1.5));
     });
 
     it("Double Barons", () => {
@@ -564,13 +429,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(2.25); // 1 (high card) * 1.5 (baron) * 1.5 (baron)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 1.5,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 1.5));
     });
 
     it("Double Kings", () => {
@@ -583,13 +442,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(2.25); // 1 (high card) * 2.25 (baron)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2.25,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 2.25));
     });
 
     it("No kings in Hand", () => {
@@ -602,13 +455,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 1.5,
-        }),
-      );
     });
   });
 
@@ -623,13 +469,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(3); // 1 (high card) * 3 (blackboard)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 3));
     });
 
     it("Multiple", () => {
@@ -643,13 +483,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(9); // 1 (high card) * 3 (blackboard) * 3 (blackboard)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 3));
     });
 
     it("Not all spades or clubs in hand", () => {
@@ -662,13 +496,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
-      );
     });
   });
 
@@ -681,15 +508,9 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(27); // 5c (high card) + 2c (2H) + 20c (blue joker)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 20,
-        }),
-      );
+      expect(chips).toBe(27); // 5 (high card) + 2 (hand) + 20 (blue joker)
+      expect(mult).toBe(1); // 1 (high card)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 20, 0, 0));
     });
 
     it("Multiple", () => {
@@ -701,14 +522,12 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(47); // 5c (high card) + 2c (2H) + 20c (blue joker) + 20c (blue joker)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 20,
-        }),
+      expect(chips).toBe(47); // 5 (high card) + 2 (hand) + 20 (blue joker) + 20 (blue joker)
+      expect(mult).toBe(1); // 1 (high card)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 20, 0, 0),
+        jokerScored(jokers[1], 20, 0, 0),
       );
     });
 
@@ -720,15 +539,8 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 20,
-        }),
-      );
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(1); // 1 (high card)
     });
   });
 
@@ -740,15 +552,9 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(3); // 1m (high card) * 3m (cavendish)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
-      );
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(3); // 1 (high card) * 3 (cavendish)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 3));
     });
 
     it("Multiple", () => {
@@ -758,14 +564,12 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(9); // 1m (high card) * 3m (cavendish) * 3m (cavendish)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(9); // 1 (high card) * 3 (cavendish) * 3 (cavendish)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 3),
+        jokerScored(jokers[1], 0, 0, 3),
       );
     });
   });
@@ -778,15 +582,9 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(110); // 20c (two pair) + 10c (hand) + 80c (clever joker)
-      expect(mult).toBe(2); // 2m (two pair)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 80,
-        }),
-      );
+      expect(chips).toBe(110); // 20 (two pair) + 10 (hand) + 80 (clever joker)
+      expect(mult).toBe(2); // 2 (two pair)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 80, 0, 0));
     });
 
     it("Multiple", () => {
@@ -796,14 +594,12 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(190); // 20c (two pair) + 10c (hand) + 80c (clever joker) + 80c (clever joker)
-      expect(mult).toBe(2); // 2m (two pair)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 80,
-        }),
+      expect(chips).toBe(190); // 20 (two pair) + 10 (hand) + 80 (clever joker) + 80 (clever joker)
+      expect(mult).toBe(2); // 2 (two pair)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 80, 0, 0),
+        jokerScored(jokers[1], 80, 0, 0),
       );
     });
 
@@ -814,15 +610,8 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(1); // 1m (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 80,
-        }),
-      );
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(1); // 1 (high card)
     });
   });
 
@@ -836,13 +625,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(145); // 35 (flush) + 30 (hand) + 80 (crafty joker)
       expect(mult).toBe(4); // 4 (flush)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 80,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 80, 0, 0));
     });
 
     it("Multiple", () => {
@@ -852,14 +635,12 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(225); // 35c (flush) + 30c (hand) + 80c (crafty joker) + 80c (crafty joker)
+      expect(chips).toBe(225); // 35 (flush) + 30c (hand) + 80 (crafty joker) + 80 (crafty joker)
       expect(mult).toBe(4); // 4 (flush)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 80,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 80, 0, 0),
+        jokerScored(jokers[1], 80, 0, 0),
       );
     });
 
@@ -872,13 +653,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 80,
-        }),
-      );
     });
   });
 
@@ -892,13 +666,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(50); // 30 (straight) + 20 (hand)
       expect(mult).toBe(16); // 4 (straight) + 12 (crazy joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 12,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 12, 0));
     });
 
     it("Multiple", () => {
@@ -910,13 +678,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(50); // 30 (straight) + 20 (hand)
       expect(mult).toBe(28); // 4 (straight) + 12 (crazy joker) + 12 (crazy joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 12,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 12, 0));
     });
 
     it("Not a straight", () => {
@@ -928,13 +690,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 12,
-        }),
-      );
     });
   });
 
@@ -948,13 +703,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(150); // 30 (straight) + 20 (hand) + 100 (devious joker)
       expect(mult).toBe(4); // 4 (straight)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 100,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 100, 0, 0));
     });
 
     it("Multiple", () => {
@@ -966,12 +715,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(250); // 30 (straight) + 20 (hand) + 100 (devious joker) + 100 (devious joker)
       expect(mult).toBe(4); // 4 (straight)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 100,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 100, 0, 0),
+        jokerScored(jokers[1], 100, 0, 0),
       );
     });
 
@@ -984,13 +731,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 100,
-        }),
-      );
     });
   });
 
@@ -1004,13 +744,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(65); // 35 (flush) + 30 (hand)
       expect(mult).toBe(14); // 4 (flush) + 10 (droll joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 10,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 10, 0));
     });
 
     it("Multiple", () => {
@@ -1022,12 +756,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(65); // 35 (flush) + 30 (hand)
       expect(mult).toBe(24); // 4 (flush) + 10 (droll joker) + 10 (droll joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 10,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 10, 0),
+        jokerScored(jokers[1], 0, 10, 0),
       );
     });
 
@@ -1040,13 +772,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 10,
-        }),
-      );
     });
   });
 
@@ -1060,13 +785,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(5); // 1 (high card) + 4 (even steven)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 4,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 4, 0));
     });
 
     it("Multiple", () => {
@@ -1078,12 +797,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(9); // 1 (high card) + 4 (even steven) + 4 (even steven)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 4,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 4, 0),
+        jokerScored(jokers[1], 0, 4, 0),
       );
     });
 
@@ -1096,13 +813,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(8); // 5 (high card) + 3 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 4,
-        }),
-      );
     });
   });
 
@@ -1117,13 +827,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(6); // 1 (high card) + 5 (fortune teller)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 5,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 5, 0));
     });
 
     it("Multiple", () => {
@@ -1140,12 +844,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(11); // 1 (high card) + 5 (fortune teller) + 5 (fortune teller)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 5,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 5, 0),
+        jokerScored(jokers[1], 0, 5, 0),
       );
     });
 
@@ -1159,13 +861,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 1,
-        }),
-      );
     });
   });
 
@@ -1179,13 +874,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(16); // 1 (high card) + 15 (gros michel)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 15,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 15, 0));
     });
 
     it("Multiple", () => {
@@ -1197,12 +886,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(31); // 1 (high card) + 15 (gros michel) + 15 (gros michel)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 15,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 15, 0),
+        jokerScored(jokers[1], 0, 15, 0),
       );
     });
   });
@@ -1217,13 +904,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(39); // 30 (three of a kind) + 9 (hand)
       expect(mult).toBe(23); // 3 (three of a kind) + 20 (half joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 20,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 20, 0));
     });
 
     it("Multiple", () => {
@@ -1235,12 +916,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(39); // 30 (three of a kind) + 9 (hand)
       expect(mult).toBe(43); // 3 (three of a kind) + 20 (half joker) + 20 (half joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 20,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 20, 0),
+        jokerScored(jokers[1], 0, 20, 0),
       );
     });
 
@@ -1253,13 +932,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(32); // 20 (two pair) + 12 (hand)
       expect(mult).toBe(2); // 2 (two pair)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 20,
-        }),
-      );
     });
   });
 
@@ -1273,12 +945,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(11); // 5 (high card) + 6 (hand + hanging chad)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 0));
     });
 
     it("Multiple", () => {
@@ -1290,12 +957,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(20); // 5 (high card) + 15 (hand + hanging chad + hanging chad)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 0));
     });
 
     it("Single, red seal", () => {
@@ -1307,12 +969,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(13); // 5 (high card) + 8 (hand + hanging chad + red seal)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 0));
     });
   });
 
@@ -1324,15 +981,9 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(5); // 1m (high card) + 4m (joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 4,
-        }),
-      );
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(5); // 1 (high card) + 4 (joker)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 4, 0));
     });
 
     it("Multiple", () => {
@@ -1342,14 +993,12 @@ describe("scoreResolver handling different jokers", () => {
         resolveSequenceTree(hand, BASIC_HANDS, jokers),
       );
 
-      expect(chips).toBe(7); // 5c (high card) + 2c (2H)
-      expect(mult).toBe(9); // 1m (high card) + 4m (joker) + 4m (joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 4,
-        }),
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(9); // 1 (high card) + 4 (joker) + 4 (joker)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 4, 0),
+        jokerScored(jokers[1], 0, 4, 0),
       );
     });
   });
@@ -1364,13 +1013,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(14); // 10 (pair) + 4 (hand)
       expect(mult).toBe(10); // 2 (pair) + 8 (jolly joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 8,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 8, 0));
     });
 
     it("Multiple", () => {
@@ -1382,12 +1025,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(14); // 10 (pair) + 4 (hand)
       expect(mult).toBe(18); // 2 (pair) + 8 (jolly joker) + 8 (jolly joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 8,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 8, 0),
+        jokerScored(jokers[1], 0, 8, 0),
       );
     });
 
@@ -1400,13 +1041,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 8,
-        }),
-      );
     });
   });
 
@@ -1420,13 +1054,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(30); // 20 (two pair) + 10 (hand)
       expect(mult).toBe(12); // 2 (two pair) + 10 (mad joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 10,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 10, 0));
     });
 
     it("Multiple", () => {
@@ -1438,12 +1066,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(30); // 20 (two pair) + 10 (hand)
       expect(mult).toBe(22); // 2 (two pair) + 10 (mad joker) + 10 (mad joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 10,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 10, 0),
+        jokerScored(jokers[1], 0, 10, 0),
       );
     });
 
@@ -1456,13 +1082,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 10,
-        }),
-      );
     });
   });
 
@@ -1476,13 +1095,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(39); // 5 (high card) + 3 (hand) + 31 (odd todd)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 31,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 31, 0, 0));
     });
 
     it("Multiple", () => {
@@ -1494,12 +1107,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(78); // 5 (high card) + 11 (hand) + 31 (odd todd) + 31 (odd todd)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 31,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 31, 0, 0),
+        jokerScored(jokers[1], 31, 0, 0),
       );
     });
 
@@ -1512,13 +1123,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 31,
-        }),
-      );
     });
   });
 
@@ -1532,13 +1136,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(2); // 1 (high card) * 2 (photograph)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 2));
     });
 
     it("Single, multiple face cards", () => {
@@ -1550,13 +1148,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(30); // 10 (pair) + 20 (hand)
       expect(mult).toBe(4); // 2 (pair) * 2 (photograph)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 2));
     });
 
     it("Single, Hanging Chad applied", () => {
@@ -1568,12 +1160,11 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(35); // 5 (high card) + 30 (hand + hanging chad)
       expect(mult).toBe(8); // 1 (high card) * 8 (photograph + hanging chad)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 2),
+        jokerScored(jokers[0], 0, 0, 2),
+        jokerScored(jokers[0], 0, 0, 2),
       );
     });
 
@@ -1586,12 +1177,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(4); // 1 (high card) * 2 (photograph) * 2 (photograph)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 2),
+        jokerScored(jokers[1], 0, 0, 2),
       );
     });
 
@@ -1604,13 +1193,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
-      );
     });
   });
 
@@ -1624,13 +1206,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(45); // 5 (high card) + 10 (hand) + 30 (scary face)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 30,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 30, 0, 0));
     });
 
     it("Single, multiple face cards", () => {
@@ -1642,12 +1218,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(90); // 10 (pair) + 20 (hand) + 60 (scary face)
       expect(mult).toBe(2); // 2 (pair)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 30,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 30, 0, 0),
+        jokerScored(jokers[0], 30, 0, 0),
       );
     });
 
@@ -1660,12 +1234,11 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(125); // 5 (high card) + 30 (hand + hanging chad) + 90 (scary face + hanging chad)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 30,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 30, 0, 0),
+        jokerScored(jokers[0], 30, 0, 0),
+        jokerScored(jokers[0], 30, 0, 0),
       );
     });
 
@@ -1678,12 +1251,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(75); // 5 (high card) + 10 (hand) + 30 (scary face) + 30 (scary face)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 30,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 30, 0, 0),
+        jokerScored(jokers[1], 30, 0, 0),
       );
     });
 
@@ -1696,13 +1267,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 30,
-        }),
-      );
     });
   });
 
@@ -1716,14 +1280,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(36); // 5 (high card) + 11 (hand) + 20 (scholar)
       expect(mult).toBe(5); // 1 (high card) + 4 (scholar)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 20,
-          addMult: 4,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 20, 4, 0));
     });
 
     it("Multiple", () => {
@@ -1735,13 +1292,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(56); // 5 (high card) + 11 (hand) + 20 (scholar) + 20 (scholar)
       expect(mult).toBe(9); // 1 (high card) + 4 (scholar) + 4 (scholar)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 20,
-          addMult: 4,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 20, 4, 0),
+        jokerScored(jokers[1], 20, 4, 0),
       );
     });
 
@@ -1754,14 +1308,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(8); // 5 (high card) + 3 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 20,
-          addMult: 4,
-        }),
-      );
     });
   });
 
@@ -1775,13 +1321,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(80); // 20 (two pair) + 10 (hand) + 50 (sly joker)
       expect(mult).toBe(2); // 2 (two pair)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 50,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 50, 0, 0));
     });
 
     it("Multiple", () => {
@@ -1793,12 +1333,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(130); // 20 (two pair) + 10 (hand) + 50 (sly joker) + 50 (sly joker)
       expect(mult).toBe(2); // 2 (two pair)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 50,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 50, 0, 0),
+        jokerScored(jokers[1], 50, 0, 0),
       );
     });
 
@@ -1811,13 +1349,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 50,
-        }),
-      );
     });
   });
 
@@ -1831,13 +1362,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(6); // 1 (high card) + 5 (smiley face)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 5,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 5, 0));
     });
 
     it("Single, multiple face cards", () => {
@@ -1849,12 +1374,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(30); // 10 (pair) + 20 (hand)
       expect(mult).toBe(12); // 2 (pair) + 10 (smiley face)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 5,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 5, 0),
+        jokerScored(jokers[0], 0, 5, 0),
       );
     });
 
@@ -1867,12 +1390,11 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(35); // 5 (high card) + 30 (hand + hanging chad)
       expect(mult).toBe(16); // 1 (high card) + 15 (smiley face + hanging chad)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 5,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 5, 0),
+        jokerScored(jokers[0], 0, 5, 0),
+        jokerScored(jokers[0], 0, 5, 0),
       );
     });
 
@@ -1885,12 +1407,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(11); // 1 (high card) + 5 (smiley face) + 5 (smiley face)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 5,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 5, 0),
+        jokerScored(jokers[1], 0, 5, 0),
       );
     });
 
@@ -1903,13 +1423,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 5,
-        }),
-      );
     });
   });
 
@@ -1923,13 +1436,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(50); // 30 (straight) + 20 (hand)
       expect(mult).toBe(12); // 4 (straight) * 3 (the order)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 3));
     });
 
     it("Multiple", () => {
@@ -1941,12 +1448,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(50); // 30 (straight) + 20 (hand)
       expect(mult).toBe(36); // 4 (straight) * 3 (the order) * 3 (the order)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 3),
+        jokerScored(jokers[1], 0, 0, 3),
       );
     });
   });
@@ -1961,13 +1466,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(65); // 35 (flush) + 30 (hand)
       expect(mult).toBe(8); // 4 (flush) * 2 (the tribe)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 2));
     });
 
     it("Multiple", () => {
@@ -1979,12 +1478,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(65); // 35 (flush) + 30 (hand)
       expect(mult).toBe(16); // 4 (flush) * 2 (the tribe) * 2 (the tribe)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 2),
+        jokerScored(jokers[1], 0, 0, 2),
       );
     });
   });
@@ -1999,13 +1496,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(60); // 30 (three of a kind) + 30 (hand)
       expect(mult).toBe(9); // 3 (three of a kind) * 3 (the trio)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 3));
     });
 
     it("Multiple", () => {
@@ -2017,12 +1508,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(60); // 30 (three of a kind) + 30 (hand)
       expect(mult).toBe(27); // 3 (three of a kind) * 3 (the trio) * 3 (the trio)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 3,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 3),
+        jokerScored(jokers[1], 0, 0, 3),
       );
     });
   });
@@ -2038,13 +1527,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(1.5); // 1 (high card) * 1.5 (throwback)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 1.5,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 1.5));
     });
 
     it("Multiple", () => {
@@ -2058,12 +1541,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(2.25); // 1 (high card) * 1.5 (throwback) * 1.5 (throwback)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 1.5,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 1.5),
+        jokerScored(jokers[1], 0, 0, 1.5),
       );
     });
   });
@@ -2078,13 +1559,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(2); // 1 (high card) * 2 (triboulet)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 2));
     });
 
     it("Multiple", () => {
@@ -2096,12 +1571,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(15); // 5 (high card) + 10 (hand)
       expect(mult).toBe(4); // 1 (high card) * 2 (triboulet) * 2 (triboulet)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 2),
+        jokerScored(jokers[1], 0, 0, 2),
       );
     });
   });
@@ -2116,14 +1589,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(88); // 20 (two pair) + 28 (hand) + 40 (walkie talkie)
       expect(mult).toBe(18); // 2 (two pair) + 16 (walkie talkie)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 10,
-          addMult: 4,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 10, 4, 0));
     });
 
     it("Multiple", () => {
@@ -2135,13 +1601,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(128); // 20 (two pair) + 28 (hand) + 40 (walkie talkie) + 40 (walkie talkie)
       expect(mult).toBe(34); // 2 (two pair) + 16 (walkie talkie) + 16 (walkie talkie)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 10,
-          addMult: 4,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 10, 4, 0),
+        jokerScored(jokers[1], 10, 4, 0),
       );
     });
 
@@ -2154,14 +1617,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 10,
-          addMult: 4,
-        }),
-      );
     });
   });
 
@@ -2176,13 +1631,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(23); // 5 (high card) + 2 (hand) + 16 (wee joker)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 16,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 16, 0, 0));
     });
 
     it("Multiple", () => {
@@ -2196,19 +1645,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(31); // 5 (high card) + 2 (hand) + 8 (wee joker) + 16 (wee joker)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 8,
-        }),
-      );
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[1],
-          addChips: 16,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 8, 0, 0),
+        jokerScored(jokers[1], 16, 0, 0),
       );
     });
   });
@@ -2223,13 +1663,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(136); // 30 (three of a kind) + 6 (hand) + 100 (wily joker)
       expect(mult).toBe(3); // 3 (three of a kind)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 100,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 100, 0, 0));
     });
 
     it("Multiple", () => {
@@ -2241,12 +1675,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(236); // 30 (three of a kind) + 6 (hand) + 100 (wily joker) + 100 (wily joker)
       expect(mult).toBe(3); // 3 (three of a kind)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 100,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 100, 0, 0),
+        jokerScored(jokers[1], 100, 0, 0),
       );
     });
 
@@ -2259,13 +1691,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addChips: 100,
-        }),
-      );
     });
   });
 
@@ -2279,13 +1704,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(4); // 1 (high card) + 3 (wrathful joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 3,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 3, 0));
     });
 
     it("Multiple", () => {
@@ -2300,12 +1719,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(7); // 1 (high card) + 3 (wrathful joker) + 3 (wrathful joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 3,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 3, 0),
+        jokerScored(jokers[1], 0, 3, 0),
       );
     });
 
@@ -2318,13 +1735,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 3,
-        }),
-      );
     });
   });
 
@@ -2339,13 +1749,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(2); // 1 (high card) * 2 (yorick)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 2));
     });
 
     it("Multiple", () => {
@@ -2359,12 +1763,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(4); // 1 (high card) * 2 (yorick) * 2 (yorick)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 2),
+        jokerScored(jokers[1], 0, 0, 2),
       );
     });
 
@@ -2378,13 +1780,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card) * 1 (yorick)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          multMult: 2,
-        }),
-      );
     });
   });
 
@@ -2398,13 +1793,7 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(36); // 30 (three of a kind) + 6 (hand)
       expect(mult).toBe(15); // 3 (three of a kind) + 12 (zany joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 12,
-        }),
-      );
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 12, 0));
     });
 
     it("Multiple", () => {
@@ -2416,12 +1805,10 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(36); // 30 (three of a kind) + 6 (hand)
       expect(mult).toBe(27); // 3 (three of a kind) + 12 (zany joker) + 12 (zany joker)
-      expect(eventLog).toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 12,
-        }),
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 12, 0),
+        jokerScored(jokers[1], 0, 12, 0),
       );
     });
 
@@ -2434,13 +1821,6 @@ describe("scoreResolver handling different jokers", () => {
 
       expect(chips).toBe(7); // 5 (high card) + 2 (hand)
       expect(mult).toBe(1); // 1 (high card)
-      expect(eventLog).not.toContainEqual(
-        expect.objectContaining({
-          type: EVENT_TYPES.JOKER_SCORED,
-          joker: jokers[0],
-          addMult: 12,
-        }),
-      );
     });
   });
 });

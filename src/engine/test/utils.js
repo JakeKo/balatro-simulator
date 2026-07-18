@@ -66,4 +66,37 @@ function parseCards(cardStrs) {
   return cardStrs.map(parseCard);
 }
 
-export { parseCard, parseCards };
+function objectContains(obj, subset) {
+  return Object.keys(subset).every((key) => {
+    if (typeof subset[key] === "object" && subset[key] !== null) {
+      return objectContains(obj[key], subset[key]);
+    }
+
+    if (Array.isArray(subset[key])) {
+      return subset[key].every((item) => obj[key].includes(item));
+    }
+
+    return obj[key] === subset[key];
+  });
+}
+
+function expectEventLogContains(eventLog, ...expectedEvents) {
+  let expectedEventIndex = 0;
+  let expectedEvent = expectedEvents[expectedEventIndex];
+
+  for (let i = 0; i < eventLog.length; i++) {
+    const currentEvent = eventLog[i];
+    if (objectContains(currentEvent, expectedEvent)) {
+      expectedEventIndex++;
+      expectedEvent = expectedEvents[expectedEventIndex];
+
+      if (!expectedEvent) {
+        break;
+      }
+    }
+  }
+
+  expect(expectedEventIndex).toBe(expectedEvents.length);
+}
+
+export { parseCard, parseCards, expectEventLogContains };

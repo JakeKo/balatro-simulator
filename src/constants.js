@@ -377,6 +377,32 @@ function BLANK_CARD() {
   };
 }
 
+function handPlayed(hand, baseChips, baseMult) {
+  return { type: EVENT_TYPES.HAND_PLAYED, hand, baseChips, baseMult };
+}
+
+function cardScored(card, addChips, addMult, multMult) {
+  const event = { type: EVENT_TYPES.CARD_SCORED, card };
+  if (addChips) event.addChips = addChips;
+  if (addMult) event.addMult = addMult;
+  if (multMult) event.multMult = multMult;
+
+  return event;
+}
+
+function handEnded() {
+  return { type: EVENT_TYPES.HAND_ENDED };
+}
+
+function jokerScored(joker, addChips, addMult, multMult) {
+  const event = { type: EVENT_TYPES.JOKER_SCORED, joker };
+  if (addChips) event.addChips = addChips;
+  if (addMult) event.addMult = addMult;
+  if (multMult) event.multMult = multMult;
+
+  return event;
+}
+
 export {
   JOKERS,
   JOKERS_LIST,
@@ -395,4 +421,8 @@ export {
   EDITIONS,
   SEALS,
   BLANK_CARD,
+  handPlayed,
+  cardScored,
+  handEnded,
+  jokerScored,
 };
