@@ -152,9 +152,11 @@ function resolveJoker(joker, { on }) {
     [JOKERS.HANGING_CHAD]: () => {
       on(EVENT_TYPES.CARD_SCORED, (node) => {
         if (node.payload.index === 0 && !node.payload.retriggered) {
+          const retriggeredCard = { ...node.payload, retriggered: true };
+
           node.addChild(jokerScored(joker, 0, 0, 0));
-          node.parent.addChild({ ...node.payload, retriggered: true });
-          node.parent.addChild({ ...node.payload, retriggered: true });
+          node.parent.insertChild(retriggeredCard, node.index + 1);
+          node.parent.insertChild(retriggeredCard, node.index + 2);
         }
       });
     },

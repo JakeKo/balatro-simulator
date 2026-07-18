@@ -14,11 +14,23 @@ function createNode(payload, weight = 1) {
 
   function addChild(childPayload) {
     const childNode = createNode(childPayload);
+    childNode.index = node.children.length;
     childNode.parent = node;
     node.children.push(childNode);
   }
 
+  function insertChild(childPayload, index) {
+    const childNode = createNode(childPayload);
+    childNode.index = index;
+    childNode.parent = node;
+    node.children.splice(index, 0, childNode);
+    node.children.slice(index + 1).forEach((child) => {
+      child.index += 1;
+    });
+  }
+
   node.addChild = addChild;
+  node.insertChild = insertChild;
 
   return node;
 }
