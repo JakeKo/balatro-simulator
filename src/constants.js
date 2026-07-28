@@ -15,7 +15,7 @@ const JOKERS = {
   // BLUEPRINT: "Blueprint",
   BOOTSTRAPS: "Bootstraps",
   // BRAINSTORM: "Brainstorm",
-  // BULL: "Bull",
+  BULL: "Bull",
   // BURGLAR: "Burglar",
   // BURNT_JOKER: "Burnt Joker",
   // BUSINESS_CARD: "Business Card",
@@ -236,6 +236,14 @@ const JOKER_METADATA_TEMPLATES = {
     },
   ],
   [JOKERS.BOOTSTRAPS]: [
+    {
+      key: "money",
+      label: "Money",
+      type: "number",
+      default: 0,
+    },
+  ],
+  [JOKERS.BULL]: [
     {
       key: "money",
       label: "Money",

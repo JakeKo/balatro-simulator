@@ -31,7 +31,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Blue
 - [ ] Purple
 
-# Joker Tally (40 / 150)
+# Joker Tally (42 / 150)
 
 **8 Ball**
 
@@ -100,10 +100,9 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - Description: Copies the ability of leftmost Joker
 - Anticipated changes: Traverse jokers, copy abilities
 
-**Bull**
+**✅ Bull**
 
 - Description: +2 Chips for each $1 you have (Currently +0 Chips)
-- Anticipated changes: None - joker metadata
 
 **Burglar**
 
