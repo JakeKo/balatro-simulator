@@ -92,7 +92,7 @@ const JOKERS = {
   ODD_TODD: "Odd Todd",
   // ONYX_AGATE: "Onyx Agate",
   // OOPS_ALL_6S: "Oops! All 6s",
-  // PAREIDOLIA: "Pareidolia",
+  PAREIDOLIA: "Pareidolia",
   // PERKEO: "Perkeo",
   PHOTOGRAPH: "Photograph",
   // POPCORN: "Popcorn",

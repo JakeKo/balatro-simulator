@@ -175,10 +175,10 @@ function resolveJoker(joker, { on }) {
     },
     [JOKERS.PHOTOGRAPH]: () => {
       on(EVENT_TYPES.CARD_SCORED, (node, round) => {
-        if (isFaceCard(node.payload.card)) {
+        if (isFaceCard(node.payload.card, round)) {
           const isFirstFaceCard = round.scoredCards
             .slice(0, node.payload.index)
-            .every((card) => !isFaceCard(card));
+            .every((card) => !isFaceCard(card, round));
           if (isFirstFaceCard) {
             node.addChild(jokerScored(joker, 0, 0, 2));
           }
@@ -186,8 +186,8 @@ function resolveJoker(joker, { on }) {
       });
     },
     [JOKERS.SCARY_FACE]: () => {
-      on(EVENT_TYPES.CARD_SCORED, (node) => {
-        if (isFaceCard(node.payload.card)) {
+      on(EVENT_TYPES.CARD_SCORED, (node, round) => {
+        if (isFaceCard(node.payload.card, round)) {
           node.addChild(jokerScored(joker, 30, 0, 0));
         }
       });
@@ -207,8 +207,8 @@ function resolveJoker(joker, { on }) {
       });
     },
     [JOKERS.SMILEY_FACE]: () => {
-      on(EVENT_TYPES.CARD_SCORED, (node) => {
-        if (isFaceCard(node.payload.card)) {
+      on(EVENT_TYPES.CARD_SCORED, (node, round) => {
+        if (isFaceCard(node.payload.card, round)) {
           node.addChild(jokerScored(joker, 0, 5, 0));
         }
       });

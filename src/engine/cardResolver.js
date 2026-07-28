@@ -1,4 +1,10 @@
-import { ENHANCEMENTS, EDITIONS, EVENT_TYPES, SEALS } from "../constants.js";
+import {
+  ENHANCEMENTS,
+  EDITIONS,
+  EVENT_TYPES,
+  SEALS,
+  JOKERS,
+} from "../constants.js";
 
 function isOddRank(card) {
   // Rank 14 is an Ace, which is treated instead as rank 1 in this context
@@ -9,8 +15,13 @@ function isEvenRank(card) {
   return [10, 8, 6, 4, 2].includes(card.rank);
 }
 
-function isFaceCard(card) {
-  return card.rank >= 11 && card.rank <= 13;
+function isFaceCard(card, round) {
+  // Pareidolia treats all cards as face cards
+  const pareidoliaEnabled = round.jokers.some(
+    (joker) => joker.name === JOKERS.PAREIDOLIA,
+  );
+
+  return pareidoliaEnabled || (card.rank >= 11 && card.rank <= 13);
 }
 
 function isSuit(card, suit) {

@@ -29,12 +29,12 @@ function stringifyCard(card) {
 
 function stringifyHandPlayed(entry) {
   const { hand, baseChips, baseMult, scoredCards } = entry;
-  return `${hand} | ${baseChips} × ${baseMult} | ${scoredCards.map(stringifyCard)}`;
+  return `${hand} ${baseChips}×${baseMult} (${scoredCards.map(stringifyCard).join(", ")})`;
 }
 
 function stringifyCardScored(entry) {
   const { card, addChips } = entry;
-  return `${stringifyCard(card)} | +${addChips}c`;
+  return `${stringifyCard(card)} +${addChips}c`;
 }
 
 function stringifyJokerScored(entry) {
@@ -45,11 +45,11 @@ function stringifyJokerScored(entry) {
   if (addMult) operations.push(`+${addMult}m`);
   if (multMult) operations.push(`×${multMult}m`);
 
-  return `${joker.name} | ${operations.join(", ")}`;
+  return `${joker.name} ${operations.join(", ")}`;
 }
 
 function stringifyHandEnded() {
-  return "Hand Ended |";
+  return "Hand Ended";
 }
 
 function stringifyLogEntry(entry) {

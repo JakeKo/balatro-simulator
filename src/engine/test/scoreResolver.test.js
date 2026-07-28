@@ -1209,6 +1209,18 @@ describe("scoreResolver handling different jokers", () => {
       expectEventLogContains(eventLog, jokerScored(jokers[0], 30, 0, 0));
     });
 
+    it("Single, Pareidolia applied", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.SCARY_FACE(), FULL_JOKERS.PAREIDOLIA()];
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(37); // 5 (high card) + 2 (hand) + 30 (scary face)
+      expect(mult).toBe(1); // 1 (high card)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 30, 0, 0));
+    });
+
     it("Single, multiple face cards", () => {
       const hand = parseCards(["JH", "JD", "QS"]);
       const jokers = [FULL_JOKERS.SCARY_FACE()];
