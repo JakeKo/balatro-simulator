@@ -31,7 +31,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Blue
 - [ ] Purple
 
-# Joker Tally (39 / 150)
+# Joker Tally (40 / 150)
 
 **8 Ball**
 
@@ -91,10 +91,9 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - Description: Copies ability of Joker to the right
 - Anticipated changes: Traverse jokers, copy abilities
 
-**Bootstraps**
+**✅ Bootstraps**
 
 - Description: +2 Mult for every $5 you have (Currently +0 Mult)
-- Anticipated changes: None - joker metadata
 
 **Brainstorm**
 
@@ -471,10 +470,9 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - Description: Doubles all listed probabilities (ex: 1 in 3 -> 2 in 3)
 - Anticipated changes: Probabilities, intercept probability check
 
-**Pareidolia**
+**✅ Pareidolia**
 
 - Description: All cards are considered face cards
-- Anticipated changes: Intercept face card check
 
 **Perkeo**
 

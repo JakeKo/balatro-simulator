@@ -68,6 +68,14 @@ function resolveJoker(joker, { on }) {
         }
       });
     },
+    [JOKERS.BOOTSTRAPS]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        if (joker.metadata.money > 5) {
+          const addMult = 2 * Math.floor(joker.metadata.money / 5);
+          node.addChild(jokerScored(joker, 0, addMult, 0));
+        }
+      });
+    },
     [JOKERS.CAVENDISH]: () => {
       on(EVENT_TYPES.HAND_ENDED, (node) => {
         node.addChild(jokerScored(joker, 0, 0, 3));

@@ -13,7 +13,7 @@ const JOKERS = {
   // BLOODSTONE: "Bloodstone",
   BLUE_JOKER: "Blue Joker",
   // BLUEPRINT: "Blueprint",
-  // BOOTSTRAPS: "Bootstraps",
+  BOOTSTRAPS: "Bootstraps",
   // BRAINSTORM: "Brainstorm",
   // BULL: "Bull",
   // BURGLAR: "Burglar",
@@ -231,6 +231,14 @@ const JOKER_METADATA_TEMPLATES = {
     {
       key: "remainingCardsInDeck",
       label: "Remaining Cards in Deck",
+      type: "number",
+      default: 0,
+    },
+  ],
+  [JOKERS.BOOTSTRAPS]: [
+    {
+      key: "money",
+      label: "Money",
       type: "number",
       default: 0,
     },

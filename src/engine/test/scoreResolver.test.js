@@ -544,6 +544,51 @@ describe("scoreResolver handling different jokers", () => {
     });
   });
 
+  describe("Bootstraps", () => {
+    it("Single", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.BOOTSTRAPS()];
+      jokers[0].metadata.money = 10;
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(5); // 1 (high card) + 4 (bootstraps)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 4, 0));
+    });
+
+    it("Multiple", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.BOOTSTRAPS(), FULL_JOKERS.BOOTSTRAPS()];
+      jokers[0].metadata.money = 10;
+      jokers[1].metadata.money = 10;
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(9); // 1 (high card) + 4 (bootstraps) + 4 (bootstraps)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 4, 0),
+        jokerScored(jokers[1], 0, 4, 0),
+      );
+    });
+
+    it("Not enough money", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.BOOTSTRAPS()];
+      jokers[0].metadata.money = 0;
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(1); // 1 (high card)
+    });
+  });
+
   describe("Cavendish", () => {
     it("Single", () => {
       const hand = parseCards(["2H"]);
