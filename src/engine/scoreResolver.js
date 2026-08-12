@@ -17,7 +17,7 @@ function resolveSequenceTree(allCards, handMap, allJokers) {
   const round = { playedCards, scoredCards, jokers: playedJokers };
 
   // Resolve jokers and their effects
-  playedJokers.forEach((joker) => resolveJoker(joker, { on }));
+  playedJokers.forEach((joker, index) => resolveJoker(joker, index, { on }));
 
   // Queue initial HAND_PLAYED event with the base chips and multiplier
   root.addChild({

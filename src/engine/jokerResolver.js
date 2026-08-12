@@ -5,10 +5,16 @@ import {
   handIsStraight,
   handIsFlush,
 } from "./handResolver";
-import { JOKERS, EVENT_TYPES, SUITS, jokerScored } from "../constants";
+import {
+  JOKERS,
+  EVENT_TYPES,
+  SUITS,
+  ENHANCEMENTS,
+  jokerScored,
+} from "../constants";
 import { isOddRank, isEvenRank, isFaceCard, isSuit } from "./cardResolver";
 
-function resolveJoker(joker, { on }) {
+function resolveJoker(joker, index, { on }) {
   const resolvedJokers = {
     [JOKERS.ABSTRACT_JOKER]: () => {
       on(EVENT_TYPES.HAND_ENDED, (node, round) => {
@@ -265,6 +271,31 @@ function resolveJoker(joker, { on }) {
           node.addChild(jokerScored(joker, 0, 0, 2));
         }
       });
+    },
+    [JOKERS.VAMPIRE]: () => {
+      on(EVENT_TYPES.HAND_PLAYED, (node, round) => {
+        const { jokers, scoredCards } = round;
+        const firstVampireIndex = jokers.findIndex(
+          (j) => j.name === JOKERS.VAMPIRE,
+        );
+        // Only the first Vampire Joker in the round should trigger this effect
+        if (firstVampireIndex !== index) return;
+
+        const numEnhancedCards = scoredCards.filter(
+          (card) => card.enhancement !== ENHANCEMENTS.NONE,
+        ).length;
+
+        joker.metadata.multMultAdded = 0.1 * numEnhancedCards;
+      });
+
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        const { metadata } = joker;
+        const multMult = metadata.multMultBase + metadata.multMultAdded;
+        node.addChild(jokerScored(joker, 0, 0, multMult));
+      });
+
+      // Zero out the multMultAdded for the next hand
+      joker.metadata.multMultAdded = 0;
     },
     [JOKERS.WALKIE_TALKIE]: () => {
       on(EVENT_TYPES.CARD_SCORED, (node) => {

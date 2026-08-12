@@ -143,7 +143,7 @@ const JOKERS = {
   // TROUBADOUR: "Troubadour",
   // TURTLE_BEAN: "Turtle Bean",
   // VAGABOND: "Vagabond",
-  // VAMPIRE: "Vampire",
+  VAMPIRE: "Vampire",
   WALKIE_TALKIE: "Walkie Talkie",
   WEE_JOKER: "Wee Joker",
   WILY_JOKER: "Wily Joker",
@@ -265,6 +265,19 @@ const JOKER_METADATA_TEMPLATES = {
       label: "Blinds Skipped",
       type: "number",
       default: 0,
+    },
+  ],
+  [JOKERS.VAMPIRE]: [
+    {
+      key: "multMultBase",
+      label: "Current Mult",
+      type: "number",
+      default: 1,
+    },
+    {
+      key: "multMultAdded",
+      default: 0,
+      readonly: true,
     },
   ],
   [JOKERS.WEE_JOKER]: [

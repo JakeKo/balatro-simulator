@@ -31,7 +31,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Blue
 - [ ] Purple
 
-# Joker Tally (42 / 150)
+# Joker Tally (43 / 150)
 
 **8 Ball**
 
@@ -713,7 +713,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - Description: Create a Tarot card if hand is played with $4 or less
 - Anticipated changes: Track money, Tarot card creation
 
-**Vampire**
+**✅ Vampire**
 
 - Description: This Joker gains X0.1 Mult per scoring Enhanced card played, removes card Enhancement (Currently X1 Mult)
 - Anticipated changes: Persistent, mutable joker metadata

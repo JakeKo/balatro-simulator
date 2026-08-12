@@ -29,7 +29,7 @@ function isSuit(card, suit) {
 }
 
 function resolveCard(card, index, { on }) {
-  on(EVENT_TYPES.HAND_PLAYED, (node) => {
+  on(EVENT_TYPES.HAND_PLAYED, (node, round) => {
     let addChips;
     let addMult = 0;
     let multMult = 1;
@@ -38,14 +38,23 @@ function resolveCard(card, index, { on }) {
     else if ([13, 12, 11].includes(card.rank)) addChips = 10;
     else addChips = card.rank;
 
-    if (card.enhancement === ENHANCEMENTS.BONUS) addChips += 30;
-    if (card.enhancement === ENHANCEMENTS.STONE) addChips = 50;
+    // Vampire strips cards of their enhancements so we skip enhancements if it's active
+    const vampireJokerActive = round.jokers.some(
+      (joker) => joker.name === JOKERS.VAMPIRE,
+    );
+
+    if (!vampireJokerActive) {
+      if (card.enhancement === ENHANCEMENTS.BONUS) addChips += 30;
+      if (card.enhancement === ENHANCEMENTS.STONE) addChips = 50;
+    }
 
     if (card.edition === EDITIONS.FOIL) addChips += 50;
 
-    if (card.enhancement === ENHANCEMENTS.MULT) addMult = 4;
-    if (card.enhancement === ENHANCEMENTS.LUCKY) addMult = 20;
-    if (card.enhancement === ENHANCEMENTS.GLASS) multMult = 2;
+    if (!vampireJokerActive) {
+      if (card.enhancement === ENHANCEMENTS.MULT) addMult = 4;
+      if (card.enhancement === ENHANCEMENTS.LUCKY) addMult = 20;
+      if (card.enhancement === ENHANCEMENTS.GLASS) multMult = 2;
+    }
 
     node.addChild({
       type: EVENT_TYPES.CARD_SCORED,

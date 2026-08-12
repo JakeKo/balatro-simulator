@@ -1681,6 +1681,36 @@ describe("scoreResolver handling different jokers", () => {
     });
   });
 
+  describe("Vampire", () => {
+    it("Single", () => {
+      const hand = parseCards(["2HBXX", "2SBXX"]);
+      const jokers = [FULL_JOKERS.VAMPIRE()];
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(14); // 10 (pair) + 4 (hand)
+      expect(mult).toBe(2.4); // 2 (pair) * 1.2 (vampire)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 1.2));
+    });
+
+    it("Multiple", () => {
+      const hand = parseCards(["2HBXX", "2SBXX"]);
+      const jokers = [FULL_JOKERS.VAMPIRE(), FULL_JOKERS.VAMPIRE()];
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(14); // 10 (pair) + 4 (hand)
+      expect(mult).toBe(2.4); // 2 (pair) * 1.2 (vampire) * 1 (vampire)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 1.2),
+        jokerScored(jokers[1], 0, 0, 1),
+      );
+    });
+  });
+
   describe("Walkie Talkie", () => {
     it("Single", () => {
       const hand = parseCards(["10H", "10D", "4H", "4D"]);
