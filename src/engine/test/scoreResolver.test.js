@@ -664,6 +664,105 @@ describe("scoreResolver handling different jokers", () => {
     });
   });
 
+  describe("Campfire", () => {
+    it("Single", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.CAMPFIRE()];
+      jokers[0].metadata.multMultBase = 2.5;
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(2.5); // 1 (high card) * 2.5 (campfire)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 2.5));
+    });
+
+    it("Multiple", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.CAMPFIRE(), FULL_JOKERS.CAMPFIRE()];
+      jokers[0].metadata.multMultBase = 2.5;
+      jokers[1].metadata.multMultBase = 2.5;
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(6.25); // 1 (high card) * 2.5 (campfire) * 2.5 (campfire)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 2.5),
+        jokerScored(jokers[1], 0, 0, 2.5),
+      );
+    });
+  });
+
+  describe("Canio", () => {
+    it("Single", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.CANIO()];
+      jokers[0].metadata.multMultBase = 3;
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(3); // 1 (high card) * 3 (canio)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 3));
+    });
+
+    it("Multiple", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.CANIO(), FULL_JOKERS.CANIO()];
+      jokers[0].metadata.multMultBase = 3;
+      jokers[1].metadata.multMultBase = 3;
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(9); // 1 (high card) * 3 (canio) * 3 (canio)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 3),
+        jokerScored(jokers[1], 0, 0, 3),
+      );
+    });
+  });
+
+  describe("Card Sharp", () => {
+    it("Single", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.CARD_SHARP()];
+      jokers[0].metadata.handPlayedBefore = true;
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(3); // 1 (high card) * 3 (card sharp)
+      expectEventLogContains(eventLog, jokerScored(jokers[0], 0, 0, 3));
+    });
+
+    it("Multiple", () => {
+      const hand = parseCards(["2H"]);
+      const jokers = [FULL_JOKERS.CARD_SHARP(), FULL_JOKERS.CARD_SHARP()];
+      jokers[0].metadata.handPlayedBefore = true;
+      jokers[1].metadata.handPlayedBefore = true;
+      const [chips, mult, eventLog] = resolveScore(
+        resolveSequenceTree(hand, BASIC_HANDS, jokers),
+      );
+
+      expect(chips).toBe(7); // 5 (high card) + 2 (hand)
+      expect(mult).toBe(9); // 1 (high card) * 3 (card sharp) * 3 (card sharp)
+      expectEventLogContains(
+        eventLog,
+        jokerScored(jokers[0], 0, 0, 3),
+        jokerScored(jokers[1], 0, 0, 3),
+      );
+    });
+  });
+
   describe("Clever Joker", () => {
     it("Single", () => {
       const hand = parseCards(["2H", "2D", "3H", "3D"]);

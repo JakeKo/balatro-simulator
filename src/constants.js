@@ -19,9 +19,9 @@ const JOKERS = {
   // BURGLAR: "Burglar",
   // BURNT_JOKER: "Burnt Joker",
   // BUSINESS_CARD: "Business Card",
-  // CAMPFIRE: "Campfire",
-  // CANIO: "Canio",
-  // CARD_SHARP: "Card Sharp",
+  CAMPFIRE: "Campfire",
+  CANIO: "Canio",
+  CARD_SHARP: "Card Sharp",
   // CARTOMANCER: "Cartomancer",
   // CASTLE: "Castle",
   CAVENDISH: "Cavendish",
@@ -249,6 +249,33 @@ const JOKER_METADATA_TEMPLATES = {
       label: "Money",
       type: "number",
       default: 0,
+    },
+  ],
+  [JOKERS.CAMPFIRE]: [
+    {
+      key: "multMultBase",
+      label: "Current Mult",
+      type: "number",
+      default: 1,
+      min: 1,
+      step: 0.25,
+    },
+  ],
+  [JOKERS.CANIO]: [
+    {
+      key: "multMultBase",
+      label: "Current Mult",
+      type: "number",
+      default: 1,
+      min: 1,
+    },
+  ],
+  [JOKERS.CARD_SHARP]: [
+    {
+      key: "handPlayedBefore",
+      label: "Hand Played Before",
+      type: "boolean",
+      default: false,
     },
   ],
   [JOKERS.FORTUNE_TELLER]: [

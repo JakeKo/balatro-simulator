@@ -31,7 +31,7 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - [ ] Blue
 - [ ] Purple
 
-# Joker Tally (43 / 150)
+# Joker Tally (46 / 150)
 
 **8 Ball**
 
@@ -119,20 +119,17 @@ Much love to the kind and watchful stewards of the [Balatro Fandom Wiki](https:/
 - Description: Played face cards have a 1 in 2 chance to give $2 when scored
 - Anticipated changes: Probabilities, adjusting money
 
-**Campfire**
+**✅ Campfire**
 
 - Description: This Joker gains X0.25 Mult for each card sold, resets when Boss Blind is defeated (Currently X1 Mult)
-- Anticipated changes: None - joker metadata
 
-**Canio**
+**✅ Canio**
 
 - Description: This Joker gains X1 Mult when a face card is destroyed (Currently X1 Mult)
-- Anticipated changes: None - joker metadata
 
-**Card Sharp**
+**✅ Card Sharp**
 
 - Description: X3 Mult if played poker hand has already been played this round
-- Anticipated changes: None - joker metadata
 
 **Cartomancer**
 

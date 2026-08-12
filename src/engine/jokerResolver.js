@@ -95,6 +95,23 @@ function resolveJoker(joker, index, { on }) {
         node.addChild(jokerScored(joker, 0, 0, 3));
       });
     },
+    [JOKERS.CAMPFIRE]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        node.addChild(jokerScored(joker, 0, 0, joker.metadata.multMultBase));
+      });
+    },
+    [JOKERS.CANIO]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        node.addChild(jokerScored(joker, 0, 0, joker.metadata.multMultBase));
+      });
+    },
+    [JOKERS.CARD_SHARP]: () => {
+      on(EVENT_TYPES.HAND_ENDED, (node) => {
+        if (joker.metadata.handPlayedBefore) {
+          node.addChild(jokerScored(joker, 0, 0, 3));
+        }
+      });
+    },
     [JOKERS.CLEVER_JOKER]: () => {
       on(EVENT_TYPES.HAND_ENDED, (node, round) => {
         if (handIsTwoPair(round.scoredCards)) {

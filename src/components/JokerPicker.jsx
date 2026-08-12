@@ -36,7 +36,7 @@ function JokerPicker({ joker, onChange }) {
           <option key={jokerName}>{jokerName}</option>
         ))}
       </select>
-      {metadataTemplate.map(({ key, label, type, readonly }) => {
+      {metadataTemplate.map(({ key, label, type, readonly, min, step }) => {
         if (readonly) return null;
 
         switch (type) {
@@ -47,10 +47,11 @@ function JokerPicker({ joker, onChange }) {
                 <input
                   key={key}
                   value={joker.metadata[key]}
-                  placeholder={label}
+                  min={min}
+                  step={step}
                   type="number"
                   onChange={(e) =>
-                    onMetadataChange({ [key]: parseInt(e.target.value, 10) })
+                    onMetadataChange({ [key]: parseFloat(e.target.value) })
                   }
                 />
               </div>
